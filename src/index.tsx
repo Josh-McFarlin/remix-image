@@ -1,3 +1,3 @@
+export { Image as default } from "./components";
 export * from "./components";
-export * from "./utils";
-export * from "./loaders";
+export * from "./hooks";

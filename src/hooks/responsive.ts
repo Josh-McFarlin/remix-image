@@ -1,6 +1,6 @@
 import type { ComponentPropsWithoutRef } from "react";
 import type { ResponsiveSize } from "../types/image";
-import { createUrl } from "./url";
+import { createUrl } from "../utils/url";
 
 type ResponsiveHookResult = {
   src: string;

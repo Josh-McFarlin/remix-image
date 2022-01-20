@@ -1,8 +1,8 @@
 import clsx from "clsx";
 import React from "react";
 import type { ComponentPropsWithoutRef } from "react";
+import { useResponsiveImage } from "../../hooks";
 import type { ResponsiveSize } from "../../types/image";
-import { useResponsiveImage } from "../../utils";
 import classes from "./Image.module.scss";
 
 export interface ImageProps extends ComponentPropsWithoutRef<"img"> {

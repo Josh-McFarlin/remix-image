@@ -15,10 +15,10 @@ export default [
         dir: "build",
         format: "cjs",
         sourcemap: true,
-        exports: "named",
       },
     ],
     plugins: [
+      peerDepsExternal(),
       multiInput({
         relative: "src",
       }),
@@ -27,9 +27,6 @@ export default [
         modules: true,
         // extract: path.resolve("build/styles.css"),
         inject: true,
-      }),
-      peerDepsExternal({
-        includeDependencies: true,
       }),
       typescript({
         useTsconfigDeclarationDir: true,
