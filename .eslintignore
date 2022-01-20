@@ -6,5 +6,9 @@ node_modules/
 .idea_modules/
 .idea/
 
+components.d.ts
+hooks.d.ts
+loaders.d.ts
+
 example/node_modules/
 example/package-lock.json/

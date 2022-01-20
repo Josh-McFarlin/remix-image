@@ -1,1 +1,1 @@
-export * from "./src/hooks";
+export * from "./build/hooks";

@@ -1,1 +1,1 @@
-export * from "./src/loaders";
+export * from "./build/loaders";
