@@ -1,0 +1,102 @@
+{
+  "name": "remix-image",
+  "version": "0.0.1",
+  "description": "A React component for responsive images in Remix",
+  "author": "Josh McFarlin <josh@mcfarl.in>",
+  "license": "GPL-3.0",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/Josh-McFarlin/remix-image.git"
+  },
+  "bugs": {
+    "url": "https://github.com/Josh-McFarlin/remix-image/issues"
+  },
+  "main": "build/index.js",
+  "types": "build/index.d.ts",
+  "style": "build/styles.css",
+  "files": [
+    "build",
+    "package.json",
+    "README.md"
+  ],
+  "scripts": {
+    "format": "prettier --write \"**/*.{js,jsx,ts,tsx,json,css,scss}\"",
+    "lint": "eslint --fix --ext ts --ext tsx --ext js --ext jsx .",
+    "prebuild": "rm -rf build",
+    "typecheck": "tsc --project tsconfig.json --noEmit",
+    "build": "rollup -c",
+    "watch": "rollup -c -w",
+    "test": "jest",
+    "test:watch": "jest --watch",
+    "prepare": "husky install"
+  },
+  "dependencies": {
+    "clsx": "^1.1.1",
+    "file-type": "^16.5.3",
+    "hybrid-disk-cache": "^0.2.0"
+  },
+  "devDependencies": {
+    "@babel/core": "^7.16.0",
+    "@remix-run/node": "^1.1.1",
+    "@remix-run/react": "^1.1.1",
+    "@remix-run/server-runtime": "^1.1.1",
+    "@rollup/plugin-commonjs": "^21.0.1",
+    "@rollup/plugin-json": "^4.1.0",
+    "@rollup/plugin-node-resolve": "^13.0.6",
+    "@testing-library/jest-dom": "^5.16.0",
+    "@testing-library/react": "^12.1.2",
+    "@testing-library/user-event": "^13.5.0",
+    "@types/jest": "^27.0.3",
+    "@types/react": "^17.0.37",
+    "@types/sharp": "^0.29.5",
+    "@typescript-eslint/eslint-plugin": "^5.5.0",
+    "@typescript-eslint/parser": "^5.5.0",
+    "autoprefixer": "^10.4.0",
+    "babel-loader": "^8.2.3",
+    "concurrently": "^6.4.0",
+    "css-loader": "^5.2.7",
+    "cssnano": "^5.0.12",
+    "eslint": "^8.4.0",
+    "eslint-config-prettier": "^8.3.0",
+    "eslint-plugin-import": "^2.25.3",
+    "eslint-plugin-jest": "^25.3.0",
+    "eslint-plugin-jsx-a11y": "^6.5.1",
+    "eslint-plugin-react": "^7.27.1",
+    "eslint-plugin-react-hooks": "^4.3.0",
+    "html-webpack-plugin": "^5.5.0",
+    "husky": "^7.0.4",
+    "identity-obj-proxy": "^3.0.0",
+    "jest": "^27.4.3",
+    "lint-staged": "^12.1.2",
+    "node-sass": "^6.0.1",
+    "postcss": "^8.4.4",
+    "prettier": "2.5.1",
+    "react": "^17.0.2",
+    "react-dom": "^17.0.2",
+    "remix": "^1.1.1",
+    "rollup": "^2.60.2",
+    "rollup-plugin-copy": "^3.4.0",
+    "rollup-plugin-delete": "^2.0.0",
+    "rollup-plugin-multi-input": "^1.3.1",
+    "rollup-plugin-peer-deps-external": "^2.2.4",
+    "rollup-plugin-postcss": "^4.0.2",
+    "rollup-plugin-scss": "^3.0.0",
+    "rollup-plugin-terser": "^7.0.2",
+    "rollup-plugin-typescript2": "^0.31.1",
+    "sass-loader": "^10.2.0",
+    "sharp": "^0.29.3",
+    "style-loader": "^2.0.0",
+    "ts-jest": "^27.1.0",
+    "typescript": "^4.5.2"
+  },
+  "peerDependencies": {
+    "react": ">=16.8.0",
+    "react-dom": ">=16.8.0",
+    "remix": "^1.0.0",
+    "sharp": "^0.29.0"
+  },
+  "lint-staged": {
+    "*.{ts,tsx,js,jsx}": "eslint --cache --fix",
+    "*.{js,jsx,ts,tsx,json,css,scss}": "prettier --write"
+  }
+}
