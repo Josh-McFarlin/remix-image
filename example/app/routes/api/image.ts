@@ -1,4 +1,4 @@
-import { imageLoader } from "remix-image";
+import { imageLoader } from "remix-image/loaders";
 
 export const loader = imageLoader({
   selfUrl: "http://localhost:3000",

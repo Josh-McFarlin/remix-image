@@ -1,5 +1,5 @@
 import React from "react";
-import { Image } from "remix-image";
+import Image from "remix-image";
 
 const images = [
   {
