@@ -4,6 +4,12 @@
   "description": "A React component for responsive images in Remix",
   "author": "Josh McFarlin <josh@mcfarl.in>",
   "license": "MIT",
+  "keywords": [
+    "react",
+    "remix",
+    "image",
+    "responsive"
+  ],
   "repository": {
     "type": "git",
     "url": "https://github.com/Josh-McFarlin/remix-image.git"
