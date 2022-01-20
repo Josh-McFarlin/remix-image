@@ -20,22 +20,6 @@
     "./hooks": "./build/hooks/index.js",
     "./components": "./build/components/index.js"
   },
-  "typesVersions": {
-    "*": {
-      "*": [
-        "build/index.d.ts"
-      ],
-      "loaders": [
-        "./build/loaders/index.d.ts"
-      ],
-      "hooks": [
-        "./build/hooks/index.d.ts"
-      ],
-      "components": [
-        "./build/components/index.d.ts"
-      ]
-    }
-  },
   "files": [
     "build",
     "package.json",
