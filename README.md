@@ -16,7 +16,7 @@ npm install -S https://github.com/Josh-McFarlin/remix-image.git
 yarn add remix-image@https://github.com/Josh-McFarlin/remix-image.git
 ```
 
-This library will be uploaded to NPM once a stable release has been created.
+This library will be uploaded to npm once a stable release has been created.
 
 ### Loader
 
@@ -35,7 +35,7 @@ export const loader = imageLoader({
 |:------------------:|:-------------------------------------------------:|:--------:|:--------------------------------------------------------------:|:------------------------------------------------------------------------------------------------------------------:|
 |       selfUrl      |                      string                       |     X    |                                                                |                                            The URL of the local server.                                            |
 | whitelistedDomains |                     string[]                      |          |                               []                               | Valid domains responsive images can be served from. selfUrl is automatically added at runtime and is not required. |
-|        cache       |   { path: string, ttl: number, tbd: number } \    | null |                                                                | { path: "tmp/img", ttl: 24 * 60 * 60, tbd: 365 * 24 * 60 * 60 } |              The configuration for the local image cache. Setting this to null will disable the cache.             |
+|        cache       |   { path: string, ttl: number, tbd: number } \| null    |                                                                   | { path: "tmp/img", ttl: 24 * 60 * 60, tbd: 365 * 24 * 60 * 60 } |              The configuration for the local image cache. Setting this to null will disable the cache.             |
 
 ### Component
 
