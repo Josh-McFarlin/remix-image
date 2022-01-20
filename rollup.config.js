@@ -5,7 +5,7 @@ import commonjs from "@rollup/plugin-commonjs";
 import json from "@rollup/plugin-json";
 import typescript from "rollup-plugin-typescript2";
 import postcss from "rollup-plugin-postcss";
-import path from "path";
+// import path from "path";
 
 export default [
   {
@@ -25,8 +25,8 @@ export default [
       json(),
       postcss({
         modules: true,
-        extract: path.resolve("build/styles.css"),
-        inject: false,
+        // extract: path.resolve("build/styles.css"),
+        inject: true,
       }),
       peerDepsExternal({
         includeDependencies: true,

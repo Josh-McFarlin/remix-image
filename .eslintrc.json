@@ -70,5 +70,6 @@
     ],
     "@typescript-eslint/no-empty-interface": "off",
     "react/no-unescaped-entities": "off"
-  }
+  },
+  "ignorePatterns": ["rollup.config.js"]
 }
