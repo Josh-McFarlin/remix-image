@@ -2,18 +2,17 @@
 
 ## 👋 Intro
 
-- A React component for responsive images in Remix
+A React component for responsive images in Remix
 
 
 ## 🚀 How to use
 
 ### Install
 
-At the moment, this library is only available on GitHub.
 To install this library, use on of the following commands:
 ```bash
-npm install -S https://github.com/Josh-McFarlin/remix-image.git
-yarn add remix-image@https://github.com/Josh-McFarlin/remix-image.git
+npm install -S remix-image
+yarn add remix-image
 ```
 
 The following peer deps are also required:
@@ -26,8 +25,6 @@ The following peer deps are also required:
   "sharp": "^0.29.0"
 }
 ```
-
-This library will be uploaded to npm once a stable release has been created.
 
 ### Loader
 

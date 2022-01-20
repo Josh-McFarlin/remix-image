@@ -23,7 +23,10 @@
   "files": [
     "build",
     "package.json",
-    "README.md"
+    "README.md",
+    "components.d.ts",
+    "hooks.d.ts",
+    "loaders.d.ts"
   ],
   "scripts": {
     "format": "prettier --write \"**/*.{js,jsx,ts,tsx,json,css,scss}\"",
