@@ -31,6 +31,12 @@ export const loader = imageLoader({
 });
 ```
 
+|        Name        |                       Type                        | Required |                            Default                             |                                                     Description                                                    |
+|:------------------:|:-------------------------------------------------:|:--------:|:--------------------------------------------------------------:|:------------------------------------------------------------------------------------------------------------------:|
+|       selfUrl      |                      string                       |     X    |                                                                |                                            The URL of the local server.                                            |
+| whitelistedDomains |                     string[]                      |          |                               []                               | Valid domains responsive images can be served from. selfUrl is automatically added at runtime and is not required. |
+|        cache       |   { path: string, ttl: number, tbd: number } \    | null |                                                                | { path: "tmp/img", ttl: 24 * 60 * 60, tbd: 365 * 24 * 60 * 60 } |              The configuration for the local image cache. Setting this to null will disable the cache.             |
+
 ### Component
 
 Import the `Image` component and specify the url to the resource route used by the `imageLoader` function.
@@ -56,6 +62,43 @@ import { Image } from "remix-image";
 />
 ```
 
+|    Name    |                                Type                                | Required |    Default   |                  Description                 |
+|:----------:|:------------------------------------------------------------------:|:--------:|:------------:|:--------------------------------------------:|
+|  loaderUrl |                               string                               |          | "/api/image" | The path of the image loader resource route. |
+| responsive | { size: { width: number; height: number; }; maxWidth?: number; }[] |          |      [ ]     |         An array of responsive sizes.        |
+
+
+### Hook
+
+Optionally, this library also exports the hook used to generate responsive props for images.
+In most use cases you can simply use the `Image` component, but you might need the hook for custom components.
+
+```typescript jsx
+import { useResponsiveImage } from "remix-image";
+
+const Image: React.FC<ImageProps> = ({
+  className,
+  loaderUrl = "/api/image",
+  responsive = [],
+  ...imgProps
+}) => {
+  const responsiveProps = useResponsiveImage(imgProps, loaderUrl, responsive);
+
+  return (
+    <img
+      className={clsx(classes.root, className)}
+      {...imgProps}
+      {...responsiveProps}
+    />
+  );
+};
+```
+
+|    Name    |                                Type                                | Required | Default |                   Description                   |
+|:----------:|:------------------------------------------------------------------:|:--------:|:-------:|:-----------------------------------------------:|
+|  imgProps  |                   ComponentPropsWithoutRef<"img">                  |     X    |         | The props to be passed to the base img element. |
+|  loaderUrl |                               string                               |     X    |    []   |   The path of the image loader resource route.  |
+| responsive | { size: { width: number; height: number; }; maxWidth?: number; }[] |          |    []   |          An array of responsive sizes.          |
 
 ## Other
 
