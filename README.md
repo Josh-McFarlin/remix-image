@@ -16,6 +16,17 @@ npm install -S https://github.com/Josh-McFarlin/remix-image.git
 yarn add remix-image@https://github.com/Josh-McFarlin/remix-image.git
 ```
 
+The following peer deps are also required:
+```json
+"peerDependencies": {
+  "hybrid-disk-cache": "^0.2.0",
+  "react": ">=16.8.0",
+  "react-dom": ">=16.8.0",
+  "remix": "^1.0.0",
+  "sharp": "^0.29.0"
+}
+```
+
 This library will be uploaded to npm once a stable release has been created.
 
 ### Loader
