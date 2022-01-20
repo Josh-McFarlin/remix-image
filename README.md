@@ -2,34 +2,52 @@
 
 ## 👋 Intro
 
-A React component for responsive images in Remix
+A React component for responsive images in Remix.
 
+This library turns:
+
+```typescript jsx
+<Image
+  src="https://i.imgur.com/5cQnAQC.png"
+  responsive={[{
+    size: {
+      width: 100,
+      height: 100,
+    },
+    maxWidth: 200,
+  }]}
+/>
+```
+
+Into:
+
+```typescript jsx
+<img
+  class="Image-module_root__56rgX"
+  src="/api/image?src=https%253A%252F%252Fi.imgur.com%252F5cQnAQC.png&amp;width=100&amp;height=100%2520100w"
+  srcset="/api/image?src=https%253A%252F%252Fi.imgur.com%252F5cQnAQC.png&amp;width=100&amp;height=100%2520100w"
+  sizes="(max-width: 200px) 100px"
+>
+```
+
+Where the `responsive` sizes provided through the props are turned into image URLs served by the local server that are cached for fast and performant loading.
 
 ## 🚀 How to use
 
 ### Install
 
-To install this library, use on of the following commands:
+To install this library and its peer deps, use on of the following commands:
 ```bash
-npm install -S remix-image
-yarn add remix-image
+npm install -S remix-image hybrid-disk-cache sharp
+yarn add remix-image hybrid-disk-cache sharp
 ```
 
-The following peer deps are also required:
-```json
-"peerDependencies": {
-  "hybrid-disk-cache": "^0.2.0",
-  "react": ">=16.8.0",
-  "react-dom": ">=16.8.0",
-  "remix": "^1.0.0",
-  "sharp": "^0.29.0"
-}
-```
+---
 
 ### Loader
 
 Create a new resource route that imports the `imageLoader` function and exports as `loader`.
-By default, the resource route `"/api/image"` is used, but any route can be used.
+By default, the image component uses the route `"/api/image"`, but any route can be used.
 ```typescript jsx
 import { imageLoader } from "remix-image";
 
@@ -39,11 +57,14 @@ export const loader = imageLoader({
 });
 ```
 
-|        Name        |                       Type                        | Required |                            Default                             |                                                     Description                                                    |
-|:------------------:|:-------------------------------------------------:|:--------:|:--------------------------------------------------------------:|:------------------------------------------------------------------------------------------------------------------:|
-|       selfUrl      |                      string                       |     X    |                                                                |                                            The URL of the local server.                                            |
-| whitelistedDomains |                     string[]                      |          |                               []                               | Valid domains responsive images can be served from. selfUrl is automatically added at runtime and is not required. |
-|        cache       |   { path: string, ttl: number, tbd: number } \| null    |                                                                   | { path: "tmp/img", ttl: 24 * 60 * 60, tbd: 365 * 24 * 60 * 60 } |              The configuration for the local image cache. Setting this to null will disable the cache.             |
+#### Options
+|        Name        |                       Type                        |                                  Required                                  |                            Default                             |                                                     Description                                                    |
+|:------------------:|:-------------------------------------------------:|:--------------------------------------------------------------------------:|:--------------------------------------------------------------:|:------------------------------------------------------------------------------------------------------------------:|
+|       selfUrl      |                      string                       |                                     X                                      |                                                                |                                            The URL of the local server.                                            |
+| whitelistedDomains |                     string[]                      |                                                                            |                               []                               | Valid domains responsive images can be served from. selfUrl is automatically added at runtime and is not required. |
+|        cache       |   { path: string, ttl: number, tbd: number } \|                                  null                                      | { path: "tmp/img", ttl: 24 * 60 * 60, tbd: 365 * 24 * 60 * 60 } |              The configuration for the local image cache. Setting this to null will disable the cache.             |
+
+---
 
 ### Component
 
@@ -70,11 +91,13 @@ import { Image } from "remix-image";
 />
 ```
 
-|    Name    |                                Type                                | Required |    Default   |                  Description                 |
-|:----------:|:------------------------------------------------------------------:|:--------:|:------------:|:--------------------------------------------:|
-|  loaderUrl |                               string                               |          | "/api/image" | The path of the image loader resource route. |
-| responsive | { size: { width: number; height: number; }; maxWidth?: number; }[] |          |      [ ]     |         An array of responsive sizes.        |
+#### PropTypes
+|    Name    |                                Type                                | Required |   Default    |                                         Description                                          |
+|:----------:|:------------------------------------------------------------------:|:--------:|:------------:|:--------------------------------------------------------------------------------------------:|
+|  loaderUrl |                               string                               |          | "/api/image" |                         The path of the image loader resource route.                         |
+| responsive | { size: { width: number; height: number; }; maxWidth?: number; }[] |          |      []      | An array of responsive sizes. The resource route is not called if this prop is not provided. |
 
+---
 
 ### Hook
 
@@ -102,6 +125,7 @@ const Image: React.FC<ImageProps> = ({
 };
 ```
 
+#### Parameters
 |    Name    |                                Type                                | Required | Default |                   Description                   |
 |:----------:|:------------------------------------------------------------------:|:--------:|:-------:|:-----------------------------------------------:|
 |  imgProps  |                   ComponentPropsWithoutRef<"img">                  |     X    |         | The props to be passed to the base img element. |
