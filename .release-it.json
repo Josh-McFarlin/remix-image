@@ -16,7 +16,7 @@
     "release": true
   },
   "hooks": {
-    "before:init": ["yon run format", "yon run test"],
+    "before:init": ["yon run test"],
     "after:bump": "npm run build",
     "after:release": "echo Successfully released ${name} v${version} to ${repo.repository}."
   }

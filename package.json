@@ -32,7 +32,7 @@
     "typecheck": "tsc --project tsconfig.json --noEmit",
     "build": "rollup -c",
     "watch": "rollup -c -w",
-    "test": "jest",
+    "test": "jest --passWithNoTests",
     "test:watch": "jest --watch",
     "prepare": "husky install",
     "commit": "commit",
