@@ -1,6 +1,6 @@
 {
   "name": "remix-image",
-  "version": "0.0.1",
+  "version": "0.1.0",
   "description": "A React component for responsive images in Remix",
   "author": "Josh McFarlin <josh@mcfarl.in>",
   "license": "GPL-3.0",
@@ -28,13 +28,15 @@
   "scripts": {
     "format": "prettier --write \"**/*.{js,jsx,ts,tsx,json,css,scss}\"",
     "lint": "eslint --fix --ext ts --ext tsx --ext js --ext jsx .",
-    "prebuild": "rm -rf build",
+    "prebuild": "rimraf coverage build tmp",
     "typecheck": "tsc --project tsconfig.json --noEmit",
     "build": "rollup -c",
     "watch": "rollup -c -w",
     "test": "jest",
     "test:watch": "jest --watch",
-    "prepare": "husky install"
+    "prepare": "husky install",
+    "commit": "commit",
+    "release": "dotenv release-it --"
   },
   "dependencies": {
     "clsx": "^1.1.1",
@@ -42,6 +44,10 @@
   },
   "devDependencies": {
     "@babel/core": "^7.16.0",
+    "@commitlint/cli": "^16.1.0",
+    "@commitlint/config-conventional": "^16.0.0",
+    "@commitlint/prompt-cli": "^16.1.0",
+    "@release-it/keep-a-changelog": "^2.3.0",
     "@remix-run/node": "^1.1.1",
     "@remix-run/react": "^1.1.1",
     "@remix-run/server-runtime": "^1.1.1",
@@ -62,6 +68,7 @@
     "concurrently": "^6.4.0",
     "css-loader": "^5.2.7",
     "cssnano": "^5.0.12",
+    "dotenv-cli": "^4.1.1",
     "eslint": "^8.4.0",
     "eslint-config-prettier": "^8.3.0",
     "eslint-plugin-import": "^2.25.3",
@@ -80,7 +87,9 @@
     "prettier": "2.5.1",
     "react": "^17.0.2",
     "react-dom": "^17.0.2",
+    "release-it": "^14.12.3",
     "remix": "^1.1.1",
+    "rimraf": "^3.0.2",
     "rollup": "^2.60.2",
     "rollup-plugin-copy": "^3.4.0",
     "rollup-plugin-delete": "^2.0.0",
@@ -94,7 +103,8 @@
     "sharp": "^0.29.3",
     "style-loader": "^2.0.0",
     "ts-jest": "^27.1.0",
-    "typescript": "^4.5.2"
+    "typescript": "^4.5.2",
+    "yarn-or-npm": "^3.0.1"
   },
   "peerDependencies": {
     "hybrid-disk-cache": "^0.2.0",
