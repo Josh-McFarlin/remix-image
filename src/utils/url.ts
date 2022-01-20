@@ -25,3 +25,9 @@ export const createUrl = (
 
   return url + (params ? "?" : "") + createParamString(params);
 };
+
+export const decodeQuery = (
+  queryParams: URLSearchParams,
+  key: string
+): string | null =>
+  queryParams.has(key) ? decodeURIComponent(queryParams.get(key)!) : null;

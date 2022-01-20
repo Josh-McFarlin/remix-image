@@ -1,104 +1,8 @@
-import fs from "fs";
-import path from "path";
-import { Request as NodeRequest } from "@remix-run/node/fetch";
 import type { LoaderFunction } from "@remix-run/server-runtime";
-import FileType from "file-type";
-import Cache from "hybrid-disk-cache";
-import sharp from "sharp";
-
-const textResponse = (status: number, message = ""): Response =>
-  new Response(message, {
-    status,
-  });
-
-const imageResponse = (
-  file: any,
-  status: number,
-  contentType: string,
-  cacheControl: string
-): Response =>
-  new Response(file, {
-    status,
-    headers: {
-      "Content-Type": contentType,
-      "Cache-Control": cacheControl,
-    },
-  });
-
-const fetchImage = async (
-  src: string,
-  width: string,
-  quality: string,
-  allowWebP = false
-) => {
-  let contentType: string | undefined;
-  let resultImg: Buffer | undefined;
-  let buffer: Buffer | undefined;
-
-  if (src.startsWith("/") && (src.length === 1 || src[1] !== "/")) {
-    const filePath = path.resolve("public", src.slice(1));
-
-    buffer = fs.readFileSync(filePath);
-    contentType = (await FileType.fromFile(filePath))?.mime || "image/svg+xml";
-  } else {
-    const imgRequest = new Request(src.toString()) as unknown as NodeRequest;
-
-    const imageResponse = await fetch(imgRequest as unknown as Request);
-
-    const arrBuff = await imageResponse.arrayBuffer();
-    buffer = Buffer.from(arrBuff);
-    contentType = imageResponse.headers.get("content-type")!;
-  }
-
-  if (contentType === "image/svg+xml") {
-    contentType = "image/svg+xml";
-    resultImg = buffer;
-  } else {
-    const image = sharp(buffer);
-
-    image
-      .resize({
-        width: parseInt(width),
-      })
-      .jpeg({
-        quality: parseInt(quality),
-        progressive: true,
-        force: false,
-      })
-      .png({
-        progressive: true,
-        compressionLevel: 9,
-        force: false,
-      });
-
-    if (allowWebP) {
-      image.webp({
-        quality: parseInt(quality),
-      });
-    }
-
-    resultImg = await image.toBuffer();
-    contentType = (await FileType.fromBuffer(resultImg))?.mime;
-  }
-
-  return {
-    resultImg: resultImg,
-    contentType: contentType,
-  };
-};
-
-const decodeQuery = (
-  queryParams: URLSearchParams,
-  key: string
-): string | null =>
-  queryParams.has(key) ? decodeURIComponent(queryParams.get(key)!) : null;
-
-const generateKey = (
-  width: string,
-  quality: string,
-  src: string,
-  webp: boolean
-) => `${width}_${quality}_${src}_${webp}`;
+import ImageCache from "../../utils/cache";
+import { fetchImage } from "../../utils/fetch";
+import { imageResponse, textResponse } from "../../utils/response";
+import { decodeQuery } from "../../utils/url";
 
 interface LoaderOptions {
   selfUrl: string;
@@ -117,11 +21,7 @@ const imageLoader = (options: LoaderOptions): LoaderFunction => {
     selfUrl.host,
   ]);
 
-  const cache = new Cache({
-    path: "tmp/img",
-    ttl: 24 * 60 * 60,
-    tbd: 365 * 24 * 60 * 60,
-  });
+  const cache = new ImageCache(options.cache);
 
   return async ({ request }: { request: Request }) => {
     const url = new URL(request.url);
@@ -134,13 +34,11 @@ const imageLoader = (options: LoaderOptions): LoaderFunction => {
       request.headers.has("accept") &&
       request.headers.get("accept")!.includes("image/webp");
 
-    let cacheValue;
-    let resultImg;
-    let contentType: string;
-    const cacheKey = generateKey(width, quality, src, webpSupport);
+    let resultImg: Buffer | undefined;
+    let contentType: string | undefined;
 
-    if ((await cache.has(cacheKey)) !== "miss") {
-      if ((await cache.has(cacheKey)) == "stale") {
+    if (cache.isUsing && (await cache.has(src, width, quality, webpSupport))) {
+      if ((await cache.status(src, width, quality, webpSupport)) == "stale") {
         setTimeout(async () => {
           const myUrl = new URL(src, selfUrl);
           const res = await fetchImage(
@@ -151,23 +49,18 @@ const imageLoader = (options: LoaderOptions): LoaderFunction => {
           );
 
           resultImg = res.resultImg;
-          contentType = res.contentType!;
+          contentType = res.contentType;
 
-          await cache.set(cacheKey, resultImg);
+          await cache.set(src, width, quality, webpSupport, resultImg);
         }, 1000);
       }
 
-      cacheValue = await cache.get(cacheKey);
-    }
+      const cacheValue = await cache.get(src, width, quality, webpSupport);
 
-    if (cacheValue) {
-      try {
-        contentType = (await FileType.fromBuffer(cacheValue))!.mime!;
-      } catch {
-        contentType = "image/svg+xml";
+      if (cacheValue) {
+        contentType = cacheValue.contentType;
+        resultImg = cacheValue.resultImg;
       }
-
-      resultImg = cacheValue;
     } else {
       const myUrl = new URL(src, selfUrl);
 
@@ -182,18 +75,27 @@ const imageLoader = (options: LoaderOptions): LoaderFunction => {
           quality,
           webpSupport
         );
+
         resultImg = res.resultImg;
-        contentType = res.contentType!;
+        contentType = res.contentType;
+
+        if (cache.isUsing) {
+          await cache.set(src, width, quality, webpSupport, resultImg);
+        }
       }
     }
 
-    await cache.set(cacheKey, resultImg);
+    if (!resultImg) {
+      return textResponse(404, "Requested Image not found!");
+    }
 
     return imageResponse(
       resultImg,
       200,
-      contentType,
-      `private, max-age=${cache.ttl}, max-stale=${cache.tbd}`
+      contentType || "image/svg+xml",
+      cache.isUsing
+        ? `private, max-age=${cache.config.ttl}, max-stale=${cache.config.tbd}`
+        : "private"
     );
   };
 };
