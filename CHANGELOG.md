@@ -9,6 +9,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - **BREAKING**: Modified Cache setup to use class instances to later support additional platforms.
 
+### Added
+
+- Created new MemoryCache that does not store files on the file system (for platforms that do not support file system access like Cloudflare)
+
 ## [0.1.5] - 2022-01-20
 
 # Docs

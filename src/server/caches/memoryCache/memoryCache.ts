@@ -1,37 +1,37 @@
 import FileType from "file-type";
-import BaseCache from "hybrid-disk-cache";
 import { CacheConfig, Cache } from "../../../types/cache";
+import { LRU } from "../../../utils/lru";
 
-export interface DiskCacheConfig extends CacheConfig {
+export interface MemoryCacheConfig extends CacheConfig {
   /**
-   * Path: the relative path where the cache should be stored
+   * Max Size: the max size of the cache in bytes
    */
-  path: string;
+  maxSize: number;
 }
 
-export class DiskCache extends Cache {
-  config: DiskCacheConfig;
-  cache: BaseCache;
+export class MemoryCache extends Cache {
+  config: MemoryCacheConfig;
+  cache: LRU<Buffer>;
 
-  constructor(config: Partial<DiskCacheConfig> | null | undefined = {}) {
+  constructor(config: Partial<MemoryCacheConfig> | null | undefined = {}) {
     super();
 
     this.config = {
-      path: "tmp/img",
+      maxSize: 5e7, // 50 MB
       ttl: 24 * 60 * 60,
       tbd: 365 * 24 * 60 * 60,
       ...config,
     };
 
-    this.cache = new BaseCache(this.config);
+    this.cache = new LRU<Buffer>(this.config.maxSize);
   }
 
   async has(key: string): Promise<boolean> {
-    return (await this.cache.has(key)) !== "miss";
+    return this.cache.has(key);
   }
 
   async status(key: string): Promise<"hit" | "stale" | "miss"> {
-    return this.cache.has(key);
+    return this.cache.has(key) ? "hit" : "miss";
   }
 
   async get(key: string): Promise<{
@@ -44,14 +44,14 @@ export class DiskCache extends Cache {
       return null;
     }
 
-    const cacheValue = (await this.cache.get(key))!;
+    const cacheValue = this.cache.get(key)!;
     try {
       contentType = (await FileType.fromBuffer(cacheValue))!.mime;
     } catch {
       contentType = "image/svg+xml";
     }
 
-    await this.cache.set(key, cacheValue);
+    this.cache.set(key, cacheValue, Buffer.byteLength(cacheValue));
 
     return {
       resultImg: cacheValue,
@@ -60,10 +60,10 @@ export class DiskCache extends Cache {
   }
 
   async set(key: string, resultImg: Buffer): Promise<void> {
-    await this.cache.set(key, resultImg);
+    this.cache.set(key, resultImg, Buffer.byteLength(resultImg));
   }
 
   async clear(): Promise<void> {
-    await this.cache.purge();
+    this.cache.clear();
   }
 }

@@ -9,7 +9,12 @@ import postcss from "rollup-plugin-postcss";
 
 export default [
   {
-    input: ["src/**/index.tsx", "src/**/index.ts", "!src/**/*.test.tsx"],
+    input: [
+      "src/**/index.tsx",
+      "src/**/index.ts",
+      "!src/**/*.test.tsx",
+      "!src/**/*.test.ts",
+    ],
     output: [
       {
         dir: "build",

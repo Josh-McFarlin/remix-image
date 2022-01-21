@@ -1,10 +1,12 @@
-import { LoaderFunction } from "@remix-run/server-runtime";
 import { Cache } from "./cache";
 
-export interface LoaderOptions {
+export interface LoaderConfig {
   selfUrl: string;
   whitelistedDomains?: string[];
   cache?: Cache;
 }
 
-export type AssetLoader = (options: LoaderOptions) => LoaderFunction;
+export type AssetLoader = (
+  config: LoaderConfig,
+  request: Request
+) => Promise<Response>;

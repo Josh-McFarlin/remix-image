@@ -49,20 +49,36 @@ yarn add remix-image hybrid-disk-cache sharp
 Create a new resource route that imports the `imageLoader` function and exports as `loader`.
 By default, the image component uses the route `"/api/image"`, but any route can be used.
 ```typescript jsx
-import { imageLoader } from "remix-image";
+import type { LoaderFunction } from "remix";
+import { imageLoader, DiskCache, MemoryCache } from "remix-image/server";
 
-export const loader = imageLoader({
+const config = {
   selfUrl: "http://localhost:3000",
   whitelistedDomains: ["i.imgur.com"],
-});
+  cache: new DiskCache(),
+};
+
+export const loader: LoaderFunction = ({ request }) => {
+  return imageLoader(config, request);
+};
 ```
 
 #### Options
-|        Name        |                       Type                        |                                  Required                                  |                            Default                             |                                                     Description                                                    |
-|:------------------:|:-------------------------------------------------:|:--------------------------------------------------------------------------:|:--------------------------------------------------------------:|:------------------------------------------------------------------------------------------------------------------:|
-|       selfUrl      |                      string                       |                                     X                                      |                                                                |                                            The URL of the local server.                                            |
-| whitelistedDomains |                     string[]                      |                                                                            |                               []                               | Valid domains responsive images can be served from. selfUrl is automatically added at runtime and is not required. |
-|        cache       |   { path: string, ttl: number, tbd: number } \|                                  null                                      | { path: "tmp/img", ttl: 24 * 60 * 60, tbd: 365 * 24 * 60 * 60 } |              The configuration for the local image cache. Setting this to null will disable the cache.             |
+|        Name        |           Type           | Required | Default |                                                    Description                                                     |
+|:------------------:|:------------------------:|:--------:|:-------:|:------------------------------------------------------------------------------------------------------------------:|
+|       selfUrl      |          string          |    X     |         |                                            The URL of the local server.                                            |
+| whitelistedDomains |         string[]         |          |   []    | Valid domains responsive images can be served from. selfUrl is automatically added at runtime and is not required. |
+|        cache       | DiskCache or MemoryCache |          |  null   |                  The configuration for the local image cache. Setting this to null will disable the cache.         |
+
+#### Cache Types
+
+| Name        | Description                                                                                                            | Options                                               |
+|-------------|------------------------------------------------------------------------------------------------------------------------|-------------------------------------------------------|
+| DiskCache   | A cache that stores images in memory and on disk (depending on size) for the best efficiency.                          | { path: string, ttl: number, tbd: number }            |
+| MemoryCache | A cache that only stores images in memory. Designed for platforms that do not have native disk access like Cloudflare. | { maxSize: number (bytes), ttl: number, tbd: number } |
+
+**Note:**
+Due to [remix request purging](https://remix.run/docs/en/v1.1.1/other-api/serve), `MemoryCache` will clear itself automatically on each request in development. This will not occur during production, and it will perform as expected.
 
 ---
 
