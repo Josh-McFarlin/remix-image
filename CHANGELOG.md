@@ -3,6 +3,17 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [Unreleased]
+
+### Added
+
+- Moved image transformation logic into separate files to later support additional platforms.
+- Created new image transformer that uses Jimp to transform images with pure JavaScript.
+
+### Changed
+
+- Switched default image transformer to Jimp support all platforms by default
+
 ## [0.1.6] - 2022-01-21
 
 ### Changed

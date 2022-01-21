@@ -38,8 +38,8 @@ Where the `responsive` sizes provided through the props are turned into image UR
 
 To install this library and its peer deps, use on of the following commands:
 ```bash
-npm install -S remix-image hybrid-disk-cache sharp
-yarn add remix-image hybrid-disk-cache sharp
+npm install -S remix-image hybrid-disk-cache sharp jimp
+yarn add remix-image hybrid-disk-cache sharp jimp
 ```
 
 ---
@@ -79,6 +79,31 @@ export const loader: LoaderFunction = ({ request }) => {
 
 **Note:**
 Due to [remix request purging](https://remix.run/docs/en/v1.1.1/other-api/serve), `MemoryCache` will clear itself automatically on each request in development. This will not occur during production, and it will perform as expected.
+
+#### Transformer Types
+| Name  | Description                                                                        |
+|-------|------------------------------------------------------------------------------------|
+| Jimp  | The default image transformer, supports all platforms at the cost of performance.  |
+| Sharp | A faster image transformer that uses the file-system, offers the best performance. |
+
+#### Platforms Without File-System Access
+Some platforms like Cloudflare workers do not support file-systems and some Node packages.
+In this case, use `MemoryCache` and `jimpTransformer` because they are pure JavaScript.
+```typescript jsx
+import type { LoaderFunction } from "remix";
+import { imageLoader, MemoryCache, jimpTransformer } from "remix-image/server";
+
+const config = {
+  selfUrl: "http://localhost:3000",
+  whitelistedDomains: ["i.imgur.com"],
+  cache: new MemoryCache(),
+  transformer: jimpTransformer,
+};
+
+export const loader: LoaderFunction = ({ request }) => {
+  return imageLoader(config, request);
+};
+```
 
 ---
 

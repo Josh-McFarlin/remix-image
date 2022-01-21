@@ -4,9 +4,11 @@ import { generateKey } from "../../../utils/cache";
 import { fetchImage } from "../../../utils/fetch";
 import { imageResponse, textResponse } from "../../../utils/response";
 import { decodeQuery } from "../../../utils/url";
+import { jimpTransformer } from "../../transformers";
 
 export const imageLoader: AssetLoader = async (config, request) => {
   const cache = config.cache instanceof Cache ? config.cache : null;
+  const imageTransformer = config.transformer || jimpTransformer;
 
   const selfUrl = new URL(config.selfUrl);
   const whitelistedDomains = new Set([
@@ -33,15 +35,21 @@ export const imageLoader: AssetLoader = async (config, request) => {
     if ((await cache.status(cacheKey)) == "stale") {
       setTimeout(async () => {
         const myUrl = new URL(src, selfUrl);
-        const res = await fetchImage(
-          myUrl.toString(),
-          width,
-          quality,
-          webpSupport
-        );
+        const res = await fetchImage(myUrl.toString());
 
-        resultImg = res.resultImg;
-        contentType = res.contentType;
+        if (res.contentType === "image/svg+xml") {
+          contentType = res.contentType;
+          resultImg = res.buffer;
+        } else {
+          const transformed = await imageTransformer(res.buffer, {
+            width: parseInt(width, 10),
+            quality: parseInt(quality, 10),
+            allowWebP: webpSupport,
+          });
+
+          contentType = transformed.contentType;
+          resultImg = transformed.resultImg;
+        }
 
         await cache.set(cacheKey, resultImg);
       }, 1000);
@@ -62,15 +70,21 @@ export const imageLoader: AssetLoader = async (config, request) => {
     } else if (parseInt(width) > 4000) {
       return textResponse(406, "Requested Image too large!");
     } else {
-      const res = await fetchImage(
-        myUrl.toString(),
-        width,
-        quality,
-        webpSupport
-      );
+      const res = await fetchImage(myUrl.toString());
 
-      resultImg = res.resultImg;
-      contentType = res.contentType;
+      if (res.contentType === "image/svg+xml") {
+        contentType = res.contentType;
+        resultImg = res.buffer;
+      } else {
+        const transformed = await imageTransformer(res.buffer, {
+          width: parseInt(width, 10),
+          quality: parseInt(quality, 10),
+          allowWebP: webpSupport,
+        });
+
+        contentType = transformed.contentType;
+        resultImg = transformed.resultImg;
+      }
 
       console.log(`Fetched image [${cacheKey}] directly.`);
       if (cache) {

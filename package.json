@@ -92,6 +92,7 @@
     "hybrid-disk-cache": "^0.2.0",
     "identity-obj-proxy": "^3.0.0",
     "jest": "^27.4.3",
+    "jimp": "^0.16.1",
     "lint-staged": "^12.1.2",
     "node-sass": "^6.0.1",
     "postcss": "^8.4.4",
@@ -119,6 +120,7 @@
   },
   "peerDependencies": {
     "hybrid-disk-cache": "^0.2.0",
+    "jimp": "^0.16.1",
     "react": ">=16.8.0",
     "react-dom": ">=16.8.0",
     "remix": "^1.0.0",

@@ -2,16 +2,14 @@ import fs from "fs";
 import path from "path";
 import { Request as NodeRequest } from "@remix-run/node/fetch";
 import FileType from "file-type";
-import sharp from "sharp";
 
 export const fetchImage = async (
-  src: string,
-  width: string,
-  quality: string,
-  allowWebP = false
-): Promise<{ resultImg: Buffer; contentType: string }> => {
+  src: string
+): Promise<{
+  buffer: Buffer;
+  contentType: string;
+}> => {
   let contentType: string | undefined;
-  let resultImg: Buffer | undefined;
   let buffer: Buffer | undefined;
 
   if (src.startsWith("/") && (src.length === 1 || src[1] !== "/")) {
@@ -29,40 +27,8 @@ export const fetchImage = async (
     contentType = imageResponse.headers.get("content-type")!;
   }
 
-  if (contentType === "image/svg+xml") {
-    contentType = "image/svg+xml";
-    resultImg = buffer;
-  } else {
-    const image = sharp(buffer);
-
-    image
-      .resize({
-        width: parseInt(width),
-      })
-      .jpeg({
-        quality: parseInt(quality),
-        progressive: true,
-        force: false,
-      })
-      .png({
-        progressive: true,
-        compressionLevel: 9,
-        force: false,
-      });
-
-    if (allowWebP) {
-      image.webp({
-        quality: parseInt(quality),
-      });
-    }
-
-    resultImg = await image.toBuffer();
-    contentType =
-      (await FileType.fromBuffer(resultImg))?.mime || "image/svg+xml";
-  }
-
   return {
-    resultImg: resultImg,
-    contentType: contentType,
+    buffer,
+    contentType,
   };
 };
