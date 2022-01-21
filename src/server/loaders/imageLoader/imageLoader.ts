@@ -1,29 +1,19 @@
-import type { LoaderFunction } from "@remix-run/server-runtime";
-import ImageCache from "../../utils/cache";
-import { fetchImage } from "../../utils/fetch";
-import { imageResponse, textResponse } from "../../utils/response";
-import { decodeQuery } from "../../utils/url";
+import type { AssetLoader } from "../../../types/loader";
+import { generateKey } from "../../../utils/cache";
+import { fetchImage } from "../../../utils/fetch";
+import { imageResponse, textResponse } from "../../../utils/response";
+import { decodeQuery } from "../../../utils/url";
 
-interface LoaderOptions {
-  selfUrl: string;
-  whitelistedDomains?: string[];
-  cache?: {
-    path?: string;
-    ttl?: number;
-    tbd?: number;
-  } | null;
-}
+export const imageLoader: AssetLoader = (options) => {
+  const { cache } = options;
 
-const imageLoader = (options: LoaderOptions): LoaderFunction => {
   const selfUrl = new URL(options.selfUrl);
   const whitelistedDomains = new Set([
     ...(options.whitelistedDomains || []),
     selfUrl.host,
   ]);
 
-  const cache = new ImageCache(options.cache);
-
-  return async ({ request }: { request: Request }) => {
+  return async ({ request }) => {
     const url = new URL(request.url);
     const width = decodeQuery(url.searchParams, "width") || "";
     const height = decodeQuery(url.searchParams, "height") || "";
@@ -35,10 +25,12 @@ const imageLoader = (options: LoaderOptions): LoaderFunction => {
       request.headers.get("accept")!.includes("image/webp");
 
     let resultImg: Buffer | undefined;
-    let contentType: string | undefined;
+    let contentType = "image/svg+xml";
 
-    if (cache.isUsing && (await cache.has(src, width, quality, webpSupport))) {
-      if ((await cache.status(src, width, quality, webpSupport)) == "stale") {
+    const cacheKey = generateKey(src, width, quality, webpSupport);
+
+    if (cache && (await cache.has(cacheKey))) {
+      if ((await cache.status(cacheKey)) == "stale") {
         setTimeout(async () => {
           const myUrl = new URL(src, selfUrl);
           const res = await fetchImage(
@@ -51,11 +43,11 @@ const imageLoader = (options: LoaderOptions): LoaderFunction => {
           resultImg = res.resultImg;
           contentType = res.contentType;
 
-          await cache.set(src, width, quality, webpSupport, resultImg);
+          await cache.set(cacheKey, resultImg);
         }, 1000);
       }
 
-      const cacheValue = await cache.get(src, width, quality, webpSupport);
+      const cacheValue = await cache.get(cacheKey);
 
       if (cacheValue) {
         contentType = cacheValue.contentType;
@@ -79,8 +71,8 @@ const imageLoader = (options: LoaderOptions): LoaderFunction => {
         resultImg = res.resultImg;
         contentType = res.contentType;
 
-        if (cache.isUsing) {
-          await cache.set(src, width, quality, webpSupport, resultImg);
+        if (cache) {
+          await cache.set(cacheKey, resultImg);
         }
       }
     }
@@ -92,12 +84,10 @@ const imageLoader = (options: LoaderOptions): LoaderFunction => {
     return imageResponse(
       resultImg,
       200,
-      contentType || "image/svg+xml",
-      cache.isUsing
+      contentType,
+      cache
         ? `private, max-age=${cache.config.ttl}, max-stale=${cache.config.tbd}`
-        : "private"
+        : `public, max-age=${60 * 60 * 24 * 365}`
     );
   };
 };
-
-export default imageLoader;

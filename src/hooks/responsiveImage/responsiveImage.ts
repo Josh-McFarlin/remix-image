@@ -1,14 +1,14 @@
 import type { ComponentPropsWithoutRef } from "react";
-import type { ResponsiveSize } from "../types/image";
-import { createUrl } from "../utils/url";
+import type { ResponsiveSize } from "../../types/image";
+import { createUrl } from "../../utils/url";
 
-type ResponsiveHookResult = {
+export type ResponsiveHookResult = {
   src: string;
   srcSet?: string;
   sizes?: string;
 };
 
-const useResponsiveImage = (
+export const useResponsiveImage = (
   imgProps: ComponentPropsWithoutRef<"img">,
   loaderUrl = "/api/image",
   responsive: ResponsiveSize[]
@@ -61,5 +61,3 @@ const useResponsiveImage = (
     }),
   };
 };
-
-export default useResponsiveImage;

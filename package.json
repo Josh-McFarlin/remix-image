@@ -22,7 +22,7 @@
   "style": "build/styles.css",
   "exports": {
     ".": "./build/index.js",
-    "./loaders": "./build/loaders/index.js",
+    "./server": "./build/server/index.js",
     "./hooks": "./build/hooks/index.js",
     "./components": "./build/components/index.js"
   },
@@ -32,7 +32,7 @@
     "README.md",
     "components.d.ts",
     "hooks.d.ts",
-    "loaders.d.ts"
+    "server.d.ts"
   ],
   "scripts": {
     "format": "prettier --write \"**/*.{js,jsx,ts,tsx,json,css,scss}\"",
@@ -44,7 +44,7 @@
     "test": "jest --passWithNoTests",
     "test:watch": "jest --watch",
     "prepare": "husky install",
-    "commit": "commit",
+    "commit": "git-cz",
     "release": "dotenv release-it --"
   },
   "dependencies": {
@@ -55,6 +55,7 @@
     "@babel/core": "^7.16.0",
     "@commitlint/cli": "^16.1.0",
     "@commitlint/config-conventional": "^16.0.0",
+    "@commitlint/cz-commitlint": "^16.1.0",
     "@commitlint/prompt-cli": "^16.1.0",
     "@release-it/keep-a-changelog": "^2.3.0",
     "@remix-run/node": "^1.1.1",
@@ -74,6 +75,7 @@
     "@typescript-eslint/parser": "^5.5.0",
     "autoprefixer": "^10.4.0",
     "babel-loader": "^8.2.3",
+    "commitizen": "^4.2.4",
     "concurrently": "^6.4.0",
     "css-loader": "^5.2.7",
     "cssnano": "^5.0.12",

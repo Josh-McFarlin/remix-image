@@ -10,7 +10,7 @@ export interface ImageProps extends ComponentPropsWithoutRef<"img"> {
   responsive?: ResponsiveSize[];
 }
 
-const Image: React.FC<ImageProps> = ({
+export const Image: React.FC<ImageProps> = ({
   className,
   loaderUrl = "/api/image",
   responsive = [],
@@ -26,5 +26,3 @@ const Image: React.FC<ImageProps> = ({
     />
   );
 };
-
-export default Image;

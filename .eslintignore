@@ -8,7 +8,7 @@ node_modules/
 
 components.d.ts
 hooks.d.ts
-loaders.d.ts
+server.d.ts
 
 example/node_modules/
 example/package-lock.json/
