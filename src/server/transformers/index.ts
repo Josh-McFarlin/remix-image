@@ -1,2 +1,1 @@
-export * from "./sharpTransformer";
-export * from "./jimpTransformer";
+export * from "./pureTransformer";

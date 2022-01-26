@@ -38,8 +38,8 @@ Where the `responsive` sizes provided through the props are turned into image UR
 
 To install this library and its peer deps, use on of the following commands:
 ```bash
-npm install -S remix-image hybrid-disk-cache sharp jimp
-yarn add remix-image hybrid-disk-cache sharp jimp
+npm install -S remix-image
+yarn add remix-image
 ```
 
 ---
@@ -51,11 +51,13 @@ By default, the image component uses the route `"/api/image"`, but any route can
 ```typescript jsx
 import type { LoaderFunction } from "remix";
 import { imageLoader, DiskCache, MemoryCache } from "remix-image/server";
+import sharp from "sharp";
 
 const config = {
   selfUrl: "http://localhost:3000",
   whitelistedDomains: ["i.imgur.com"],
   cache: new DiskCache(),
+  transformer: sharp
 };
 
 export const loader: LoaderFunction = ({ request }) => {
@@ -64,46 +66,98 @@ export const loader: LoaderFunction = ({ request }) => {
 ```
 
 #### Options
-|        Name        |           Type           | Required | Default |                                                    Description                                                     |
-|:------------------:|:------------------------:|:--------:|:-------:|:------------------------------------------------------------------------------------------------------------------:|
-|       selfUrl      |          string          |    X     |         |                                            The URL of the local server.                                            |
-| whitelistedDomains |         string[]         |          |   []    | Valid domains responsive images can be served from. selfUrl is automatically added at runtime and is not required. |
-|        cache       | DiskCache or MemoryCache |          |  null   |                  The configuration for the local image cache. Setting this to null will disable the cache.         |
+|        Name        |    Type     | Required |     Default     |                                                    Description                                                     |
+|:------------------:|:-----------:|:--------:|:---------------:|:------------------------------------------------------------------------------------------------------------------:|
+|      selfUrl       |   string    |    X     |                 |                                            The URL of the local server.                                            |
+|       cache        |    Cache    |          |                 |             The configuration for the local image cache. Setting this to null will disable the cache.              |
+|    transformer     | Transformer |          | pureTransformer |                                      The image transformation library to use.                                      |
+|      resolver      |  Resolver   |          |  fetchResolver  |                                             The image resolver to use.                                             |
 
 #### Cache Types
 
-| Name        | Description                                                                                                            | Options                                               |
-|-------------|------------------------------------------------------------------------------------------------------------------------|-------------------------------------------------------|
-| DiskCache   | A cache that stores images in memory and on disk (depending on size) for the best efficiency.                          | { path: string, ttl: number, tbd: number }            |
-| MemoryCache | A cache that only stores images in memory. Designed for platforms that do not have native disk access like Cloudflare. | { maxSize: number (bytes), ttl: number, tbd: number } |
+| Name        | Description                                                                                                                            | Options                                               |
+|-------------|----------------------------------------------------------------------------------------------------------------------------------------|-------------------------------------------------------|
+| DiskCache   | A cache that stores images in memory and on disk (depending on size) for the best efficiency. To use, install the `hybrid-disk-cache` library from npm. | { path: string, ttl: number, tbd: number }            |
+| MemoryCache | A cache that only stores images in memory. Designed for platforms that do not have native disk access like Cloudflare.                 | { maxSize: number (bytes), ttl: number, tbd: number } |
 
 **Note:**
 Due to [remix request purging](https://remix.run/docs/en/v1.1.1/other-api/serve), `MemoryCache` will clear itself automatically on each request in development. This will not occur during production, and it will perform as expected.
 
 #### Transformer Types
-| Name  | Description                                                                        |
-|-------|------------------------------------------------------------------------------------|
-| Jimp  | The default image transformer, supports all platforms at the cost of performance.  |
-| Sharp | A faster image transformer that uses the file-system, offers the best performance. |
+| Name            | Description                                                                                                                      |
+|-----------------|----------------------------------------------------------------------------------------------------------------------------------|
+| pureTransformer | The default image transformer, supports all platforms at the cost of performance.                                                |
+| sharp           | A faster image transformer that uses the file-system, offers the best performance. To use, install the `sharp` library from npm. |
 
-#### Platforms Without File-System Access
-Some platforms like Cloudflare workers do not support file-systems and some Node packages.
-In this case, use `MemoryCache` and `jimpTransformer` because they are pure JavaScript.
+#### Resolver Types
+| Name          | Description                                                                                                               |
+|---------------|---------------------------------------------------------------------------------------------------------------------------|
+| fetchResolver | The default image resolver, fetches images over the network.                                                              |
+| fsResolver    | An image resolver that retrieves local images from the file-system.                                                       |
+| kvResolver    | A resolver for assets stored in Workers KV (for retrieving local images on Remix projects hosted on Cloudflare Workers.) To use, install the `@cloudflare/kv-asset-handler` library from npm. |
+
+You can create a custom resolver by combining resolvers and passing this to the loader options:
+
 ```typescript jsx
-import type { LoaderFunction } from "remix";
-import { imageLoader, MemoryCache, jimpTransformer } from "remix-image/server";
+import {
+  imageLoader,
+  MemoryCache,
+  kvResolver,
+  fetchResolver,
+} from "remix-image/serverPure";
+
+const whitelistedDomains = new Set(["http://localhost:3000", "i.imgur.com"]);
+
+export const myResolver = async (
+  asset: string,
+  url: string
+): Promise<{
+  buffer: Buffer;
+  contentType: string;
+}> => {
+  if (asset.startsWith("/") && (asset.length === 1 || asset[1] !== "/")) {
+    return kvResolver(asset, url);
+  } else {
+    if (!whitelistedDomains.has(new URL(url).host)) {
+      throw new Error("Domain not allowed!");
+    }
+
+    return fetchResolver(asset, url);
+  }
+};
 
 const config = {
   selfUrl: "http://localhost:3000",
-  whitelistedDomains: ["i.imgur.com"],
   cache: new MemoryCache(),
-  transformer: jimpTransformer,
+  resolver: myResolver,
 };
 
 export const loader: LoaderFunction = ({ request }) => {
   return imageLoader(config, request);
 };
 ```
+
+#### Platforms Without File-System Access
+Some platforms like Cloudflare Workers do not support file-systems and some Node packages.
+In this case, use `MemoryCache` and `pureTransformer` because they are pure JavaScript.
+**Note**: Because of bundling issues, you must import these helpers from `remix-image/serverPure`.
+```typescript jsx
+import type { LoaderFunction } from "remix";
+import { imageLoader, MemoryCache, pureTransformer } from "remix-image/serverPure";
+
+const config = {
+  selfUrl: "http://localhost:3000",
+  whitelistedDomains: ["i.imgur.com"],
+  cache: new MemoryCache(),
+  transformer: pureTransformer
+};
+
+export const loader: LoaderFunction = ({ request }) => {
+  return imageLoader(config, request);
+};
+```
+
+For an example project hosted on Cloudflare Workers, look at [this example](examples/cloudflare).
 
 ---
 

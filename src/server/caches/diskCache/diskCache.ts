@@ -1,6 +1,6 @@
-import FileType from "file-type";
 import BaseCache from "hybrid-disk-cache";
 import { CacheConfig, Cache } from "../../../types/cache";
+import { fromBuffer } from "../../../utils/fileType";
 
 export interface DiskCacheConfig extends CacheConfig {
   /**
@@ -46,7 +46,7 @@ export class DiskCache extends Cache {
 
     const cacheValue = (await this.cache.get(key))!;
     try {
-      contentType = (await FileType.fromBuffer(cacheValue))!.mime;
+      contentType = fromBuffer(cacheValue);
     } catch {
       contentType = "image/svg+xml";
     }

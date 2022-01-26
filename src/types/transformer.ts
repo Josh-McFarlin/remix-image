@@ -1,11 +1,12 @@
-export type ImageTransformer = (
-  buffer: Buffer,
-  options: {
-    width: number;
-    quality: number;
-    allowWebP: boolean;
-  }
-) => Promise<{
-  resultImg: Buffer;
-  contentType: string;
-}>;
+import { JpegOptions, PngOptions, ResizeOptions, WebpOptions } from "sharp";
+
+export abstract class ImageTransformer {
+  abstract jpeg(options?: JpegOptions): this;
+  abstract png(options?: PngOptions): this;
+  abstract webp(options?: WebpOptions): this;
+
+  abstract resize(options: ResizeOptions): this;
+  abstract toBuffer(): Promise<Buffer>;
+}
+
+export type TransformerMaker = (buffer: Buffer) => ImageTransformer;

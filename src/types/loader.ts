@@ -1,11 +1,12 @@
-import { Cache } from "./cache";
-import { ImageTransformer } from "./transformer";
+import type { Cache } from "./cache";
+import type { Resolver } from "./resolver";
+import type { TransformerMaker } from "./transformer";
 
 export interface LoaderConfig {
   selfUrl: string;
-  whitelistedDomains?: string[];
   cache?: Cache;
-  transformer?: ImageTransformer;
+  transformer?: TransformerMaker;
+  resolver?: Resolver;
 }
 
 export type AssetLoader = (

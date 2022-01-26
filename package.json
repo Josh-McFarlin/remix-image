@@ -22,17 +22,15 @@
   "style": "build/styles.css",
   "exports": {
     ".": "./build/index.js",
-    "./server": "./build/server/index.js",
-    "./hooks": "./build/hooks/index.js",
-    "./components": "./build/components/index.js"
+    "./server": "./build/server.js",
+    "./serverPure": "./build/serverPure.js"
   },
   "files": [
     "build",
     "package.json",
     "README.md",
-    "components.d.ts",
-    "hooks.d.ts",
-    "server.d.ts"
+    "server.d.ts",
+    "serverPure.d.ts"
   ],
   "scripts": {
     "format": "prettier --write \"**/*.{js,jsx,ts,tsx,json,css,scss}\"",
@@ -48,11 +46,14 @@
     "release": "dotenv release-it --"
   },
   "dependencies": {
+    "buffer": "^6.0.3",
     "clsx": "^1.1.1",
-    "file-type": "^16.5.3"
+    "jpeg-js": "^0.4.3",
+    "pngjs": "^6.0.0"
   },
   "devDependencies": {
     "@babel/core": "^7.16.0",
+    "@cloudflare/kv-asset-handler": "^0.2.0",
     "@commitlint/cli": "^16.1.0",
     "@commitlint/config-conventional": "^16.0.0",
     "@commitlint/cz-commitlint": "^16.1.0",
@@ -62,6 +63,7 @@
     "@remix-run/react": "^1.1.1",
     "@remix-run/server-runtime": "^1.1.1",
     "@rollup/plugin-commonjs": "^21.0.1",
+    "@rollup/plugin-inject": "^4.0.4",
     "@rollup/plugin-json": "^4.1.0",
     "@rollup/plugin-node-resolve": "^13.0.6",
     "@testing-library/jest-dom": "^5.16.0",
@@ -69,6 +71,7 @@
     "@testing-library/user-event": "^13.5.0",
     "@types/better-sqlite3": "^7.4.2",
     "@types/jest": "^27.0.3",
+    "@types/pngjs": "^6.0.1",
     "@types/react": "^17.0.37",
     "@types/sharp": "^0.29.5",
     "@typescript-eslint/eslint-plugin": "^5.5.0",
@@ -92,7 +95,6 @@
     "hybrid-disk-cache": "^0.2.0",
     "identity-obj-proxy": "^3.0.0",
     "jest": "^27.4.3",
-    "jimp": "^0.16.1",
     "lint-staged": "^12.1.2",
     "node-sass": "^6.0.1",
     "postcss": "^8.4.4",
@@ -106,7 +108,10 @@
     "rollup-plugin-copy": "^3.4.0",
     "rollup-plugin-delete": "^2.0.0",
     "rollup-plugin-multi-input": "^1.3.1",
+    "rollup-plugin-node-builtins": "^2.1.2",
+    "rollup-plugin-node-globals": "^1.4.0",
     "rollup-plugin-peer-deps-external": "^2.2.4",
+    "rollup-plugin-polyfill-node": "^0.8.0",
     "rollup-plugin-postcss": "^4.0.2",
     "rollup-plugin-scss": "^3.0.0",
     "rollup-plugin-terser": "^7.0.2",
@@ -119,12 +124,11 @@
     "yarn-or-npm": "^3.0.1"
   },
   "peerDependencies": {
+    "@cloudflare/kv-asset-handler": "^0.2.0",
     "hybrid-disk-cache": "^0.2.0",
-    "jimp": "^0.16.1",
     "react": ">=16.8.0",
     "react-dom": ">=16.8.0",
-    "remix": "^1.0.0",
-    "sharp": "^0.29.0"
+    "remix": "^1.0.0"
   },
   "lint-staged": {
     "*.{ts,tsx,js,jsx}": "eslint --cache --fix",

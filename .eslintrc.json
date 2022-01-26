@@ -70,7 +70,8 @@
     ],
     "@typescript-eslint/no-empty-interface": "off",
     "react/no-unescaped-entities": "off",
-    "@typescript-eslint/no-non-null-assertion": "off"
+    "@typescript-eslint/no-non-null-assertion": "off",
+    "@typescript-eslint/no-empty-function": "off"
   },
   "ignorePatterns": ["rollup.config.js"]
 }

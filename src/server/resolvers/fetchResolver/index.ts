@@ -1,0 +1,1 @@
+export { fetchResolver } from "./fetchResolver";

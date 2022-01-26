@@ -1,5 +1,5 @@
-import FileType from "file-type";
 import { CacheConfig, Cache } from "../../../types/cache";
+import { fromBuffer } from "../../../utils/fileType";
 import { LRU } from "../../../utils/lru";
 
 export interface MemoryCacheConfig extends CacheConfig {
@@ -46,7 +46,8 @@ export class MemoryCache extends Cache {
 
     const cacheValue = this.cache.get(key)!;
     try {
-      contentType = (await FileType.fromBuffer(cacheValue))!.mime;
+      contentType = fromBuffer(cacheValue);
+      contentType = "image/png";
     } catch {
       contentType = "image/svg+xml";
     }

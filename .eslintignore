@@ -6,9 +6,8 @@ node_modules/
 .idea_modules/
 .idea/
 
-components.d.ts
-hooks.d.ts
 server.d.ts
+serverPure.d.ts
 
 example/node_modules/
 example/package-lock.json/
