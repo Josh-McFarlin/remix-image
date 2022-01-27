@@ -8,15 +8,16 @@ import {
 import sharp from "sharp";
 
 export const fetchImage = async (
+  asset: string,
   src: string
 ): Promise<{
   buffer: Buffer;
   contentType: string;
 }> => {
   if (src.startsWith("/") && (src.length === 1 || src[1] !== "/")) {
-    return fsResolver(src);
+    return fsResolver(asset, src);
   } else {
-    return fetchResolver(src);
+    return fetchResolver(asset, src);
   }
 };
 
