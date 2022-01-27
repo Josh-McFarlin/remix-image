@@ -15,6 +15,7 @@ const config = {
   favicon: "img/favicon.ico",
   organizationName: "Josh-McFarlin", // Usually your GitHub org/user name.
   projectName: "remix-image", // Usually your repo name.
+  trailingSlash: false,
 
   plugins: [require.resolve("docusaurus-lunr-search")],
 
