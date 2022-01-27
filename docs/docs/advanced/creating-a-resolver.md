@@ -1,0 +1,64 @@
+---
+sidebar_position: 2
+---
+
+# Creating a Resolver
+
+You may want to create a Resolver if you want to **retrieve** images in a way that is not currently supported by this library.
+An example could be retrieving images stored on an authenticated server that is separate from your app.
+
+## Instructions
+
+To make your own, just make a function that follows the [Resolver format](https://github.com/Josh-McFarlin/remix-image/blob/master/src/types/resolver.ts):
+```typescript
+export type Resolver = (
+  asset: string,
+  url: string
+) => Promise<{
+  buffer: Buffer;
+  contentType: string;
+}>;
+```
+such as:
+```typescript
+import { fsResolver, fetchResolver } from "remix-image/server";
+
+export const myResolver = async (
+  asset: string,
+  src: string
+): Promise<{
+  buffer: Buffer;
+  contentType: string;
+}> => {
+  if (src.startsWith("/") && (src.length === 1 || src[1] !== "/")) {
+    return fsResolver(asset, src);
+  } else {
+    return fetchResolver(asset, src);
+  }
+};
+```
+
+You will then provide this function to the ‘resolver’ field of the loader config
+```typescript jsx
+import type { LoaderFunction } from "remix";
+import { imageLoader } from "remix-image/server";
+import myResolver from "...";
+
+const config = {
+  selfUrl: "http://localhost:3000",
+  whitelistedDomains: ["i.imgur.com"],
+  resolver: myResolver,
+};
+
+export const loader: LoaderFunction = ({ request }) => {
+  return imageLoader(config, request);
+};
+```
+
+## Example
+
+To see an example, look at [`fsResolver`](https://github.com/Josh-McFarlin/remix-image/tree/master/src/server/resolvers/fsResolver) in the library.
+
+## Show Off
+
+Create something cool that you think others would use? Upload it to GitHub and [show it off on the Remix-Image repo](https://github.com/Josh-McFarlin/remix-image/discussions/3)!

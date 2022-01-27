@@ -13,13 +13,10 @@ const config = {
   onBrokenLinks: "throw",
   onBrokenMarkdownLinks: "warn",
   favicon: "img/favicon.ico",
-  organizationName: "Josh-McFarlin", // Usually your GitHub org/user name.
-  projectName: "remix-image", // Usually your repo name.
+  organizationName: "Josh-McFarlin",
+  projectName: "remix-image",
   trailingSlash: false,
   deploymentBranch: "gh-pages",
-
-  plugins: [require.resolve("docusaurus-lunr-search")],
-
   presets: [
     [
       "classic",
@@ -27,7 +24,6 @@ const config = {
       ({
         docs: {
           sidebarPath: require.resolve("./sidebars.js"),
-          // Please change this to your repo.
           editUrl:
             "https://github.com/Josh-McFarlin/remix-image/tree/master/docs/templates/shared/",
         },
@@ -37,7 +33,6 @@ const config = {
       }),
     ],
   ],
-
   themeConfig:
     /** @type {import('@docusaurus/preset-classic').ThemeConfig} */
     ({
@@ -50,20 +45,20 @@ const config = {
         items: [
           {
             type: "doc",
-            docId: "tutorial-basics/install",
-            position: "left",
-            label: "Tutorial",
-          },
-          {
-            type: "doc",
             docId: "intro",
             position: "left",
             label: "Documentation",
           },
           {
+            type: "doc",
+            docId: "tutorial-basics/install",
+            position: "left",
+            label: "Tutorial",
+          },
+          {
             href: "https://github.com/Josh-McFarlin/remix-image",
             label: "GitHub",
-            position: "right",
+            position: "left",
           },
         ],
       },
@@ -74,6 +69,11 @@ const config = {
       prism: {
         theme: lightCodeTheme,
         darkTheme: darkCodeTheme,
+      },
+      algolia: {
+        appId: "YOUR_APP_ID",
+        apiKey: "YOUR_SEARCH_API_KEY",
+        indexName: "YOUR_INDEX_NAME",
       },
     }),
 };
