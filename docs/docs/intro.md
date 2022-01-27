@@ -1,3 +1,7 @@
+---
+sidebar_position: 1
+---
+
 # Remix-Image
 
 ## 👋 Intro
@@ -36,29 +40,8 @@ Where the `responsive` sizes provided through the props are turned into image UR
 
 ### Install
 
-To install this library, use on of the following commands:
+To install this library and its peer deps, use on of the following commands:
 ```bash
 npm install -S remix-image
 yarn add remix-image
 ```
-
-### Docs
-
-- Documentation for this library can be found at: [https://remix-image.mcfarl.in](https://remix-image.mcfarl.in)
-- Several examples can be found in [examples/](examples/)
-
----
-
-## Other
-
-### Status
-
-At the moment this library is experimental and has not been used in a production environment.
-Further development is ongoing, but I welcome all pull-requests and issues created on GitHub.
-
-### Credit
-
-This repo expands on the following gists by:
-
-- [jacob-ebey](https://gist.github.com/jacob-ebey/3a37a86307de9ef22f47aae2e593b56f)
-- [olikami](https://gist.github.com/olikami/236e3c57ca73d145984ec6c127416340)
