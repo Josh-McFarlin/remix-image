@@ -3,6 +3,14 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [Unreleased]
+
+### Docs
+
+- Created documentation website at [remix-image.mcfarl.in](http://remix-image.mcfarl.in)
+- Updated `package.json` to include link to docs website
+- Simplified `README.md`, moving most info to docs website
+
 ## [0.1.8] - 2022-01-26
 
 ### Changed

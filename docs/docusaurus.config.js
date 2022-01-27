@@ -16,6 +16,7 @@ const config = {
   organizationName: "Josh-McFarlin", // Usually your GitHub org/user name.
   projectName: "remix-image", // Usually your repo name.
   trailingSlash: false,
+  deploymentBranch: "gh-pages",
 
   plugins: [require.resolve("docusaurus-lunr-search")],
 

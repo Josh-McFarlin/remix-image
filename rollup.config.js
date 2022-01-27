@@ -5,8 +5,6 @@ import json from "@rollup/plugin-json";
 import typescript from "rollup-plugin-typescript2";
 import postcss from "rollup-plugin-postcss";
 import nodePolyfills from "rollup-plugin-polyfill-node";
-import globals from "rollup-plugin-node-globals";
-import builtins from "rollup-plugin-node-builtins";
 
 export default [
   {
@@ -67,18 +65,9 @@ export default [
       typescript({
         useTsconfigDeclarationDir: true,
       }),
-
-      // globals({
-      //   buffer: true,
-      // }),
-      // builtins(),
-
       resolve({ preferBuiltins: false }),
       commonjs(),
-      nodePolyfills({
-        include: null,
-        // exclude: ["node_modules/pngjs/**/*.js"],
-      }),
+      nodePolyfills(),
     ],
   },
 ];
