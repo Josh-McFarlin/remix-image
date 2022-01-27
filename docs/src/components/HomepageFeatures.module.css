@@ -1,0 +1,26 @@
+.features {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-around;
+  align-items: center;
+  padding: 32px;
+  width: 100%;
+  gap: 12px;
+}
+
+@media only screen and (max-device-width: 840px) {
+  .features {
+    flex-direction: column;
+  }
+}
+
+.feature {
+  border: 2px solid var(--ifm-color-primary);
+  border-radius: 12px;
+  padding: 16px;
+}
+
+.featureSvg {
+  height: 200px;
+  width: 200px;
+}
