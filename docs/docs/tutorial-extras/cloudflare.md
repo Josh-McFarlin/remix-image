@@ -74,4 +74,4 @@ export const loader: LoaderFunction = ({ request }) => {
 };
 ```
 
-For an example project hosted on Cloudflare Workers, look at [this example](../../../examples/cloudflare).
+For an example project hosted on Cloudflare Workers, look at [this example](https://github.com/Josh-McFarlin/remix-image/tree/master/examples/cloudflare).
