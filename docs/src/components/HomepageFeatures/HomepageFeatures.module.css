@@ -1,26 +1,30 @@
-.features {
+.root {
   display: flex;
   flex-direction: row;
   justify-content: space-around;
-  align-items: center;
-  padding: 32px;
+  align-items: stretch;
   width: 100%;
   gap: 12px;
 }
 
 @media only screen and (max-device-width: 840px) {
-  .features {
+  .root {
     flex-direction: column;
   }
 }
 
 .feature {
+  width: 100%;
   border: 2px solid var(--ifm-color-primary);
   border-radius: 12px;
   padding: 16px;
 }
 
-.featureSvg {
+.feature > img {
   height: 200px;
   width: 200px;
+}
+
+.feature > h3 {
+  text-align: center;
 }
