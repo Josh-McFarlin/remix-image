@@ -1,29 +1,18 @@
 import useBaseUrl from "@docusaurus/useBaseUrl";
 import React from "react";
-import clsx from "clsx";
 import styles from "./HomepageFeatures.module.css";
 
-type FeatureItem = {
+export type FeatureItem = {
   title: string;
   image?: string;
   description: JSX.Element;
 };
 
 const Feature: React.FC<FeatureItem> = ({ title, image, description }) => (
-  <div className={clsx(styles.feature)}>
-    {image && (
-      <div className="text--center">
-        <img
-          className={styles.featureSvg}
-          alt={title}
-          src={useBaseUrl(image)}
-        />
-      </div>
-    )}
-    <div className="text--center padding-horiz--md">
-      <h3>{title}</h3>
-      <p>{description}</p>
-    </div>
+  <div className={styles.feature}>
+    {image && <img alt={title} src={useBaseUrl(image)} />}
+    <h3>{title}</h3>
+    <p>{description}</p>
   </div>
 );
 
@@ -32,7 +21,7 @@ interface PropTypes {
 }
 
 const HomepageFeatures: React.FC<PropTypes> = ({ features }) => (
-  <section className={styles.features}>
+  <section className={styles.root}>
     {features.map((props, idx) => (
       <Feature key={idx} {...props} />
     ))}

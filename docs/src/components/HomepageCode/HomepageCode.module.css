@@ -1,0 +1,32 @@
+.root {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-around;
+  align-items: stretch;
+  width: 100%;
+  gap: 12px;
+}
+
+@media only screen and (max-device-width: 840px) {
+  .root {
+    flex-direction: column;
+  }
+}
+
+.block {
+  width: 100%;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+.block > h3 {
+  text-align: center;
+}
+
+.code {
+  width: 100%;
+  overflow: auto;
+  flex: 1;
+}
