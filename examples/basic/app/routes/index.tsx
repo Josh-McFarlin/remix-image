@@ -38,15 +38,54 @@ const images = [
   },
 ];
 
+const formatsTest = {
+  filePath: "./camera.",
+  fileTypes: ["jpeg", "png", "gif", "webp", "bmp", "tif"],
+  sizes: [
+    {
+      size: {
+        width: 300,
+        height: 300,
+      },
+    },
+    {
+      size: {
+        width: 100,
+        height: 100,
+      },
+    },
+  ],
+};
+
 const IndexPage: React.FC = () => (
   <div className="root">
-    {images.map((img) => (
-      <Image
-        key={img.src}
-        src={img.src}
-        loaderUrl="/api/image"
-        responsive={img.responsive}
-      />
+    <section>
+      {images.map((img) => (
+        <div key={img.src}>
+          <Image
+            src={img.src}
+            loaderUrl="/api/image"
+            responsive={img.responsive}
+          />
+        </div>
+      ))}
+    </section>
+    <h3>File Formats</h3>
+    {formatsTest.fileTypes.map((fileType) => (
+      <div key={fileType}>
+        <h4>{fileType}</h4>
+        <section>
+          {formatsTest.sizes.map((size) => (
+            <div key={size.size.width + " " + size.size.height}>
+              <Image
+                src={formatsTest.filePath + fileType}
+                loaderUrl="/api/image"
+                responsive={[size]}
+              />
+            </div>
+          ))}
+        </section>
+      </div>
     ))}
   </div>
 );

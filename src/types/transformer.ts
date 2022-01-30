@@ -1,12 +1,12 @@
-import { JpegOptions, PngOptions, ResizeOptions, WebpOptions } from "sharp";
+import { MimeType } from "./file";
+import { ResizeOptions } from "./image";
 
-export abstract class ImageTransformer {
-  abstract jpeg(options?: JpegOptions): this;
-  abstract png(options?: PngOptions): this;
-  abstract webp(options?: WebpOptions): this;
-
-  abstract resize(options: ResizeOptions): this;
-  abstract toBuffer(): Promise<Buffer>;
-}
-
-export type TransformerMaker = (buffer: Buffer) => ImageTransformer;
+export type TransformerMaker = (
+  input: {
+    data: Buffer;
+    width: number;
+    height: number;
+    contentType: MimeType;
+  },
+  output: Required<ResizeOptions>
+) => Promise<Buffer>;

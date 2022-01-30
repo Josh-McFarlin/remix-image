@@ -1,132 +1,140 @@
+import { redirect } from "@remix-run/server-runtime";
 import { Cache } from "../../../types/cache";
 import { RemixImageError } from "../../../types/error";
 import type { AssetLoader } from "../../../types/loader";
 import { generateKey } from "../../../utils/cache";
+import { fromBuffer } from "../../../utils/fileType";
 import { imageResponse, textResponse } from "../../../utils/response";
-import { transformImage } from "../../../utils/transform";
-import { decodeQuery } from "../../../utils/url";
+import { decodeQuery, decodeResizeQuery, parseURL } from "../../../utils/url";
 import { fetchResolver } from "../../resolvers/fetchResolver";
 import { pureTransformer } from "../../transformers";
 
 export const imageLoader: AssetLoader = async (config, request) => {
+  const reqUrl = parseURL(request.url);
+  const cache = config.cache instanceof Cache ? config.cache : null;
+  const imageTransformer = config.transformer || pureTransformer;
+  const resolver = config.resolver || fetchResolver;
+  const defaultOptions = config.defaultOptions || {};
+  const fallbackTransformer = config.fallbackTransformer || true;
+  let redirectOnFail = defaultOptions.redirectOnFail || false;
+  const selfUrl = parseURL(config.selfUrl);
+  const src = decodeQuery(reqUrl.searchParams, "src");
+
   try {
-    const cache = config.cache instanceof Cache ? config.cache : null;
-    const imageTransformer = config.transformer || pureTransformer;
-    const resolver = config.resolver || fetchResolver;
+    const resizeOptions = decodeResizeQuery(reqUrl.search);
+    redirectOnFail = resizeOptions.redirectOnFail;
 
-    let selfUrl: URL;
-    try {
-      selfUrl = new URL(config.selfUrl);
-    } catch (error) {
-      throw new RemixImageError(`Invalid selfUrl: ${config.selfUrl}`);
+    if (!src) {
+      throw new RemixImageError("An image URL must be provided!");
     }
 
-    let reqUrl: URL;
-    try {
-      reqUrl = new URL(request.url);
-    } catch (error) {
-      throw new RemixImageError(`Invalid request url: ${request.url}`);
+    const assetUrl = parseURL(src, selfUrl);
+
+    if (resizeOptions.width && resizeOptions.width > 8000) {
+      return textResponse(406, "Requested Image too large!");
     }
-
-    const width = decodeQuery(reqUrl.searchParams, "width") || "";
-    const height = decodeQuery(reqUrl.searchParams, "height") || "";
-    const quality = decodeQuery(reqUrl.searchParams, "quality") || "80";
-    const src = decodeQuery(reqUrl.searchParams, "src") || "";
-
-    const webpSupport =
-      request.headers.has("accept") &&
-      request.headers.get("accept")!.includes("image/webp");
-
-    let resultImg: Buffer | undefined;
-    let contentType = "image/svg+xml";
-
-    if (parseInt(width) > 8000) {
+    if (resizeOptions.height && resizeOptions.height > 8000) {
       return textResponse(406, "Requested Image too large!");
     }
 
-    const cacheKey = generateKey(src, width, quality, webpSupport);
+    let resultImg: Buffer | undefined;
 
-    let assetUrl: URL;
-    try {
-      assetUrl = new URL(src, selfUrl);
-    } catch (error) {
-      throw new RemixImageError(`Cannot combine urls ${src} and ${selfUrl}`);
-    }
+    const cacheKey = generateKey(
+      src,
+      resizeOptions.width,
+      resizeOptions.height,
+      resizeOptions.quality,
+      resizeOptions.contentType
+    );
 
     if (cache && (await cache.has(cacheKey))) {
-      if ((await cache.status(cacheKey)) == "stale") {
-        setTimeout(async () => {
-          const res = await resolver(src, assetUrl.toString());
-
-          if (res.contentType === "image/svg+xml") {
-            contentType = res.contentType;
-            resultImg = res.buffer;
-          } else {
-            const transformed = await transformImage(
-              imageTransformer,
-              res.buffer,
-              {
-                width: parseInt(width, 10),
-                quality: parseInt(quality, 10),
-                allowWebP: webpSupport,
-              }
-            );
-
-            contentType = transformed.contentType;
-            resultImg = transformed.resultImg;
-          }
-
-          await cache.set(cacheKey, resultImg);
-        }, 1000);
-      }
-
       const cacheValue = await cache.get(cacheKey);
-      console.log(`Retrieved image [${cacheKey}] from cache.`);
 
       if (cacheValue) {
-        contentType = cacheValue.contentType;
-        resultImg = cacheValue.resultImg;
+        console.log(`Retrieved image [${cacheKey}] from cache.`);
+        resultImg = cacheValue;
       }
-    } else {
-      const res = await resolver(src, assetUrl.toString());
+    }
 
-      if (res.contentType === "image/svg+xml") {
-        contentType = res.contentType;
-        resultImg = res.buffer;
-      } else {
-        const transformed = await transformImage(imageTransformer, res.buffer, {
-          width: parseInt(width, 10),
-          quality: parseInt(quality, 10),
-          allowWebP: webpSupport,
-        });
+    if (!resultImg) {
+      let res;
 
-        contentType = transformed.contentType;
-        resultImg = transformed.resultImg;
+      try {
+        res = await resolver(src, assetUrl.toString());
+
+        if (!res || !res.buffer) {
+          return textResponse(404, "Requested image not found!");
+        }
+      } catch (error) {
+        return textResponse(500, "Failed to retrieve requested image!");
+      }
+
+      try {
+        resultImg = await imageTransformer(
+          {
+            data: res.buffer,
+            width: 0,
+            height: 0,
+            contentType: res.contentType,
+          },
+          {
+            ...defaultOptions,
+            ...resizeOptions,
+          }
+        );
+      } catch (error: any) {
+        if (fallbackTransformer) {
+          try {
+            resultImg = await pureTransformer(
+              {
+                data: res.buffer,
+                width: 0,
+                height: 0,
+                contentType: res.contentType,
+              },
+              {
+                ...defaultOptions,
+                ...resizeOptions,
+              }
+            );
+          } catch (error2: any) {
+            return textResponse(500, "Failed to transform image!");
+          }
+        }
       }
 
       console.log(`Fetched image [${cacheKey}] directly.`);
-      if (cache) {
-        await cache.set(cacheKey, resultImg);
-      }
     }
 
     if (!resultImg) {
       return textResponse(404, "Requested Image not found!");
     }
 
+    if (cache) {
+      await cache.set(cacheKey, resultImg);
+    }
+
+    const resultContentType = fromBuffer(resultImg);
+
     return imageResponse(
       resultImg,
       200,
-      contentType,
+      resultContentType,
       cache
         ? `private, max-age=${cache.config.ttl}, max-stale=${cache.config.tbd}`
         : `public, max-age=${60 * 60 * 24 * 365}`
     );
   } catch (error: any) {
-    console.error("imageLoader error:", error?.message || error);
+    console.error("RemixImage loader error:", error?.message || error);
 
-    //if (error instanceof RemixImageError) {
-    return textResponse(500, error?.message || error);
-    //}
+    if (redirectOnFail && src) {
+      return redirect(src);
+    }
+
+    if (error instanceof RemixImageError) {
+      return textResponse(500, error.message);
+    } else {
+      return textResponse(500, "RemixImage encountered an unknown error!");
+    }
   }
 };

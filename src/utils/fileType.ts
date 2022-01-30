@@ -1,5 +1,5 @@
-import { RemixImageError } from "../types/error";
-import type { MimeType } from "../types/file";
+import { RemixImageError, UnsupportedImageError } from "../types/error";
+import { MimeType } from "../types/file";
 
 const check = (buffer: Buffer, headers: number[], offset = 0): boolean =>
   headers.every((val, index) => val === buffer[index + offset]);
@@ -13,18 +13,24 @@ export const fromBuffer = (buffer: Buffer): MimeType => {
   }
 
   if (check(buffer, [0xff, 0xd8, 0xff])) {
-    return "image/jpeg";
+    return MimeType.JPEG;
   } else if (check(buffer, [0x89, 0x50, 0x4e, 0x47, 0x0d, 0x0a, 0x1a, 0x0a])) {
-    return "image/png";
-  } else if (check(buffer, [0x57, 0x45, 0x42, 0x50], 8)) {
-    return "image/webp";
+    return MimeType.PNG;
   } else if (check(buffer, [0x47, 0x49, 0x46])) {
-    return "image/gif";
+    return MimeType.GIF;
+  } else if (check(buffer, [0x57, 0x45, 0x42, 0x50], 8)) {
+    return MimeType.WEBP;
   } else if (check(buffer, [0x42, 0x4d])) {
-    return "image/bmp";
+    return MimeType.BMP;
+  } else if (check(buffer, [0x49, 0x49, 0x2a, 0x00])) {
+    return MimeType.TIFF;
+  } else if (check(buffer, [0x4d, 0x4d, 0x00, 0x2a])) {
+    return MimeType.TIFF;
+  } else {
+    const magic = getMagicNumbers(buffer, 8, 0);
+
+    throw new UnsupportedImageError(
+      `Unsupported file type with magic numbers: ${magic}`
+    );
   }
-
-  console.log("MAGIC NUMBERS:", getMagicNumbers(buffer, 8, 0));
-
-  throw new RemixImageError("Buffer is not a supported image file type!");
 };

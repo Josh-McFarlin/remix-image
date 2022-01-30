@@ -23,9 +23,8 @@ export const fetchImage = async (
 
 const config = {
   selfUrl: "http://localhost:3000",
-  whitelistedDomains: ["i.imgur.com"],
   cache: new DiskCache(),
-  transformer: sharp,
+  //transformer: sharp,
   resolver: fetchImage,
 };
 

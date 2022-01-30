@@ -1,5 +1,4 @@
-import { CacheConfig, Cache } from "../../../types/cache";
-import { fromBuffer } from "../../../utils/fileType";
+import { Cache, CacheConfig, CacheStatus } from "../../../types/cache";
 import { LRU } from "../../../utils/lru";
 
 export interface MemoryCacheConfig extends CacheConfig {
@@ -26,38 +25,24 @@ export class MemoryCache extends Cache {
     this.cache = new LRU<Buffer>(this.config.maxSize);
   }
 
+  async status(key: string): Promise<CacheStatus> {
+    return this.cache.has(key) ? CacheStatus.HIT : CacheStatus.MISS;
+  }
+
   async has(key: string): Promise<boolean> {
     return this.cache.has(key);
   }
 
-  async status(key: string): Promise<"hit" | "stale" | "miss"> {
-    return this.cache.has(key) ? "hit" : "miss";
-  }
-
-  async get(key: string): Promise<{
-    resultImg: Buffer;
-    contentType: string;
-  } | null> {
-    let contentType: string;
-
+  async get(key: string): Promise<Buffer | null> {
     if (!(await this.has(key))) {
       return null;
     }
 
     const cacheValue = this.cache.get(key)!;
-    try {
-      contentType = fromBuffer(cacheValue);
-      contentType = "image/png";
-    } catch {
-      contentType = "image/svg+xml";
-    }
 
     this.cache.set(key, cacheValue, Buffer.byteLength(cacheValue));
 
-    return {
-      resultImg: cacheValue,
-      contentType,
-    };
+    return cacheValue;
   }
 
   async set(key: string, resultImg: Buffer): Promise<void> {

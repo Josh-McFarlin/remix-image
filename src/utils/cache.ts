@@ -1,6 +1,2 @@
-export const generateKey = (
-  src: string,
-  width: string,
-  quality: string,
-  webp: boolean
-) => `${width}_${quality}_${src}_${webp}`;
+export const generateKey = (...args: (string | number | null | undefined)[]) =>
+  args.filter((i) => i != null).join("_");

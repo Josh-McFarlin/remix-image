@@ -5,6 +5,7 @@ import json from "@rollup/plugin-json";
 import typescript from "rollup-plugin-typescript2";
 import postcss from "rollup-plugin-postcss";
 import nodePolyfills from "rollup-plugin-polyfill-node";
+import { wasm } from "@rollup/plugin-wasm";
 
 export default [
   {
@@ -46,8 +47,9 @@ export default [
       typescript({
         useTsconfigDeclarationDir: true,
       }),
-      commonjs(),
       resolve(),
+      commonjs(),
+      wasm(),
     ],
   },
   {
@@ -68,6 +70,7 @@ export default [
       resolve({ preferBuiltins: false }),
       commonjs(),
       nodePolyfills(),
+      wasm(),
     ],
   },
 ];

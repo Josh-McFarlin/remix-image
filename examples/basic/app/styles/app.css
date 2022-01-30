@@ -5,7 +5,12 @@ body {
 
 .root {
   display: flex;
+  flex-direction: column;
+  padding: 12px;
+}
+
+section {
+  display: flex;
   flex-direction: row;
   gap: 12px;
-  padding: 12px;
 }

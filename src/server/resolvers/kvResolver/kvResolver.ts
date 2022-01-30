@@ -1,6 +1,5 @@
 import type { Options as KvAssetHandlerOptions } from "@cloudflare/kv-asset-handler";
 import { getAssetFromKV, NotFoundError } from "@cloudflare/kv-asset-handler";
-import { RemixImageError } from "../../../types/error";
 import type { Resolver } from "../../../types/resolver";
 import { fromBuffer } from "../../../utils/fileType";
 

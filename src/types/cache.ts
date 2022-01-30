@@ -9,17 +9,29 @@ export interface CacheConfig {
   tbd: number;
 }
 
+export enum CacheStatus {
+  /**
+   * The cache contains the key and it has not yet expired
+   */
+  HIT = "hit",
+  /**
+   * The cache contains the key but it has expired
+   */
+  STALE = "stale",
+  /**
+   * The cache does not contain the key
+   */
+  MISS = "miss",
+}
+
 export abstract class Cache {
   abstract config: CacheConfig;
 
   abstract has(key: string): Promise<boolean>;
 
-  abstract status(key: string): Promise<"hit" | "stale" | "miss">;
+  abstract status(key: string): Promise<CacheStatus>;
 
-  abstract get(key: string): Promise<{
-    resultImg: Buffer;
-    contentType: string;
-  } | null>;
+  abstract get(key: string): Promise<Buffer | null>;
 
   abstract set(key: string, resultImg: Buffer): Promise<void>;
 
