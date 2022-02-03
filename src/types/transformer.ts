@@ -1,12 +1,10 @@
 import { MimeType } from "./file";
-import { ResizeOptions } from "./image";
+import { TransformOptions } from "./image";
 
-export type TransformerMaker = (
+export type Transformer = (
   input: {
-    data: Buffer;
-    width: number;
-    height: number;
+    data: Uint8Array;
     contentType: MimeType;
   },
-  output: Required<ResizeOptions>
-) => Promise<Buffer>;
+  output: Required<TransformOptions>
+) => Promise<Uint8Array>;

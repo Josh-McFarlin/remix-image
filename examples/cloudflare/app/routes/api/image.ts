@@ -4,6 +4,7 @@ import {
   MemoryCache,
   kvResolver,
   fetchResolver,
+  Resolver,
 } from "remix-image/serverPure";
 
 declare global {
@@ -13,13 +14,7 @@ declare global {
 
 const whitelistedDomains = new Set([SELF_URL, "i.imgur.com"]);
 
-export const myResolver = async (
-  asset: string,
-  url: string
-): Promise<{
-  buffer: Buffer;
-  contentType: string;
-}> => {
+export const myResolver: Resolver = async (asset: string, url: string) => {
   if (asset.startsWith("/") && (asset.length === 1 || asset[1] !== "/")) {
     return kvResolver(asset, url);
   } else {

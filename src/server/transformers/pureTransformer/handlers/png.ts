@@ -1,29 +1,19 @@
-import * as PNGJS from "pngjs/browser";
-import { ResizeOptions } from "../../../../types/image";
-import { ImageHandler, RGBA } from "./types";
-const { PNG } = PNGJS;
+import PNGJS from "@pdf-lib/upng";
+import { ImageHandler } from "../types";
 
 export const PngHandler: ImageHandler = {
-  async decode(buffer: Buffer): Promise<RGBA> {
-    const image = PNG.sync.read(buffer);
+  async decode(buffer) {
+    const image = PNGJS.decode(buffer);
 
     return {
       width: image.width,
       height: image.height,
-      data: image.data,
+      data: new Uint8Array(image.data),
     };
   },
-  async encode(rgba: RGBA, options: ResizeOptions): Promise<Buffer> {
-    const dst = new PNG({
-      width: rgba.width,
-      height: rgba.height,
-      deflateLevel: options.compressionLevel,
-    });
+  async encode(image) {
+    const encoded = PNGJS.encode([image.data], image.width, image.height, 0);
 
-    dst.data = rgba.data;
-
-    return PNG.sync.write(dst, {
-      deflateLevel: options.compressionLevel,
-    });
+    return new Uint8Array(encoded);
   },
 };

@@ -10,7 +10,7 @@ export interface MemoryCacheConfig extends CacheConfig {
 
 export class MemoryCache extends Cache {
   config: MemoryCacheConfig;
-  cache: LRU<Buffer>;
+  cache: LRU<Uint8Array>;
 
   constructor(config: Partial<MemoryCacheConfig> | null | undefined = {}) {
     super();
@@ -22,7 +22,7 @@ export class MemoryCache extends Cache {
       ...config,
     };
 
-    this.cache = new LRU<Buffer>(this.config.maxSize);
+    this.cache = new LRU<Uint8Array>(this.config.maxSize);
   }
 
   async status(key: string): Promise<CacheStatus> {
@@ -33,20 +33,20 @@ export class MemoryCache extends Cache {
     return this.cache.has(key);
   }
 
-  async get(key: string): Promise<Buffer | null> {
+  async get(key: string): Promise<Uint8Array | null> {
     if (!(await this.has(key))) {
       return null;
     }
 
     const cacheValue = this.cache.get(key)!;
 
-    this.cache.set(key, cacheValue, Buffer.byteLength(cacheValue));
+    this.cache.set(key, cacheValue, cacheValue.byteLength);
 
     return cacheValue;
   }
 
-  async set(key: string, resultImg: Buffer): Promise<void> {
-    this.cache.set(key, resultImg, Buffer.byteLength(resultImg));
+  async set(key: string, resultImg: Uint8Array): Promise<void> {
+    this.cache.set(key, resultImg, resultImg.byteLength);
   }
 
   async clear(): Promise<void> {

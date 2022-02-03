@@ -10,7 +10,6 @@ const images = [
           width: 100,
           height: 100,
         },
-        maxWidth: 200,
       },
     ],
   },
@@ -28,7 +27,7 @@ const images = [
           width: 100,
           height: 100,
         },
-        maxWidth: 200,
+        maxWidth: 600,
       },
     ],
   },
@@ -42,6 +41,7 @@ const IndexPage: React.FC = () => (
         src={img.src}
         loaderUrl="/api/image"
         responsive={img.responsive}
+        //width={img.responsive[0].size.width}
       />
     ))}
   </div>

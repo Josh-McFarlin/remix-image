@@ -1,8 +1,11 @@
 export class RemixImageError extends Error {
-  constructor(message: string) {
-    super(message);
+  errorCode: number;
 
+  constructor(message: string, errorCode?: number) {
+    super(message);
     Object.setPrototypeOf(this, RemixImageError.prototype);
+
+    this.errorCode = errorCode || 500;
   }
 
   toString() {
@@ -12,8 +15,7 @@ export class RemixImageError extends Error {
 
 export class UnsupportedImageError extends RemixImageError {
   constructor(message: string) {
-    super(message);
-
+    super(message, 415);
     Object.setPrototypeOf(this, UnsupportedImageError.prototype);
   }
 }

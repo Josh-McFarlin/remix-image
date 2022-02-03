@@ -1,0 +1,38 @@
+name = "remix-cloudflare-workers-wasm"
+type = "javascript"
+
+zone_id = ""
+account_id = ""
+route = ""
+workers_dev = true
+
+[site]
+bucket = "./public"
+entry-point = "."
+
+[build]
+command = "npm run build:worker"
+watch_dir = "build/index.js"
+
+[build.upload]
+format="service-worker"
+
+[vars]
+SELF_URL = "http://127.0.0.1:8787"
+
+[env.production.vars]
+SELF_URL = "https://remix-cloudflare-workers-wasm-production.josh-mcfarlin.workers.dev"
+
+[wasm_modules]
+# @Note we need to manually include the wasm modules used for Cloudflare workers
+# These modules will be injected as global vars into the worker
+AVIF_ENC_WASM = "node_modules/@jsquash/avif/codec/enc/avif_enc.wasm"
+AVIF_DEC_WASM = "node_modules/@jsquash/avif/codec/dec/avif_dec.wasm"
+JPEG_ENC_WASM = "node_modules/@jsquash/jpeg/codec/enc/mozjpeg_enc.wasm"
+JPEG_DEC_WASM = "node_modules/@jsquash/jpeg/codec/dec/mozjpeg_dec.wasm"
+PNG_ENC_WASM = "node_modules/@jsquash/png/codec/squoosh_png_bg.wasm"
+PNG_DEC_WASM = "node_modules/@jsquash/png/codec/squoosh_png_bg.wasm"
+WEBP_ENC_WASM = "node_modules/@jsquash/webp/codec/enc/webp_enc.wasm"
+WEBP_ENC_WASM_SIMD = "node_modules/@jsquash/webp/codec/enc/webp_enc_simd.wasm"
+WEBP_DEC_WASM = "node_modules/@jsquash/webp/codec/dec/webp_dec.wasm"
+RESIZE_ENC_WASM = "node_modules/@jsquash/resize/lib/resize/squoosh_resize_bg.wasm"

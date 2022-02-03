@@ -20,13 +20,9 @@
  * THE SOFTWARE.
  */
 
-export interface ImageBuffer {
-  data: Buffer;
-  width: number;
-  height: number;
-}
+import { ImageData } from "./types";
 
-export const bilinearInterpolation = (src: ImageBuffer, dst: ImageBuffer) => {
+export const bilinearInterpolation = (src: ImageData, dst: ImageData) => {
   const wSrc = src.width;
   const hSrc = src.height;
 

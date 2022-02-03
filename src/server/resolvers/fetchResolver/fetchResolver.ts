@@ -12,7 +12,7 @@ export const fetchResolver: Resolver = async (_asset, url) => {
   const imageResponse = await fetch(imgRequest as unknown as Request);
   const arrBuff = await imageResponse.arrayBuffer();
 
-  const buffer = Buffer.from(arrBuff);
+  const buffer = new Uint8Array(arrBuff);
   const contentType = imageResponse.headers.get("content-type")! as MimeType;
 
   return {

@@ -47,14 +47,14 @@
     "release": "dotenv release-it --"
   },
   "dependencies": {
+    "@pdf-lib/upng": "^1.0.1",
     "bmp-js": "^0.1.0",
     "buffer": "^6.0.3",
     "clsx": "^1.1.1",
-    "image-size": "^1.0.1",
+    "get-rgba-palette": "^2.0.1",
     "jpeg-js": "^0.4.3",
     "omggif": "^1.0.10",
-    "pngjs": "^6.0.0",
-    "qs": "^6.10.3",
+    "query-string": "^7.1.0",
     "utif": "^3.1.0"
   },
   "devDependencies": {
@@ -72,18 +72,15 @@
     "@rollup/plugin-inject": "^4.0.4",
     "@rollup/plugin-json": "^4.1.0",
     "@rollup/plugin-node-resolve": "^13.0.6",
-    "@rollup/plugin-wasm": "^5.1.2",
     "@testing-library/jest-dom": "^5.16.0",
     "@testing-library/react": "^12.1.2",
     "@testing-library/user-event": "^13.5.0",
-    "@types/better-sqlite3": "^7.4.2",
     "@types/bmp-js": "^0.1.0",
     "@types/jest": "^27.0.3",
     "@types/omggif": "^1.0.2",
     "@types/pngjs": "^6.0.1",
     "@types/qs": "^6.9.7",
     "@types/react": "^17.0.37",
-    "@types/sharp": "^0.29.5",
     "@types/utif": "^3.0.1",
     "@typescript-eslint/eslint-plugin": "^5.5.0",
     "@typescript-eslint/parser": "^5.5.0",
@@ -128,7 +125,6 @@
     "rollup-plugin-terser": "^7.0.2",
     "rollup-plugin-typescript2": "^0.31.1",
     "sass-loader": "^10.2.0",
-    "sharp": "^0.29.3",
     "style-loader": "^2.0.0",
     "ts-jest": "^27.1.0",
     "typescript": "^4.5.2",
@@ -139,8 +135,7 @@
     "hybrid-disk-cache": "^0.2.0",
     "react": ">=16.8.0",
     "react-dom": ">=16.8.0",
-    "remix": "^1.0.0",
-    "sharp": "^0.29.0"
+    "remix": "^1.0.0"
   },
   "lint-staged": {
     "*.{ts,tsx,js,jsx}": "eslint --cache --fix",

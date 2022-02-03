@@ -1,9 +1,9 @@
-import * as TIFFJS from "utif";
+import TIFFJS from "utif";
 import { RemixImageError } from "../../../../types/error";
-import { ImageHandler, RGBA } from "./types";
+import { ImageHandler } from "../types";
 
 export const TiffHandler: ImageHandler = {
-  async decode(buffer: Buffer): Promise<RGBA> {
+  async decode(buffer) {
     const ifds = TIFFJS.decode(buffer);
     if (!ifds) {
       throw new RemixImageError("Invalid TIFF!");
@@ -13,16 +13,16 @@ export const TiffHandler: ImageHandler = {
     return {
       width: ifds[0].width,
       height: ifds[0].height,
-      data: Buffer.from(TIFFJS.toRGBA8(ifds[0])),
+      data: TIFFJS.toRGBA8(ifds[0]),
     };
   },
-  async encode(rgba: RGBA): Promise<Buffer> {
+  async encode(image) {
     const tiffImageData = TIFFJS.encodeImage(
-      rgba.data,
-      rgba.width,
-      rgba.height
+      image.data,
+      image.width,
+      image.height
     );
 
-    return Buffer.from(tiffImageData);
+    return new Uint8Array(tiffImageData);
   },
 };

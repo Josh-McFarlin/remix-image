@@ -1,15 +1,15 @@
 import { UnsupportedImageError } from "../../../types/error";
 import { MimeType } from "../../../types/file";
-import { TransformerMaker } from "../../../types/transformer";
+import { Transformer } from "../../../types/transformer";
 import {
   BmpHandler,
   GifHandler,
-  ImageHandler,
   JpegHandler,
   PngHandler,
   TiffHandler,
 } from "./handlers";
 import { bilinearInterpolation } from "./interpolation";
+import { ImageHandler } from "./types";
 
 const typeHandlers: Record<string, ImageHandler> = {
   [MimeType.JPEG]: JpegHandler,
@@ -23,12 +23,11 @@ const supported = new Set([
   MimeType.JPEG,
   MimeType.PNG,
   MimeType.GIF,
-  MimeType.WEBP,
   MimeType.BMP,
   MimeType.TIFF,
 ]);
 
-export const pureTransformer: TransformerMaker = async (
+export const pureTransformer: Transformer = async (
   { data, contentType: inputContentType },
   {
     contentType: outputContentType,
@@ -45,27 +44,19 @@ export const pureTransformer: TransformerMaker = async (
 ) => {
   if (!supported.has(inputContentType)) {
     throw new UnsupportedImageError(
-      `Transformer does not allow this content type: ${inputContentType}!`
+      `Transformer does not allow this input content type: ${inputContentType}!`
     );
   } else if (outputContentType && !supported.has(outputContentType)) {
     throw new UnsupportedImageError(
-      `Transformer does not allow this content type: ${outputContentType}!`
+      `Transformer does not allow this output content type: ${outputContentType}!`
     );
   }
 
   const inputHandler = typeHandlers[inputContentType];
   const rgba = await inputHandler.decode(data);
 
-  let targetWidth = 0;
-  let targetHeight = 0;
-
-  if (width) {
-    targetWidth = rgba.width * (targetHeight / rgba.height);
-  }
-
-  if (height) {
-    targetHeight = rgba.height * (targetWidth / rgba.width);
-  }
+  let targetWidth = width || rgba.width * ((height || 0) / rgba.height);
+  let targetHeight = height || rgba.height * ((width || 0) / rgba.width);
 
   if (targetWidth <= 0 || targetHeight <= 0) {
     throw new Error("At least one dimension must be provided!");
@@ -75,7 +66,7 @@ export const pureTransformer: TransformerMaker = async (
   targetHeight = Math.round(targetHeight);
 
   const rawImageData = {
-    data: new Buffer(targetWidth * targetHeight * 4),
+    data: new Uint8Array(targetWidth * targetHeight * 4),
     width: targetWidth,
     height: targetHeight,
   };

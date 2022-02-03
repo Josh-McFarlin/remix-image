@@ -5,4 +5,5 @@ export enum MimeType {
   WEBP = "image/webp",
   BMP = "image/bmp",
   TIFF = "image/tiff",
+  AVIF = "image/avif",
 }

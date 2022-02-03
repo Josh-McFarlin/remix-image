@@ -1,20 +1,19 @@
 import jpeg from "jpeg-js";
-import { ResizeOptions } from "../../../../types/image";
-import { ImageHandler, RGBA } from "./types";
+import { ImageHandler } from "../types";
 
 export const JpegHandler: ImageHandler = {
-  async decode(buffer: Buffer): Promise<RGBA> {
+  async decode(buffer) {
     const image = jpeg.decode(buffer);
 
     return {
       width: image.width,
       height: image.height,
-      data: image.data,
+      data: new Uint8Array(image.data),
     };
   },
-  async encode(rgba: RGBA, options: ResizeOptions): Promise<Buffer> {
-    const jpegImageData = jpeg.encode(rgba, options.quality);
+  async encode(image, options) {
+    const jpegImageData = jpeg.encode(image, options.quality);
 
-    return jpegImageData.data;
+    return new Uint8Array(jpegImageData.data);
   },
 };

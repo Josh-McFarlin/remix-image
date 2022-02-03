@@ -1,20 +1,26 @@
 import * as BMPJS from "bmp-js";
-import { ResizeOptions } from "../../../../types/image";
-import { ImageHandler, RGBA } from "./types";
+import { ImageHandler } from "../types";
 
 export const BmpHandler: ImageHandler = {
-  async decode(buffer: Buffer): Promise<RGBA> {
-    const image = BMPJS.decode(buffer);
+  async decode(buffer) {
+    const image = BMPJS.decode(Buffer.from(buffer));
 
     return {
       width: image.width,
       height: image.height,
-      data: image.data,
+      data: new Uint8Array(image.data),
     };
   },
-  async encode(rgba: RGBA, options: ResizeOptions): Promise<Buffer> {
-    const bmpImageData = BMPJS.encode(rgba, options.quality);
+  async encode(image, options) {
+    const bmpImageData = BMPJS.encode(
+      {
+        width: image.width,
+        height: image.height,
+        data: Buffer.from(image.data),
+      },
+      options.quality
+    );
 
-    return bmpImageData.data;
+    return new Uint8Array(bmpImageData.data);
   },
 };

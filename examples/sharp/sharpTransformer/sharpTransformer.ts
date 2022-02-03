@@ -1,7 +1,5 @@
+import { UnsupportedImageError, MimeType, Transformer } from "remix-image";
 import sharp from "sharp";
-import { UnsupportedImageError } from "../../../types/error";
-import { MimeType } from "../../../types/file";
-import { TransformerMaker } from "../../../types/transformer";
 
 const supported = new Set([
   MimeType.JPEG,
@@ -11,7 +9,7 @@ const supported = new Set([
   MimeType.TIFF,
 ]);
 
-export const sharpTransformer: TransformerMaker = async (
+export const sharpTransformer: Transformer = async (
   { data, contentType: inputContentType },
   {
     contentType: outputContentType,

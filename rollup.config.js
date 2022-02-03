@@ -1,3 +1,4 @@
+import path from "path";
 import peerDepsExternal from "rollup-plugin-peer-deps-external";
 import resolve from "@rollup/plugin-node-resolve";
 import commonjs from "@rollup/plugin-commonjs";
@@ -5,7 +6,6 @@ import json from "@rollup/plugin-json";
 import typescript from "rollup-plugin-typescript2";
 import postcss from "rollup-plugin-postcss";
 import nodePolyfills from "rollup-plugin-polyfill-node";
-import { wasm } from "@rollup/plugin-wasm";
 
 export default [
   {
@@ -22,8 +22,8 @@ export default [
       json(),
       postcss({
         modules: true,
-        // extract: path.resolve("build/styles.css"),
-        inject: true,
+        extract: path.resolve("build/styles.css"),
+        // inject: true,
       }),
       typescript({
         useTsconfigDeclarationDir: true,
@@ -47,9 +47,11 @@ export default [
       typescript({
         useTsconfigDeclarationDir: true,
       }),
-      resolve(),
+      resolve({ preferBuiltins: false }),
       commonjs(),
-      wasm(),
+      nodePolyfills({
+        include: null,
+      }),
     ],
   },
   {
@@ -69,8 +71,9 @@ export default [
       }),
       resolve({ preferBuiltins: false }),
       commonjs(),
-      nodePolyfills(),
-      wasm(),
+      nodePolyfills({
+        include: null,
+      }),
     ],
   },
 ];

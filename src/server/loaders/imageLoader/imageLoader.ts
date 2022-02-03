@@ -3,7 +3,7 @@ import { Cache } from "../../../types/cache";
 import { RemixImageError } from "../../../types/error";
 import type { AssetLoader } from "../../../types/loader";
 import { generateKey } from "../../../utils/cache";
-import { fromBuffer } from "../../../utils/fileType";
+import { mimeFromBuffer } from "../../../utils/fileType";
 import { imageResponse, textResponse } from "../../../utils/response";
 import { decodeQuery, decodeResizeQuery, parseURL } from "../../../utils/url";
 import { fetchResolver } from "../../resolvers/fetchResolver";
@@ -31,13 +31,13 @@ export const imageLoader: AssetLoader = async (config, request) => {
     const assetUrl = parseURL(src, selfUrl);
 
     if (resizeOptions.width && resizeOptions.width > 8000) {
-      return textResponse(406, "Requested Image too large!");
+      throw new RemixImageError("Requested Image too large!", 406);
     }
     if (resizeOptions.height && resizeOptions.height > 8000) {
-      return textResponse(406, "Requested Image too large!");
+      throw new RemixImageError("Requested Image too large!", 406);
     }
 
-    let resultImg: Buffer | undefined;
+    let resultImg: Uint8Array | undefined;
 
     const cacheKey = generateKey(
       src,
@@ -63,18 +63,17 @@ export const imageLoader: AssetLoader = async (config, request) => {
         res = await resolver(src, assetUrl.toString());
 
         if (!res || !res.buffer) {
-          return textResponse(404, "Requested image not found!");
+          throw new RemixImageError("Requested image not found!", 404);
         }
       } catch (error) {
-        return textResponse(500, "Failed to retrieve requested image!");
+        console.error(error);
+        throw new RemixImageError("Failed to retrieve requested image!", 500);
       }
 
       try {
         resultImg = await imageTransformer(
           {
             data: res.buffer,
-            width: 0,
-            height: 0,
             contentType: res.contentType,
           },
           {
@@ -82,24 +81,33 @@ export const imageLoader: AssetLoader = async (config, request) => {
             ...resizeOptions,
           }
         );
+
+        console.log(
+          `Successfully transformed image using transformer: ${imageTransformer.name}`
+        );
       } catch (error: any) {
-        if (fallbackTransformer) {
-          try {
-            resultImg = await pureTransformer(
-              {
-                data: res.buffer,
-                width: 0,
-                height: 0,
-                contentType: res.contentType,
-              },
-              {
-                ...defaultOptions,
-                ...resizeOptions,
-              }
-            );
-          } catch (error2: any) {
-            return textResponse(500, "Failed to transform image!");
-          }
+        console.error(
+          "Failed to use provided transformer:",
+          error?.message || error
+        );
+
+        if (fallbackTransformer && imageTransformer !== pureTransformer) {
+          resultImg = await pureTransformer(
+            {
+              data: res.buffer,
+              contentType: res.contentType,
+            },
+            {
+              ...defaultOptions,
+              ...resizeOptions,
+            }
+          );
+
+          console.log(
+            `Successfully transformed image using fallback transformer: ${pureTransformer.name}`
+          );
+        } else {
+          throw error;
         }
       }
 
@@ -107,14 +115,14 @@ export const imageLoader: AssetLoader = async (config, request) => {
     }
 
     if (!resultImg) {
-      return textResponse(404, "Requested Image not found!");
+      throw new RemixImageError("Failed to transform requested image!", 500);
     }
 
     if (cache) {
       await cache.set(cacheKey, resultImg);
     }
 
-    const resultContentType = fromBuffer(resultImg);
+    const resultContentType = mimeFromBuffer(resultImg);
 
     return imageResponse(
       resultImg,
@@ -132,7 +140,7 @@ export const imageLoader: AssetLoader = async (config, request) => {
     }
 
     if (error instanceof RemixImageError) {
-      return textResponse(500, error.message);
+      return textResponse(error.errorCode || 500, error.message);
     } else {
       return textResponse(500, "RemixImage encountered an unknown error!");
     }

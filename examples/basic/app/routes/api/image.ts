@@ -5,7 +5,6 @@ import {
   fsResolver,
   fetchResolver,
 } from "remix-image/server";
-import sharp from "sharp";
 
 export const fetchImage = async (
   asset: string,
@@ -24,7 +23,6 @@ export const fetchImage = async (
 const config = {
   selfUrl: "http://localhost:3000",
   cache: new DiskCache(),
-  //transformer: sharp,
   resolver: fetchImage,
 };
 

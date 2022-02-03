@@ -31,9 +31,9 @@ export abstract class Cache {
 
   abstract status(key: string): Promise<CacheStatus>;
 
-  abstract get(key: string): Promise<Buffer | null>;
+  abstract get(key: string): Promise<Uint8Array | null>;
 
-  abstract set(key: string, resultImg: Buffer): Promise<void>;
+  abstract set(key: string, resultImg: Uint8Array): Promise<void>;
 
   abstract clear(): Promise<void>;
 }

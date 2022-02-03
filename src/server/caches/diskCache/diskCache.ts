@@ -33,7 +33,7 @@ export class DiskCache extends Cache {
     return (await this.status(key)) !== CacheStatus.MISS;
   }
 
-  async get(key: string): Promise<Buffer | null> {
+  async get(key: string): Promise<Uint8Array | null> {
     if (!(await this.has(key))) {
       return null;
     }
@@ -45,8 +45,8 @@ export class DiskCache extends Cache {
     return cacheValue;
   }
 
-  async set(key: string, resultImg: Buffer): Promise<void> {
-    await this.cache.set(key, resultImg);
+  async set(key: string, resultImg: Uint8Array): Promise<void> {
+    await this.cache.set(key, Buffer.from(resultImg));
   }
 
   async clear(): Promise<void> {

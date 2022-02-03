@@ -1,15 +1,15 @@
 import type { Cache } from "./cache";
-import type { ResizeOptions } from "./image";
+import type { TransformOptions } from "./image";
 import type { Resolver } from "./resolver";
-import type { TransformerMaker } from "./transformer";
+import type { Transformer } from "./transformer";
 
 export interface LoaderConfig {
   selfUrl: string;
   cache?: Cache;
-  transformer?: TransformerMaker;
+  transformer?: Transformer;
   resolver?: Resolver;
   fallbackTransformer?: boolean;
-  defaultOptions?: ResizeOptions;
+  defaultOptions?: TransformOptions;
 }
 
 export type AssetLoader = (

@@ -1,36 +1,8 @@
-import qs from "qs";
+import qs from "query-string";
 import { RemixImageError } from "../types/error";
 import { MimeType } from "../types/file";
-import type { ResizeOptions } from "../types/image";
+import type { TransformOptions } from "../types/image";
 import { ImageFit } from "../types/image";
-
-const createParamString = (
-  params: Record<string, string | number | undefined> | null = null
-): string => {
-  const searchParams = new URLSearchParams();
-
-  if (params) {
-    Object.entries(params).forEach(([key, value]) => {
-      if (key && value) {
-        searchParams.set(key, encodeURIComponent(value));
-      }
-    });
-  }
-
-  return searchParams.toString();
-};
-
-export const createUrl = (
-  url: string,
-  params: Record<string, string | number | undefined> | null = null,
-  merge = false
-): string => {
-  if (merge) {
-    return url + "&" + createParamString(params);
-  }
-
-  return url + (params ? "?" : "") + createParamString(params);
-};
 
 export const decodeQuery = (
   queryParams: URLSearchParams,
@@ -38,25 +10,28 @@ export const decodeQuery = (
 ): string | null =>
   queryParams.has(key) ? decodeURIComponent(queryParams.get(key)!) : null;
 
-export const encodeResizeQuery = (query: ResizeOptions): string =>
+export const encodeResizeQuery = (query: TransformOptions): string =>
   qs.stringify(query, {
-    skipNulls: true,
+    skipNull: true,
+    arrayFormat: "bracket",
   });
 
 export const decodeResizeQuery = (
   queryString: string
-): Required<ResizeOptions> => {
+): Required<TransformOptions> => {
   const parsed = qs.parse(queryString, {
-    depth: 2,
+    arrayFormat: "bracket",
   });
 
   return {
+    src: parsed.src ? parsed.src!.toString() : "",
     contentType: parsed.contentType as MimeType,
-    width: parsed.width ? parseInt(parsed.width.toString(), 10) : null,
+    width: parsed.width ? parseInt(parsed.width.toString(), 10) : -1,
     height: parsed.height ? parseInt(parsed.height.toString(), 10) : null,
     fit: (parsed.fit as ImageFit) || ImageFit.COVER,
     position: parsed.position?.toString() || "center",
-    background: parsed.background?.toString() || "{r:0,g:0,b:0,alpha:1}",
+    background:
+      parsed.background?.toString() || `{"r":0,"g":0,"b":0,"alpha":0}`,
     quality: parsed.quality ? parseInt(parsed.quality.toString(), 10) : 80,
     compressionLevel: parsed.compressionLevel
       ? parseInt(parsed.compressionLevel.toString(), 10)
@@ -77,7 +52,7 @@ export const parseURL = (rawUrl: string, baseUrl?: URL | string): URL => {
   try {
     urlObject = new URL(rawUrl, baseUrl);
   } catch (error) {
-    throw new RemixImageError(`Invalid URL: ${rawUrl}`);
+    throw new RemixImageError(`Invalid URL: ${rawUrl}`, 400);
   }
 
   return urlObject;
