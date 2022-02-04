@@ -6,7 +6,7 @@
   "scripts": {
     "build": "remix build",
     "dev": "remix watch",
-    "postinstall": "remix setup cloudflare-workers && patch-package",
+    "postinstall": "remix setup cloudflare-workers",
     "build:worker": "esbuild --define:process.env.NODE_ENV='\"production\"' --define:import.meta.url='\"http://localhost\"' --define:self.location.href='\"http://localhost\"' --minify --bundle --sourcemap --outdir=dist ./worker",
     "dev:worker": "esbuild --define:process.env.NODE_ENV='\"development\"' --define:import.meta.url='\"http://localhost\"' --define:self.location.href='\"http://localhost\"' --bundle --sourcemap --outdir=dist ./worker",
     "start": "npm run build && miniflare --build-command \"npm run dev:worker\" --watch",

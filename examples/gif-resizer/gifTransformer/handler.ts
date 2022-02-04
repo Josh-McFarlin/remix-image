@@ -42,11 +42,13 @@ export const GifHandler = async (
 
   // Process
   for (let i = 0; i < numFrames; i += 1) {
-    for (let i = 0; i < srcLen; i += 4) {
-      srcFrame.data[i] = options.background[0];
-      srcFrame.data[i + 1] = options.background[1];
-      srcFrame.data[i + 2] = options.background[2];
-      srcFrame.data[i + 3] = options.background[3];
+    if (options.background) {
+      for (let i = 0; i < srcLen; i += 4) {
+        srcFrame.data[i] = options.background[0];
+        srcFrame.data[i + 1] = options.background[1];
+        srcFrame.data[i + 2] = options.background[2];
+        srcFrame.data[i + 3] = options.background[3];
+      }
     }
 
     image.decodeAndBlitFrameRGBA(i, srcFrame.data);
@@ -64,7 +66,7 @@ export const GifHandler = async (
 
     gifImageData.addFrame(0, 0, targetWidth, targetHeight, mappedData, {
       palette: palette.map(([r, g, b]) => rgbToHex(r, g, b)),
-      delay: options.delay ? options.delay[i] : image.frameInfo(i).delay || 0.1,
+      delay: image.frameInfo(i).delay || options.delay,
       transparent: palette.length - 1,
       disposal: 2,
     });

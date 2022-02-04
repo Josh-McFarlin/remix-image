@@ -24,9 +24,8 @@ export const useResponsiveImage = (
   for (const { size } of responsive) {
     const srcSetUrl =
       loaderUrl +
-      "?" +
+      `?src=${image.src}&` +
       encodeTransformQuery({
-        src: image.src,
         width: size.width,
         height: size.height,
         ...options,

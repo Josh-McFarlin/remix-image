@@ -1,8 +1,6 @@
 import qs from "query-string";
 import { RemixImageError } from "../types/error";
-import { MimeType } from "../types/file";
-import type { Color, TransformOptions } from "../types/image";
-import { ImageFit } from "../types/image";
+import type { TransformOptions } from "../types/image";
 
 export const decodeQuery = (
   queryParams: URLSearchParams,
@@ -18,34 +16,12 @@ export const encodeTransformQuery = (query: TransformOptions): string =>
 
 export const decodeTransformQuery = (
   queryString: string
-): Required<TransformOptions> => {
-  const parsed = qs.parse(queryString, {
+): Partial<TransformOptions> =>
+  qs.parse(queryString, {
     arrayFormat: "bracket",
+    parseNumbers: true,
+    parseBooleans: true,
   });
-
-  return {
-    src: parsed.src ? parsed.src!.toString() : "",
-    contentType: parsed.contentType ? (parsed.contentType as MimeType) : null,
-    width: parsed.width ? parseInt(parsed.width.toString(), 10) : -1,
-    height: parsed.height ? parseInt(parsed.height.toString(), 10) : null,
-    fit: (parsed.fit as ImageFit) || ImageFit.COVER,
-    position: parsed.position?.toString() || "center",
-    background: (parsed.background
-      ? (parsed.background as string[]).map((i) => parseInt(i, 10))
-      : [0x00, 0x00, 0x00, 0x00]) as Color,
-    quality: parsed.quality ? parseInt(parsed.quality.toString(), 10) : 80,
-    compressionLevel: parsed.compressionLevel
-      ? parseInt(parsed.compressionLevel.toString(), 10)
-      : 9,
-    loop: parsed.loop ? parseInt(parsed.loop.toString(), 10) : 0,
-    delay: parsed.delay
-      ? (parsed.delay as string[]).map((i) => parseInt(i, 10))
-      : null,
-    redirectOnFail: parsed.redirectOnFail
-      ? parsed.redirectOnFail === "true"
-      : false,
-  };
-};
 
 export const parseURL = (rawUrl: string, baseUrl?: URL | string): URL => {
   let urlObject: URL;

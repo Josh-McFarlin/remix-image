@@ -6,5 +6,5 @@ export type Transformer = (
     data: Uint8Array;
     contentType: MimeType;
   },
-  output: Required<TransformOptions>
+  output: TransformOptions
 ) => Promise<Uint8Array>;

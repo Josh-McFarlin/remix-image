@@ -30,13 +30,13 @@ export const GifHandler: ImageHandler = {
       }
     );
 
-    frames.forEach((frame, i) => {
+    frames.forEach((frame) => {
       const palette = generatePalette(frame, 16);
       const mappedData = mapImage(frame, palette);
 
       gifImageData.addFrame(0, 0, image.width, image.height, mappedData, {
         palette: palette.map(([r, g, b]) => rgbToHex(r, g, b)),
-        delay: options.delay ? options.delay[i] : 0.1,
+        delay: options.delay,
         transparent: palette.length - 1,
         disposal: 2,
       });

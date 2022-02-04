@@ -23,7 +23,6 @@ export default [
       postcss({
         modules: true,
         extract: path.resolve("build/styles.css"),
-        // inject: true,
       }),
       typescript({
         useTsconfigDeclarationDir: true,
@@ -41,6 +40,7 @@ export default [
         sourcemap: true,
       },
     ],
+    external: ["fs", "path"],
     plugins: [
       peerDepsExternal(),
       json(),
@@ -49,9 +49,6 @@ export default [
       }),
       resolve({ preferBuiltins: false }),
       commonjs(),
-      // nodePolyfills({
-      //   include: null,
-      // }),
     ],
   },
   {

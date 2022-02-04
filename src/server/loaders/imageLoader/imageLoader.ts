@@ -1,5 +1,5 @@
 import { redirect } from "@remix-run/server-runtime";
-import { Cache } from "../../../types/cache";
+import { ImageFit, TransformOptions } from "../../../types";
 import { RemixImageError } from "../../../types/error";
 import type { AssetLoader } from "../../../types/loader";
 import { generateKey } from "../../../utils/cache";
@@ -13,27 +13,52 @@ import {
 import { fetchResolver } from "../../resolvers/fetchResolver";
 import { pureTransformer } from "../../transformers";
 
-export const imageLoader: AssetLoader = async (config, request) => {
+export const imageLoader: AssetLoader = async (
+  {
+    selfUrl,
+    cache = null,
+    resolver = fetchResolver,
+    transformer = pureTransformer,
+    useFallbackTransformer = true,
+    defaultOptions = {},
+    redirectOnFail = false,
+  },
+  request
+) => {
   const reqUrl = parseURL(request.url);
-  const cache = config.cache instanceof Cache ? config.cache : null;
-  const imageTransformer = config.transformer || pureTransformer;
-  const resolver = config.resolver || fetchResolver;
-  const defaultOptions = config.defaultOptions || {};
-  const fallbackTransformer = config.fallbackTransformer || true;
-  let redirectOnFail = defaultOptions.redirectOnFail || false;
-  const selfUrl = parseURL(config.selfUrl);
-  const src = decodeQuery(reqUrl.searchParams, "src");
+  let src: string | null = null;
 
   try {
-    const transformOptions = decodeTransformQuery(reqUrl.search);
-    redirectOnFail = transformOptions.redirectOnFail;
-
-    if (!src) {
-      throw new RemixImageError("An image URL must be provided!");
+    if (!selfUrl) {
+      throw new RemixImageError(
+        "selfUrl is required in RemixImage loader config!",
+        500
+      );
     }
+
+    src = decodeQuery(reqUrl.searchParams, "src");
+    if (!src) {
+      throw new RemixImageError("An image URL must be provided!", 400);
+    }
+
+    const decodedQuery = decodeTransformQuery(reqUrl.search);
+    const transformOptions: TransformOptions = {
+      fit: ImageFit.COVER,
+      position: "center",
+      background: [0x00, 0x00, 0x00, 0x00],
+      quality: 80,
+      compressionLevel: 9,
+      loop: 0,
+      delay: 100,
+      ...defaultOptions,
+      ...decodedQuery,
+    } as TransformOptions;
 
     const assetUrl = parseURL(src, selfUrl);
 
+    if (!transformOptions.width) {
+      throw new RemixImageError("A width is required!", 400);
+    }
     if (transformOptions.width && transformOptions.width > 8000) {
       throw new RemixImageError("Requested Image too large!", 406);
     }
@@ -78,20 +103,20 @@ export const imageLoader: AssetLoader = async (config, request) => {
       }
 
       try {
-        resultImg = await imageTransformer(
+        if (transformOptions.contentType == null) {
+          transformOptions.contentType = res.contentType;
+        }
+
+        resultImg = await transformer(
           {
             data: res.buffer,
             contentType: res.contentType,
           },
-          {
-            ...defaultOptions,
-            ...transformOptions,
-            contentType: transformOptions.contentType || res.contentType,
-          }
+          transformOptions
         );
 
         console.log(
-          `Successfully transformed image using transformer: ${imageTransformer.name}`
+          `Successfully transformed image using transformer: ${transformer.name}`
         );
       } catch (error: any) {
         console.error(
@@ -99,16 +124,13 @@ export const imageLoader: AssetLoader = async (config, request) => {
           error?.message || error
         );
 
-        if (fallbackTransformer && imageTransformer !== pureTransformer) {
+        if (useFallbackTransformer && transformer !== pureTransformer) {
           resultImg = await pureTransformer(
             {
               data: res.buffer,
               contentType: res.contentType,
             },
-            {
-              ...defaultOptions,
-              ...transformOptions,
-            }
+            transformOptions
           );
 
           console.log(
