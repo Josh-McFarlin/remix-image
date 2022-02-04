@@ -13,4 +13,5 @@ section {
   display: flex;
   flex-direction: row;
   gap: 12px;
+  margin-bottom: 12px;
 }

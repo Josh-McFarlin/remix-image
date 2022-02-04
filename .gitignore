@@ -1,6 +1,35 @@
 
-# Created by https://www.toptal.com/developers/gitignore/api/node,webstorm+all
-# Edit at https://www.toptal.com/developers/gitignore?templates=node,webstorm+all
+# Created by https://www.toptal.com/developers/gitignore/api/node,webstorm+all,macos
+# Edit at https://www.toptal.com/developers/gitignore?templates=node,webstorm+all,macos
+
+### macOS ###
+# General
+.DS_Store
+.AppleDouble
+.LSOverride
+
+# Icon must end with two \r
+Icon
+
+
+# Thumbnails
+._*
+
+# Files that might appear in the root of a volume
+.DocumentRevisions-V100
+.fseventsd
+.Spotlight-V100
+.TemporaryItems
+.Trashes
+.VolumeIcon.icns
+.com.apple.timemachine.donotpresent
+
+# Directories potentially created on remote AFP share
+.AppleDB
+.AppleDesktop
+Network Trash Folder
+Temporary Items
+.apdisk
 
 ### Node ###
 # Logs
@@ -237,7 +266,17 @@ modules.xml
 # Sonarlint plugin
 .idea/sonarlint
 
-# End of https://www.toptal.com/developers/gitignore/api/node,webstorm+all
+# End of https://www.toptal.com/developers/gitignore/api/node,webstorm+all,macos
 
 node_modules
 build
+examples/**/node_modules
+examples/**/build
+examples/**/.cache
+examples/**/tmp
+examples/**/.mf
+
+docs/.docusaurus
+docs/build
+docs/node_modules
+docs/.env

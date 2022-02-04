@@ -1,7 +1,7 @@
 import qs from "query-string";
 import { RemixImageError } from "../types/error";
 import { MimeType } from "../types/file";
-import type { TransformOptions } from "../types/image";
+import type { Color, TransformOptions } from "../types/image";
 import { ImageFit } from "../types/image";
 
 export const decodeQuery = (
@@ -10,13 +10,13 @@ export const decodeQuery = (
 ): string | null =>
   queryParams.has(key) ? decodeURIComponent(queryParams.get(key)!) : null;
 
-export const encodeResizeQuery = (query: TransformOptions): string =>
+export const encodeTransformQuery = (query: TransformOptions): string =>
   qs.stringify(query, {
     skipNull: true,
     arrayFormat: "bracket",
   });
 
-export const decodeResizeQuery = (
+export const decodeTransformQuery = (
   queryString: string
 ): Required<TransformOptions> => {
   const parsed = qs.parse(queryString, {
@@ -25,13 +25,14 @@ export const decodeResizeQuery = (
 
   return {
     src: parsed.src ? parsed.src!.toString() : "",
-    contentType: parsed.contentType as MimeType,
+    contentType: parsed.contentType ? (parsed.contentType as MimeType) : null,
     width: parsed.width ? parseInt(parsed.width.toString(), 10) : -1,
     height: parsed.height ? parseInt(parsed.height.toString(), 10) : null,
     fit: (parsed.fit as ImageFit) || ImageFit.COVER,
     position: parsed.position?.toString() || "center",
-    background:
-      parsed.background?.toString() || `{"r":0,"g":0,"b":0,"alpha":0}`,
+    background: (parsed.background
+      ? (parsed.background as string[]).map((i) => parseInt(i, 10))
+      : [0x00, 0x00, 0x00, 0x00]) as Color,
     quality: parsed.quality ? parseInt(parsed.quality.toString(), 10) : 80,
     compressionLevel: parsed.compressionLevel
       ? parseInt(parsed.compressionLevel.toString(), 10)

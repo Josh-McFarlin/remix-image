@@ -5,7 +5,11 @@ import type { AssetLoader } from "../../../types/loader";
 import { generateKey } from "../../../utils/cache";
 import { mimeFromBuffer } from "../../../utils/fileType";
 import { imageResponse, textResponse } from "../../../utils/response";
-import { decodeQuery, decodeResizeQuery, parseURL } from "../../../utils/url";
+import {
+  decodeQuery,
+  decodeTransformQuery,
+  parseURL,
+} from "../../../utils/url";
 import { fetchResolver } from "../../resolvers/fetchResolver";
 import { pureTransformer } from "../../transformers";
 
@@ -21,8 +25,8 @@ export const imageLoader: AssetLoader = async (config, request) => {
   const src = decodeQuery(reqUrl.searchParams, "src");
 
   try {
-    const resizeOptions = decodeResizeQuery(reqUrl.search);
-    redirectOnFail = resizeOptions.redirectOnFail;
+    const transformOptions = decodeTransformQuery(reqUrl.search);
+    redirectOnFail = transformOptions.redirectOnFail;
 
     if (!src) {
       throw new RemixImageError("An image URL must be provided!");
@@ -30,10 +34,10 @@ export const imageLoader: AssetLoader = async (config, request) => {
 
     const assetUrl = parseURL(src, selfUrl);
 
-    if (resizeOptions.width && resizeOptions.width > 8000) {
+    if (transformOptions.width && transformOptions.width > 8000) {
       throw new RemixImageError("Requested Image too large!", 406);
     }
-    if (resizeOptions.height && resizeOptions.height > 8000) {
+    if (transformOptions.height && transformOptions.height > 8000) {
       throw new RemixImageError("Requested Image too large!", 406);
     }
 
@@ -41,10 +45,10 @@ export const imageLoader: AssetLoader = async (config, request) => {
 
     const cacheKey = generateKey(
       src,
-      resizeOptions.width,
-      resizeOptions.height,
-      resizeOptions.quality,
-      resizeOptions.contentType
+      transformOptions.width,
+      transformOptions.height,
+      transformOptions.quality,
+      transformOptions.contentType
     );
 
     if (cache && (await cache.has(cacheKey))) {
@@ -65,8 +69,11 @@ export const imageLoader: AssetLoader = async (config, request) => {
         if (!res || !res.buffer) {
           throw new RemixImageError("Requested image not found!", 404);
         }
+
+        console.log(
+          `Fetched image [${cacheKey}] directly using resolver: ${resolver.name}.`
+        );
       } catch (error) {
-        console.error(error);
         throw new RemixImageError("Failed to retrieve requested image!", 500);
       }
 
@@ -78,7 +85,8 @@ export const imageLoader: AssetLoader = async (config, request) => {
           },
           {
             ...defaultOptions,
-            ...resizeOptions,
+            ...transformOptions,
+            contentType: transformOptions.contentType || res.contentType,
           }
         );
 
@@ -99,7 +107,7 @@ export const imageLoader: AssetLoader = async (config, request) => {
             },
             {
               ...defaultOptions,
-              ...resizeOptions,
+              ...transformOptions,
             }
           );
 
@@ -110,8 +118,6 @@ export const imageLoader: AssetLoader = async (config, request) => {
           throw error;
         }
       }
-
-      console.log(`Fetched image [${cacheKey}] directly.`);
     }
 
     if (!resultImg) {

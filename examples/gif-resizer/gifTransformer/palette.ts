@@ -1,5 +1,5 @@
 import getPalette from "get-rgba-palette";
-import type { Color } from "../types";
+import type { Color } from "remix-image";
 
 export const rgbToHex = (r: number, g: number, b: number): number =>
   (r << 16) + (g << 8) + b;
@@ -7,12 +7,9 @@ export const rgbToHex = (r: number, g: number, b: number): number =>
 export const generatePalette = (buffer: Uint8Array, count: number): Color[] => {
   const powCount = Math.pow(2, Math.ceil(Math.log(count) / Math.log(2)));
 
-  const colors: Color[] = getPalette(buffer, count).map((color) => [
-    color[0],
-    color[1],
-    color[2],
-    0xff,
-  ]);
+  const colors: Color[] = getPalette(buffer, count).map(
+    (color: [number, number, number]) => [color[0], color[1], color[2], 0xff]
+  );
 
   if (colors.length < powCount) {
     const lastVal = colors[colors.length - 1];

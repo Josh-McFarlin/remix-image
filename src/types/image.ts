@@ -1,5 +1,8 @@
 import { MimeType } from "./file";
 
+/** RGBA hex values 0...255 */
+export type Color = [number, number, number, number];
+
 export enum ImageFit {
   CONTAIN = "contain",
   COVER = "cover",
@@ -12,7 +15,7 @@ export interface TransformOptions {
   /** The URL for the image you want to transform. */
   src?: string;
   /** The content type of the resulting image, uses source type if not defined. */
-  contentType?: MimeType;
+  contentType?: MimeType | null;
   /** Width of resulting image. */
   width?: number;
   /** Height of resulting image. If width is present, this take priority. */
@@ -22,7 +25,7 @@ export interface TransformOptions {
   /** Position, gravity or strategy to use when fit is cover or contain. (optional, default 'center') */
   position?: number | string;
   /** Background colour when using a fit of contain, parsed by the color module, defaults to black without transparency. (optional, default{"r":0,"g":0,"b":0,"alpha":0}) */
-  background?: string;
+  background?: Color;
   /** Quality, integer 1-100 (optional, default 80) */
   quality?: number;
   /** zlib compression level, 0-9 (optional, default 9) */

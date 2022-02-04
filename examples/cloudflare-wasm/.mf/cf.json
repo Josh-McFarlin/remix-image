@@ -1,1 +1,53 @@
-{"clientTcpRtt":3,"longitude":"-84.37540","latitude":"33.76970","tlsCipher":"AEAD-AES256-GCM-SHA384","continent":"NA","asn":22768,"clientAcceptEncoding":"br, gzip, deflate","country":"US","tlsClientAuth":{"certIssuerDNLegacy":"","certIssuerSKI":"","certSubjectDNRFC2253":"","certSubjectDNLegacy":"","certFingerprintSHA256":"","certNotBefore":"","certSKI":"","certSerial":"","certIssuerDN":"","certVerified":"NONE","certNotAfter":"","certSubjectDN":"","certPresented":"0","certRevoked":"0","certIssuerSerial":"","certIssuerDNRFC2253":"","certFingerprintSHA1":""},"tlsExportedAuthenticator":{"clientFinished":"8273beaed929ec33210dccf3d5cfecafe57055df25d10b2240450307355eeb350f72906e7cde15a501330a2d4637d3e0","clientHandshake":"e8cd46e21231dd9574cf4c42b79321334cb13731f9e3eab73e0428c413ca7ba55fce7b70ee586d6d11725b951f00bcfc","serverHandshake":"210e3da473e8e1e84affd2d1bb61a906d905141e0e6cef830cca3d96c5871c84ce9685063a015303edecd9159694d1dd","serverFinished":"cb697f2581ad4676316d29d8bc05be5abd97a2441767ed87ee2f22842dd50e84680ddaab8863041b37d2088f96f88da8"},"tlsVersion":"TLSv1.3","colo":"ATL","timezone":"America/New_York","city":"Atlanta","httpProtocol":"HTTP/1.1","edgeRequestKeepAliveStatus":1,"requestPriority":"","botManagement":{"staticResource":false,"verifiedBot":false,"score":1},"clientTrustScore":1,"region":"Georgia","regionCode":"GA","asOrganization":"Synergy Broadband","metroCode":"524","postalCode":"30308"}
+{
+  "clientTcpRtt": 3,
+  "longitude": "-84.37540",
+  "latitude": "33.76970",
+  "tlsCipher": "AEAD-AES256-GCM-SHA384",
+  "continent": "NA",
+  "asn": 22768,
+  "clientAcceptEncoding": "br, gzip, deflate",
+  "country": "US",
+  "tlsClientAuth": {
+    "certIssuerDNLegacy": "",
+    "certIssuerSKI": "",
+    "certSubjectDNRFC2253": "",
+    "certSubjectDNLegacy": "",
+    "certFingerprintSHA256": "",
+    "certNotBefore": "",
+    "certSKI": "",
+    "certSerial": "",
+    "certIssuerDN": "",
+    "certVerified": "NONE",
+    "certNotAfter": "",
+    "certSubjectDN": "",
+    "certPresented": "0",
+    "certRevoked": "0",
+    "certIssuerSerial": "",
+    "certIssuerDNRFC2253": "",
+    "certFingerprintSHA1": ""
+  },
+  "tlsExportedAuthenticator": {
+    "clientFinished": "8273beaed929ec33210dccf3d5cfecafe57055df25d10b2240450307355eeb350f72906e7cde15a501330a2d4637d3e0",
+    "clientHandshake": "e8cd46e21231dd9574cf4c42b79321334cb13731f9e3eab73e0428c413ca7ba55fce7b70ee586d6d11725b951f00bcfc",
+    "serverHandshake": "210e3da473e8e1e84affd2d1bb61a906d905141e0e6cef830cca3d96c5871c84ce9685063a015303edecd9159694d1dd",
+    "serverFinished": "cb697f2581ad4676316d29d8bc05be5abd97a2441767ed87ee2f22842dd50e84680ddaab8863041b37d2088f96f88da8"
+  },
+  "tlsVersion": "TLSv1.3",
+  "colo": "ATL",
+  "timezone": "America/New_York",
+  "city": "Atlanta",
+  "httpProtocol": "HTTP/1.1",
+  "edgeRequestKeepAliveStatus": 1,
+  "requestPriority": "",
+  "botManagement": {
+    "staticResource": false,
+    "verifiedBot": false,
+    "score": 1
+  },
+  "clientTrustScore": 1,
+  "region": "Georgia",
+  "regionCode": "GA",
+  "asOrganization": "Synergy Broadband",
+  "metroCode": "524",
+  "postalCode": "30308"
+}

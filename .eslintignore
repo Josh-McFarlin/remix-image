@@ -9,5 +9,9 @@ node_modules/
 server.d.ts
 serverPure.d.ts
 
-example/node_modules/
-example/package-lock.json/
+examples/
+docs/
+
+rollup.config.js
+jest.config.js
+jest.setup.js

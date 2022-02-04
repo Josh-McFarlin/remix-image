@@ -49,9 +49,9 @@ export default [
       }),
       resolve({ preferBuiltins: false }),
       commonjs(),
-      nodePolyfills({
-        include: null,
-      }),
+      // nodePolyfills({
+      //   include: null,
+      // }),
     ],
   },
   {
