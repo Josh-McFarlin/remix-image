@@ -1,18 +1,13 @@
 import type { LoaderFunction } from "remix";
 import {
   imageLoader,
-  DiskCache,
+  MemoryCache,
   fsResolver,
   fetchResolver,
+  Resolver,
 } from "remix-image/server";
 
-export const fetchImage = async (
-  asset: string,
-  src: string
-): Promise<{
-  buffer: Buffer;
-  contentType: string;
-}> => {
+export const fetchImage: Resolver = async (asset, src) => {
   if (src.startsWith("/") && (src.length === 1 || src[1] !== "/")) {
     return fsResolver(asset, src);
   } else {
@@ -22,7 +17,7 @@ export const fetchImage = async (
 
 const config = {
   selfUrl: "http://localhost:3000",
-  cache: new DiskCache(),
+  cache: new MemoryCache(),
   resolver: fetchImage,
 };
 

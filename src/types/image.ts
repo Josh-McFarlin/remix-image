@@ -32,10 +32,10 @@ export interface TransformOptions {
   height?: number;
   /** The content type of the resulting image. (optional, default source type) */
   contentType?: MimeType;
-  /** How the image should be resized to fit both provided dimensions. (optional, default 'cover') */
+  /** How the image should be resized to fit both provided dimensions. (optional, default 'contain') */
   fit?: ImageFit;
   /** Position to use when fit is cover or contain. (optional, default 'center') */
-  position?: string;
+  position?: ImagePosition;
   /** Background color of resulting image. (optional, default [0x00, 0x00, 0x00, 0x00]) */
   background?: Color;
   /** Quality, integer 1-100. (optional, default 80) */

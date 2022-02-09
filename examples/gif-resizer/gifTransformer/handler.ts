@@ -5,8 +5,6 @@ import { generatePalette, mapImage, rgbToHex } from "./palette";
 
 export const GifHandler = async (
   buffer: Uint8Array,
-  width: number,
-  height: number | null,
   options: TransformOptions
 ) => {
   // Input
@@ -14,10 +12,10 @@ export const GifHandler = async (
   const numFrames = image.numFrames();
 
   const targetWidth = Math.round(
-    width || image.width * ((height || 0) / image.height)
+    options.width || image.width * ((options.height || 0) / image.height)
   );
   const targetHeight = Math.round(
-    height || image.height * ((width || 0) / image.width)
+    options.height || image.height * ((options.width || 0) / image.width)
   );
 
   // Output

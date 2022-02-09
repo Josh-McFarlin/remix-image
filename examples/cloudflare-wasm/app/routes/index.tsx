@@ -59,7 +59,7 @@ const IndexPage: React.FC = () => (
           loaderUrl="/api/image"
           responsive={img.responsive}
           options={{
-            contentType: MimeType.GIF,
+            contentType: MimeType.AVIF,
           }}
         />
       ))}

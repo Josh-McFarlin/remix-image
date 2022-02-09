@@ -1,3 +1,4 @@
+// @ts-ignore find types for "get-rgba-palette" in pureTransformer if needed
 import getPalette from "get-rgba-palette";
 import type { Color } from "remix-image";
 

@@ -1,19 +1,14 @@
 import type { LoaderFunction } from "remix";
 import {
   imageLoader,
-  DiskCache,
   fsResolver,
   fetchResolver,
-  wasmTransformer,
+  Resolver,
+  MemoryCache,
 } from "remix-image/server";
+import { sharpTransformer } from "../../../sharpTransformer";
 
-export const fetchImage = async (
-  asset: string,
-  src: string
-): Promise<{
-  buffer: Buffer;
-  contentType: string;
-}> => {
+export const fetchImage: Resolver = async (asset, src) => {
   if (src.startsWith("/") && (src.length === 1 || src[1] !== "/")) {
     return fsResolver(asset, src);
   } else {
@@ -23,9 +18,8 @@ export const fetchImage = async (
 
 const config = {
   selfUrl: "http://localhost:3000",
-  cache: new DiskCache(),
-  //transformer: sharp,
-  transformer: wasmTransformer,
+  cache: new MemoryCache(),
+  transformer: sharpTransformer,
   resolver: fetchImage,
 };
 

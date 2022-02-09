@@ -1,25 +1,9 @@
-import { UnsupportedImageError } from "../../../types/error";
 import { MimeType } from "../../../types/file";
 import { Transformer } from "../../../types/transformer";
-import {
-  BmpHandler,
-  GifHandler,
-  JpegHandler,
-  PngHandler,
-  TiffHandler,
-} from "./handlers";
+import { typeHandlers } from "./handlers";
 import { bilinearInterpolation } from "./interpolation";
-import { ImageHandler } from "./types";
 
-const typeHandlers: Record<string, ImageHandler> = {
-  [MimeType.JPEG]: JpegHandler,
-  [MimeType.PNG]: PngHandler,
-  [MimeType.GIF]: GifHandler,
-  [MimeType.BMP]: BmpHandler,
-  [MimeType.TIFF]: TiffHandler,
-};
-
-const supported = new Set([
+const supportedInputs = new Set([
   MimeType.JPEG,
   MimeType.PNG,
   MimeType.GIF,
@@ -27,60 +11,64 @@ const supported = new Set([
   MimeType.TIFF,
 ]);
 
-export const pureTransformer: Transformer = async (
-  { data, contentType: inputContentType },
-  {
-    contentType: outputContentType,
-    width,
-    height,
-    fit,
-    position,
-    background,
-    quality,
-    compressionLevel,
-    loop,
-    delay,
-  }
-) => {
-  if (!supported.has(inputContentType)) {
-    throw new UnsupportedImageError(
-      `Transformer does not allow this input content type: ${inputContentType}!`
-    );
-  } else if (outputContentType && !supported.has(outputContentType)) {
-    throw new UnsupportedImageError(
-      `Transformer does not allow this output content type: ${outputContentType}!`
-    );
-  }
+const supportedOutputs = new Set([
+  MimeType.JPEG,
+  MimeType.PNG,
+  MimeType.GIF,
+  MimeType.BMP,
+]);
 
-  const inputHandler = typeHandlers[inputContentType];
-  const rgba = await inputHandler.decode(data);
+export const pureTransformer: Transformer = {
+  name: "pureTransformer",
+  supportedInputs,
+  supportedOutputs,
+  transform: async (
+    { data, contentType: inputContentType },
+    {
+      contentType: outputContentType,
+      width,
+      height,
+      fit,
+      position,
+      background,
+      quality,
+      compressionLevel,
+      loop,
+      delay,
+    }
+  ) => {
+    const inputHandler = typeHandlers[inputContentType];
+    const rgba = await inputHandler.decode(data);
 
-  let targetWidth = width || rgba.width * ((height || 0) / rgba.height);
-  let targetHeight = height || rgba.height * ((width || 0) / rgba.width);
+    let targetWidth = width || rgba.width * ((height || 0) / rgba.height);
+    let targetHeight = height || rgba.height * ((width || 0) / rgba.width);
 
-  if (targetWidth <= 0 || targetHeight <= 0) {
-    throw new Error("At least one dimension must be provided!");
-  }
+    if (targetWidth <= 0 || targetHeight <= 0) {
+      throw new Error("At least one dimension must be provided!");
+    }
 
-  targetWidth = Math.round(targetWidth);
-  targetHeight = Math.round(targetHeight);
+    targetWidth = Math.round(targetWidth);
+    targetHeight = Math.round(targetHeight);
 
-  const rawImageData = {
-    data: new Uint8Array(targetWidth * targetHeight * 4),
-    width: targetWidth,
-    height: targetHeight,
-  };
+    const rawImageData = {
+      data: new Uint8Array(targetWidth * targetHeight * 4),
+      width: targetWidth,
+      height: targetHeight,
+    };
 
-  bilinearInterpolation(rgba, rawImageData);
+    bilinearInterpolation(rgba, rawImageData);
 
-  const outputHandler = typeHandlers[outputContentType || inputContentType];
-  return outputHandler.encode(rawImageData, {
-    fit,
-    position,
-    background,
-    quality,
-    compressionLevel,
-    loop,
-    delay,
-  });
+    const outputHandler = typeHandlers[outputContentType || inputContentType];
+    return outputHandler.encode(rawImageData, {
+      width: targetWidth,
+      height: targetHeight,
+      fit,
+      position,
+      background,
+      quality,
+      compressionLevel,
+      loop,
+      delay,
+    });
+  },
 };

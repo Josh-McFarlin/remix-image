@@ -6,7 +6,7 @@
   "scripts": {
     "build": "remix build",
     "dev": "remix watch",
-    "postinstall": "remix setup cloudflare-workers",
+    "postinstall": "remix setup cloudflare-workers && patch-package",
     "build:worker": "esbuild --define:process.env.NODE_ENV='\"production\"' --define:import.meta.url='\"http://localhost\"' --define:self.location.href='\"http://localhost\"' --minify --bundle --sourcemap --outdir=dist ./worker",
     "dev:worker": "esbuild --define:process.env.NODE_ENV='\"development\"' --define:import.meta.url='\"http://localhost\"' --define:self.location.href='\"http://localhost\"' --bundle --sourcemap --outdir=dist ./worker",
     "start": "npm run build && miniflare --build-command \"npm run dev:worker\" --watch",
@@ -34,6 +34,7 @@
     "@types/react-dom": "^17.0.9",
     "esbuild": "0.13.14",
     "miniflare": "^2.2.0",
+    "patch-package": "^6.4.7",
     "typescript": "^4.1.2"
   },
   "engines": {

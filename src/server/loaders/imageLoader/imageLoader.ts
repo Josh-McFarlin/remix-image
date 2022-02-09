@@ -1,5 +1,11 @@
 import { redirect } from "@remix-run/server-runtime";
-import { ImageFit, TransformOptions } from "../../../types";
+import {
+  ImageFit,
+  ImagePosition,
+  MimeType,
+  TransformOptions,
+  UnsupportedImageError,
+} from "../../../types";
 import { RemixImageError } from "../../../types/error";
 import type { AssetLoader } from "../../../types/loader";
 import { generateKey } from "../../../utils/cache";
@@ -20,6 +26,8 @@ export const imageLoader: AssetLoader = async (
     resolver = fetchResolver,
     transformer = pureTransformer,
     useFallbackTransformer = true,
+    useFallbackFormat = true,
+    fallbackFormat = MimeType.JPEG,
     defaultOptions = {},
     redirectOnFail = false,
   },
@@ -43,8 +51,8 @@ export const imageLoader: AssetLoader = async (
 
     const decodedQuery = decodeTransformQuery(reqUrl.search);
     const transformOptions: TransformOptions = {
-      fit: ImageFit.COVER,
-      position: "center",
+      fit: ImageFit.CONTAIN,
+      position: ImagePosition.CENTER,
       background: [0x00, 0x00, 0x00, 0x00],
       quality: 80,
       compressionLevel: 9,
@@ -94,6 +102,9 @@ export const imageLoader: AssetLoader = async (
         if (!res || !res.buffer) {
           throw new RemixImageError("Requested image not found!", 404);
         }
+        if (transformOptions.contentType == null) {
+          transformOptions.contentType = res.contentType;
+        }
 
         console.log(
           `Fetched image [${cacheKey}] directly using resolver: ${resolver.name}.`
@@ -103,11 +114,26 @@ export const imageLoader: AssetLoader = async (
       }
 
       try {
-        if (transformOptions.contentType == null) {
-          transformOptions.contentType = res.contentType;
+        if (!transformer.supportedInputs.has(res.contentType)) {
+          throw new UnsupportedImageError(
+            `Transformer does not allow this input content type: ${res.contentType}!`
+          );
+        } else if (
+          !transformer.supportedOutputs.has(transformOptions.contentType)
+        ) {
+          if (useFallbackFormat) {
+            console.log(
+              `Transformer does not allow this output content type: ${transformOptions.contentType}! Falling back to ${fallbackFormat}`
+            );
+            transformOptions.contentType = fallbackFormat;
+          } else {
+            throw new UnsupportedImageError(
+              `Transformer does not allow this output content type: ${transformOptions.contentType}!`
+            );
+          }
         }
 
-        resultImg = await transformer(
+        resultImg = await transformer.transform(
           {
             data: res.buffer,
             contentType: res.contentType,
@@ -124,8 +150,27 @@ export const imageLoader: AssetLoader = async (
           error?.message || error
         );
 
-        if (useFallbackTransformer && transformer !== pureTransformer) {
-          resultImg = await pureTransformer(
+        if (
+          useFallbackTransformer &&
+          transformer !== pureTransformer &&
+          pureTransformer.supportedInputs.has(res.contentType)
+        ) {
+          if (
+            !pureTransformer.supportedOutputs.has(transformOptions.contentType)
+          ) {
+            if (useFallbackFormat) {
+              console.log(
+                `Transformer does not allow this output content type: ${transformOptions.contentType}! Falling back to ${fallbackFormat}`
+              );
+              transformOptions.contentType = fallbackFormat;
+            } else {
+              throw new UnsupportedImageError(
+                `Fallback transformer does not allow this output content type: ${transformOptions.contentType}!`
+              );
+            }
+          }
+
+          resultImg = await pureTransformer.transform(
             {
               data: res.buffer,
               contentType: res.contentType,
@@ -161,7 +206,8 @@ export const imageLoader: AssetLoader = async (
         : `public, max-age=${60 * 60 * 24 * 365}`
     );
   } catch (error: any) {
-    console.error("RemixImage loader error:", error?.message || error);
+    console.error("RemixImage loader error:", error?.message);
+    console.error(error);
 
     if (redirectOnFail && src) {
       return redirect(src);

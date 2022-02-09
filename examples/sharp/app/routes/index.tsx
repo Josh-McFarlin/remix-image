@@ -40,7 +40,7 @@ const images = [
 
 const formatsTest = {
   filePath: "./camera.",
-  fileTypes: ["jpeg", "png", "gif", "webp", "bmp", "tif"],
+  fileTypes: ["jpeg", "png", "webp"],
   sizes: [
     {
       size: {

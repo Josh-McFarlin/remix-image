@@ -1,13 +1,10 @@
 import type { LoaderFunction } from "remix";
-import { imageLoader, fsResolver, DiskCache } from "remix-image/server";
+import { imageLoader, fsResolver, MemoryCache } from "remix-image/server";
 import { gifTransformer } from "../../../gifTransformer";
 
 const config = {
   selfUrl: "http://localhost:3000",
-  cache: new DiskCache({
-    ttl: 0,
-    tbd: 0,
-  }),
+  cache: new MemoryCache(),
   resolver: fsResolver,
   transformer: gifTransformer,
 };
