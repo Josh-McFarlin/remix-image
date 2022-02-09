@@ -3,12 +3,12 @@ import { ImageHandler } from "../types";
 
 export const JpegHandler: ImageHandler = {
   async decode(buffer) {
-    const image = jpeg.decode(buffer);
+    const image = jpeg.decode(buffer, { useTArray: true });
 
     return {
       width: image.width,
       height: image.height,
-      data: new Uint8Array(image.data),
+      data: image.data,
     };
   },
   async encode(image, options) {

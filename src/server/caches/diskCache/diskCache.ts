@@ -46,7 +46,7 @@ export class DiskCache extends Cache {
   }
 
   async set(key: string, resultImg: Uint8Array): Promise<void> {
-    await this.cache.set(key, Buffer.from(resultImg));
+    await this.cache.set(key, resultImg as Buffer);
   }
 
   async clear(): Promise<void> {

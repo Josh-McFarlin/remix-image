@@ -41,7 +41,6 @@ const IndexPage: React.FC = () => (
         src={img.src}
         loaderUrl="/api/image"
         responsive={img.responsive}
-        //width={img.responsive[0].size.width}
       />
     ))}
   </div>
