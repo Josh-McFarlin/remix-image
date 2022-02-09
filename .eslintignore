@@ -14,4 +14,4 @@ docs/
 
 rollup.config.js
 jest.config.js
-jest.setup.js
+jest.setup.ts
