@@ -1,3 +1,4 @@
+import path from "path";
 import peerDepsExternal from "rollup-plugin-peer-deps-external";
 import resolve from "@rollup/plugin-node-resolve";
 import commonjs from "@rollup/plugin-commonjs";
@@ -21,8 +22,7 @@ export default [
       json(),
       postcss({
         modules: true,
-        // extract: path.resolve("build/styles.css"),
-        inject: true,
+        extract: path.resolve("build/styles.css"),
       }),
       typescript({
         useTsconfigDeclarationDir: true,
@@ -40,14 +40,15 @@ export default [
         sourcemap: true,
       },
     ],
+    external: ["fs", "path"],
     plugins: [
       peerDepsExternal(),
       json(),
       typescript({
         useTsconfigDeclarationDir: true,
       }),
+      resolve({ preferBuiltins: false }),
       commonjs(),
-      resolve(),
     ],
   },
   {
@@ -67,7 +68,9 @@ export default [
       }),
       resolve({ preferBuiltins: false }),
       commonjs(),
-      nodePolyfills(),
+      nodePolyfills({
+        include: null,
+      }),
     ],
   },
 ];

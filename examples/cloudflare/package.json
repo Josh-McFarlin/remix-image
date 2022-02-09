@@ -1,8 +1,8 @@
 {
   "private": true,
-  "name": "remix-app-template",
-  "description": "",
-  "license": "",
+  "name": "cloudflare-example",
+  "description": "An example showing Remix-Image on Cloudflare Workers",
+  "license": "MIT",
   "scripts": {
     "build": "remix build",
     "dev": "remix watch",

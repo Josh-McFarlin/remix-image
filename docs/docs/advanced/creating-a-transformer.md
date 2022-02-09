@@ -11,27 +11,21 @@ An example could be resizing images using Cloudinary or Cloudflare Images.
 
 To make your own, just make a class that follows the [Transformer format](https://github.com/Josh-McFarlin/remix-image/blob/master/src/types/transformer.ts):
 ```typescript
-import { JpegOptions, PngOptions, ResizeOptions, WebpOptions } from "sharp";
-
-export abstract class ImageTransformer {
-  abstract jpeg(options?: JpegOptions): this;
-  abstract png(options?: PngOptions): this;
-  abstract webp(options?: WebpOptions): this;
-
-  abstract resize(options: ResizeOptions): this;
-  abstract toBuffer(): Promise<Buffer>;
-}
+export type Transformer = {
+  name: string;
+  supportedInputs: Set<MimeType>;
+  supportedOutputs: Set<MimeType>;
+  transform: (
+    input: {
+      data: Uint8Array;
+      contentType: MimeType;
+    },
+    output: TransformOptions
+  ) => Promise<Uint8Array>;
+};
 ```
 
-**Note**: Transformers use Buffer, a default Node package that is not available on platforms like Cloudflare Workers.
-If you would like to use your custom transformer on these platforms, you will need to polyfill your custom transformer using a library like [`buffer`](https://www.npmjs.com/package/buffer).
-
-Then make a function that takes in a buffer as the single parameter, and creates an instance of your Transformer class
-```typescript
-export type TransformerMaker = (buffer: Buffer) => ImageTransformer;
-```
-
-You will then provide this function to the ‘transformer’ field of the ‘loader’ config
+You will then provide this object to the `transformer` field of the ‘loader’ config
 ```typescript jsx
 import type { LoaderFunction } from "remix";
 import { imageLoader } from "remix-image/server";
@@ -48,9 +42,11 @@ export const loader: LoaderFunction = ({ request }) => {
 };
 ```
 
-## Example
+## Examples
 
-To see an example, look at [`pureTransformer`](https://github.com/Josh-McFarlin/remix-image/tree/master/src/server/transformers/pureTransformer) in the library.
+* [pureTransformer](https://github.com/Josh-McFarlin/remix-image/tree/master/src/server/transformers/pureTransformer)
+* [sharp](https://github.com/Josh-McFarlin/remix-image/tree/master/examples/sharp/sharpTransformer)
+* [gif-resizer](https://github.com/Josh-McFarlin/remix-image/tree/master/examples/gif-resizer/gifTransformer)
 
 ## Show Off
 

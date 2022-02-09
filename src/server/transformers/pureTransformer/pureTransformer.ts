@@ -1,87 +1,74 @@
-import type {
-  JpegOptions,
-  PngOptions,
-  WebpOptions,
-  ResizeOptions,
-} from "sharp";
-import type { MimeType } from "../../../types/file";
-import type {
-  ImageTransformer,
-  TransformerMaker,
-} from "../../../types/transformer";
-import { fromBuffer } from "../../../utils/fileType";
-import { ImageHandler, PNGHandler, JPEGHandler } from "./handler";
+import { MimeType } from "../../../types/file";
+import { Transformer } from "../../../types/transformer";
+import { typeHandlers } from "./handlers";
+import { bilinearInterpolation } from "./interpolation";
 
-export class PureTransformer implements ImageTransformer {
-  #mimeType: MimeType;
-  #src: Buffer;
-  #jpegOptions: JpegOptions | undefined;
-  #pngOptions: PngOptions | undefined;
-  #webpOptions: WebpOptions | undefined;
-  #targetWidth: number | undefined;
-  #targetHeight: number | undefined;
-  #handler: ImageHandler | undefined;
+const supportedInputs = new Set([
+  MimeType.JPEG,
+  MimeType.PNG,
+  MimeType.GIF,
+  MimeType.BMP,
+  MimeType.TIFF,
+]);
 
-  constructor(buffer: Buffer) {
-    this.#mimeType = fromBuffer(buffer);
-    this.#src = buffer;
-  }
+const supportedOutputs = new Set([
+  MimeType.JPEG,
+  MimeType.PNG,
+  MimeType.GIF,
+  MimeType.BMP,
+]);
 
-  jpeg(options?: JpegOptions): this {
-    this.#jpegOptions = options;
+export const pureTransformer: Transformer = {
+  name: "pureTransformer",
+  supportedInputs,
+  supportedOutputs,
+  transform: async (
+    { data, contentType: inputContentType },
+    {
+      contentType: outputContentType,
+      width,
+      height,
+      fit,
+      position,
+      background,
+      quality,
+      compressionLevel,
+      loop,
+      delay,
+    }
+  ) => {
+    const inputHandler = typeHandlers[inputContentType];
+    const rgba = await inputHandler.decode(data);
 
-    return this;
-  }
+    let targetWidth = width || rgba.width * ((height || 0) / rgba.height);
+    let targetHeight = height || rgba.height * ((width || 0) / rgba.width);
 
-  png(options?: PngOptions): this {
-    this.#pngOptions = options;
-
-    return this;
-  }
-
-  webp(options?: WebpOptions): this {
-    this.#webpOptions = options;
-
-    return this;
-  }
-
-  resize(options: ResizeOptions): this {
-    this.#targetWidth = options.width;
-    this.#targetHeight = options.height;
-
-    if (!options.width && !options.height) {
+    if (targetWidth <= 0 || targetHeight <= 0) {
       throw new Error("At least one dimension must be provided!");
     }
 
-    this.#handler =
-      this.#mimeType === "image/png"
-        ? new PNGHandler(this.#src)
-        : new JPEGHandler(this.#src);
+    targetWidth = Math.round(targetWidth);
+    targetHeight = Math.round(targetHeight);
 
-    if (!options.width) {
-      this.#targetWidth =
-        this.#handler.width * (this.#targetHeight! / this.#handler.height);
-    }
+    const rawImageData = {
+      data: new Uint8Array(targetWidth * targetHeight * 4),
+      width: targetWidth,
+      height: targetHeight,
+    };
 
-    if (!options.height) {
-      this.#targetHeight =
-        this.#handler.height * (this.#targetWidth! / this.#handler.width);
-    }
+    bilinearInterpolation(rgba, rawImageData);
 
-    if (this.#targetWidth! < 0 || this.#targetHeight! < 0) {
-      throw new Error("At least one dimension must be provided!");
-    }
-
-    this.#targetWidth = Math.round(this.#targetWidth!);
-    this.#targetHeight = Math.round(this.#targetHeight!);
-
-    return this;
-  }
-
-  async toBuffer(): Promise<Buffer> {
-    return this.#handler!.write(this.#targetWidth!, this.#targetHeight!);
-  }
-}
-
-export const pureTransformer: TransformerMaker = (buffer: Buffer) =>
-  new PureTransformer(buffer);
+    const outputHandler = typeHandlers[outputContentType || inputContentType];
+    return outputHandler.encode(rawImageData, {
+      width: targetWidth,
+      height: targetHeight,
+      fit,
+      position,
+      background,
+      quality,
+      compressionLevel,
+      loop,
+      delay,
+    });
+  },
+};

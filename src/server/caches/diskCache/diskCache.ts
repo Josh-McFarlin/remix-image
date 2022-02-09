@@ -1,6 +1,5 @@
 import BaseCache from "hybrid-disk-cache";
-import { CacheConfig, Cache } from "../../../types/cache";
-import { fromBuffer } from "../../../utils/fileType";
+import { CacheConfig, Cache, CacheStatus } from "../../../types/cache";
 
 export interface DiskCacheConfig extends CacheConfig {
   /**
@@ -26,41 +25,28 @@ export class DiskCache extends Cache {
     this.cache = new BaseCache(this.config);
   }
 
+  async status(key: string): Promise<CacheStatus> {
+    return (await this.cache.has(key)) as CacheStatus;
+  }
+
   async has(key: string): Promise<boolean> {
-    return (await this.cache.has(key)) !== "miss";
+    return (await this.status(key)) !== CacheStatus.MISS;
   }
 
-  async status(key: string): Promise<"hit" | "stale" | "miss"> {
-    return this.cache.has(key);
-  }
-
-  async get(key: string): Promise<{
-    resultImg: Buffer;
-    contentType: string;
-  } | null> {
-    let contentType: string;
-
+  async get(key: string): Promise<Uint8Array | null> {
     if (!(await this.has(key))) {
       return null;
     }
 
     const cacheValue = (await this.cache.get(key))!;
-    try {
-      contentType = fromBuffer(cacheValue);
-    } catch {
-      contentType = "image/svg+xml";
-    }
 
     await this.cache.set(key, cacheValue);
 
-    return {
-      resultImg: cacheValue,
-      contentType,
-    };
+    return cacheValue;
   }
 
-  async set(key: string, resultImg: Buffer): Promise<void> {
-    await this.cache.set(key, resultImg);
+  async set(key: string, resultImg: Uint8Array): Promise<void> {
+    await this.cache.set(key, Buffer.from(resultImg));
   }
 
   async clear(): Promise<void> {

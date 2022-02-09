@@ -1,6 +1,9 @@
-import type { ComponentPropsWithoutRef } from "react";
-import type { ResponsiveSize } from "../../types/image";
-import { createUrl } from "../../utils/url";
+import type { ResponsiveSize, SizelessOptions } from "../../types/image";
+import { encodeTransformQuery } from "../../utils/url";
+
+export type ImageProps = {
+  src?: string;
+};
 
 export type ResponsiveHookResult = {
   src: string;
@@ -9,55 +12,50 @@ export type ResponsiveHookResult = {
 };
 
 export const useResponsiveImage = (
-  imgProps: ComponentPropsWithoutRef<"img">,
-  loaderUrl = "/api/image",
-  responsive: ResponsiveSize[]
+  image: ImageProps,
+  loaderUrl: string,
+  responsive: ResponsiveSize[],
+  options: SizelessOptions = {}
 ): ResponsiveHookResult => {
-  const baseURL = imgProps.src
-    ? createUrl(loaderUrl, {
-        src: imgProps.src,
-      })
-    : "";
+  let largestSrc = image.src || "";
+  let largestWidth = 0;
+  const srcSet: string[] = [];
 
-  const result = responsive.reduce(
-    (accum, { size, maxWidth }) => {
-      const srcSetUrl = createUrl(
-        baseURL,
-        {
-          width: size.width || "",
-          height: `${size.height || ""} ${size.width}w`,
-        },
-        true
-      );
+  for (const { size } of responsive) {
+    const srcSetUrl =
+      loaderUrl +
+      `?src=${image.src}&` +
+      encodeTransformQuery({
+        width: size.width,
+        height: size.height,
+        ...options,
+      });
 
-      accum.srcSet.push(srcSetUrl);
+    srcSet.push(srcSetUrl + ` ${size.width}w`);
 
-      if (maxWidth) {
-        accum.sizes.push(`(max-width: ${maxWidth}px) ${size.width}px`);
-      }
-
-      if (size.width > accum.largestWidth) {
-        accum.largestWidth = size.width;
-        accum.src = srcSetUrl;
-      }
-
-      return accum;
-    },
-    {
-      src: imgProps.src || "",
-      srcSet: [] as string[],
-      sizes: [] as string[],
-      largestWidth: 0,
+    if (size.width > largestWidth) {
+      largestWidth = size.width;
+      largestSrc = srcSetUrl;
     }
-  );
+  }
+
+  const sizes = [...responsive]
+    .sort((resp1, resp2) => resp1.size.width - resp2.size.width)
+    .map((resp) =>
+      resp.maxWidth
+        ? `(max-width: ${resp.maxWidth}px) ${resp.size.width}px`
+        : `${resp.size.width}px`
+    );
+
+  if (responsive.length === 1 && responsive[0].maxWidth != null) {
+    sizes.push(`${responsive[0].size.width}px`);
+  }
 
   return {
-    src: result.src,
-    ...(result.srcSet.length && {
-      srcSet: result.srcSet.join(", "),
-    }),
-    ...(result.sizes.length && {
-      sizes: result.sizes.join(", "),
+    src: largestSrc,
+    ...(srcSet.length && {
+      srcSet: srcSet.join(", "),
+      sizes: sizes.join(", "),
     }),
   };
 };

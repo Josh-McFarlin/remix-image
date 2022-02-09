@@ -1,5 +1,5 @@
 import React from "react";
-import Image from "remix-image";
+import Image, { MimeType } from "remix-image";
 
 const images = [
   {
@@ -13,10 +13,6 @@ const images = [
         maxWidth: 200,
       },
     ],
-  },
-  {
-    src: "https://i.imgur.com/5cQnAQC.png",
-    responsive: [],
   },
   {
     src: "/camera.png",
@@ -38,15 +34,89 @@ const images = [
   },
 ];
 
+const formatsTest = {
+  filePath: "./camera.",
+  fileTypes: ["jpeg", "png", "gif", "bmp"],
+  sizes: [
+    {
+      size: {
+        width: 300,
+        height: 300,
+      },
+    },
+    {
+      size: {
+        width: 100,
+        height: 100,
+      },
+    },
+  ],
+};
+
+const formatMap: Record<string, MimeType> = {
+  jpeg: MimeType.JPEG,
+  png: MimeType.PNG,
+  gif: MimeType.GIF,
+  bmp: MimeType.BMP,
+  tif: MimeType.TIFF,
+};
+
 const IndexPage: React.FC = () => (
   <div className="root">
-    {images.map((img) => (
-      <Image
-        key={img.src}
-        src={img.src}
-        loaderUrl="/api/image"
-        responsive={img.responsive}
-      />
+    <section>
+      {images.map((img) => (
+        <div key={img.src}>
+          <Image
+            src={img.src}
+            loaderUrl="/api/image"
+            responsive={img.responsive}
+          />
+        </div>
+      ))}
+    </section>
+    <h3>Resize But Keep Initial File Formats</h3>
+    {formatsTest.fileTypes.map((fileType) => (
+      <div key={fileType}>
+        <h4>
+          {fileType} {"==>"} {fileType}
+        </h4>
+        <section>
+          {formatsTest.sizes.map((size) => (
+            <div key={size.size.width + " " + size.size.height}>
+              <Image
+                src={formatsTest.filePath + fileType}
+                loaderUrl="/api/image"
+                responsive={[size]}
+                options={{
+                  contentType: formatMap[fileType],
+                }}
+              />
+            </div>
+          ))}
+        </section>
+      </div>
+    ))}
+    <h3>Resize PNG To File Formats</h3>
+    {formatsTest.fileTypes.map((fileType) => (
+      <div key={fileType}>
+        <h4>
+          PNG {"==>"} {fileType}
+        </h4>
+        <section>
+          {formatsTest.sizes.map((size) => (
+            <div key={size.size.width + " " + size.size.height}>
+              <Image
+                src={formatsTest.filePath + "png"}
+                loaderUrl="/api/image"
+                responsive={[size]}
+                options={{
+                  contentType: formatMap[fileType],
+                }}
+              />
+            </div>
+          ))}
+        </section>
+      </div>
     ))}
   </div>
 );

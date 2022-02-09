@@ -1,8 +1,8 @@
 {
   "private": true,
-  "name": "remix-app-template",
-  "description": "",
-  "license": "",
+  "name": "basic-example",
+  "description": "An example showing a basic setup on Remix server.",
+  "license": "MIT",
   "scripts": {
     "build": "remix build",
     "dev": "remix dev",
@@ -16,8 +16,7 @@
     "react": "^17.0.2",
     "react-dom": "^17.0.2",
     "remix": "^1.1.1",
-    "remix-image": "file:../..",
-    "sharp": "^0.29.3"
+    "remix-image": "file:../.."
   },
   "devDependencies": {
     "@remix-run/dev": "^1.1.1",

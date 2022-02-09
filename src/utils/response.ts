@@ -4,7 +4,7 @@ export const textResponse = (status: number, message = ""): Response =>
   });
 
 export const imageResponse = (
-  file: any,
+  file: Uint8Array,
   status: number,
   contentType: string,
   cacheControl: string

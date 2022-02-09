@@ -10,7 +10,7 @@ Some platforms like Cloudflare Workers do not support file-systems and Node pack
 ## Transformer
 To use `remix-image` on Cloudflare and similar, use `MemoryCache` and `pureTransformer` because they are pure JavaScript.
 
-**Note**: Because of bundling issues, you must import these helpers from `remix-image/serverPure`.
+**Note**: Because of bundling issues, you must import this package from `remix-image/serverPure`.
 
 ```typescript jsx
 import type { LoaderFunction } from "remix";
@@ -41,17 +41,12 @@ import {
   MemoryCache,
   kvResolver,
   fetchResolver,
+  Resolver
 } from "remix-image/serverPure";
 
 const whitelistedDomains = new Set(["http://localhost:3000", "i.imgur.com"]);
 
-export const myResolver = async (
-  asset: string,
-  url: string
-): Promise<{
-  buffer: Buffer;
-  contentType: string;
-}> => {
+export const myResolver: Resolver = async (asset, url) => {
   if (asset.startsWith("/") && (asset.length === 1 || asset[1] !== "/")) {
     return kvResolver(asset, url);
   } else {

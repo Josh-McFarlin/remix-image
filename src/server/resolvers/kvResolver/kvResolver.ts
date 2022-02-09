@@ -1,8 +1,7 @@
 import type { Options as KvAssetHandlerOptions } from "@cloudflare/kv-asset-handler";
 import { getAssetFromKV, NotFoundError } from "@cloudflare/kv-asset-handler";
-import { RemixImageError } from "../../../types/error";
 import type { Resolver } from "../../../types/resolver";
-import { fromBuffer } from "../../../utils/fileType";
+import { mimeFromBuffer } from "../../../utils/fileType";
 
 export interface FetchEvent {
   request: Request;
@@ -57,8 +56,8 @@ export const kvResolver: Resolver = async (_asset, url) => {
 
   const arrBuff = await imageResponse.arrayBuffer();
 
-  const buffer = Buffer.from(arrBuff);
-  const contentType = fromBuffer(buffer);
+  const buffer = new Uint8Array(arrBuff);
+  const contentType = mimeFromBuffer(buffer);
 
   return {
     buffer,

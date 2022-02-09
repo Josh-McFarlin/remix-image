@@ -1,0 +1,33 @@
+{
+  "private": true,
+  "name": "gif-resizer-example",
+  "description": "An example showing a transformer capable of resizing animated gifs.",
+  "license": "MIT",
+  "scripts": {
+    "build": "remix build",
+    "dev": "remix dev",
+    "postinstall": "remix setup node",
+    "start": "remix build && remix-serve build"
+  },
+  "dependencies": {
+    "@remix-run/react": "^1.1.1",
+    "@remix-run/serve": "^1.1.1",
+    "get-rgba-palette": "^2.0.1",
+    "hybrid-disk-cache": "^0.2.0",
+    "omggif": "^1.0.10",
+    "react": "^17.0.2",
+    "react-dom": "^17.0.2",
+    "remix": "^1.1.1",
+    "remix-image": "file:../.."
+  },
+  "devDependencies": {
+    "@remix-run/dev": "^1.1.1",
+    "@types/react": "^17.0.24",
+    "@types/react-dom": "^17.0.9",
+    "typescript": "^4.1.2"
+  },
+  "engines": {
+    "node": ">=14"
+  },
+  "sideEffects": false
+}

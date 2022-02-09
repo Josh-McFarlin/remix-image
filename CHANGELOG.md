@@ -3,6 +3,23 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [Unreleased]
+
+### Changed
+
+- add supported content type fields to transformers
+- modify how transform defaults are set and their types
+- Simplify transformers by removing buffer dependency for external transformers, move sharp
+  transformer to examples, and create wasm transformer
+- **BREAKING**: Modified transformer to use a new function type, Sharp can no longer be passed in
+  as is
+
+### Docs
+
+- Updated docs to use new transformer format
+- Created multiple new examples for various transformers
+- Created documentation for new usage of Sharp
+
 ## [0.2.0] - 2022-01-26
 
 ### Docs

@@ -47,10 +47,16 @@
     "release": "dotenv release-it --"
   },
   "dependencies": {
+    "@pdf-lib/upng": "^1.0.1",
+    "bmp-js": "^0.1.0",
     "buffer": "^6.0.3",
     "clsx": "^1.1.1",
+    "get-rgba-palette": "^2.0.1",
     "jpeg-js": "^0.4.3",
-    "pngjs": "^6.0.0"
+    "omggif": "^1.0.10",
+    "pako": "^2.0.4",
+    "query-string": "^7.1.0",
+    "utif": "^3.1.0"
   },
   "devDependencies": {
     "@babel/core": "^7.16.0",
@@ -70,11 +76,13 @@
     "@testing-library/jest-dom": "^5.16.0",
     "@testing-library/react": "^12.1.2",
     "@testing-library/user-event": "^13.5.0",
-    "@types/better-sqlite3": "^7.4.2",
+    "@types/bmp-js": "^0.1.0",
     "@types/jest": "^27.0.3",
+    "@types/omggif": "^1.0.2",
     "@types/pngjs": "^6.0.1",
+    "@types/qs": "^6.9.7",
     "@types/react": "^17.0.37",
-    "@types/sharp": "^0.29.5",
+    "@types/utif": "^3.0.1",
     "@typescript-eslint/eslint-plugin": "^5.5.0",
     "@typescript-eslint/parser": "^5.5.0",
     "autoprefixer": "^10.4.0",
@@ -118,11 +126,9 @@
     "rollup-plugin-terser": "^7.0.2",
     "rollup-plugin-typescript2": "^0.31.1",
     "sass-loader": "^10.2.0",
-    "sharp": "^0.29.3",
     "style-loader": "^2.0.0",
     "ts-jest": "^27.1.0",
-    "typescript": "^4.5.2",
-    "yarn-or-npm": "^3.0.1"
+    "typescript": "^4.5.2"
   },
   "peerDependencies": {
     "@cloudflare/kv-asset-handler": "^0.2.0",

@@ -1,0 +1,22 @@
+diff --git a/node_modules/@jsquash/avif/encode.js b/node_modules/@jsquash/avif/encode.js
+index dd1c7c7..909ca21 100644
+--- a/node_modules/@jsquash/avif/encode.js
++++ b/node_modules/@jsquash/avif/encode.js
+@@ -12,15 +12,10 @@
+  */
+ import { defaultOptions } from './meta';
+ import { initEmscriptenModule } from './utils';
+-import { threads } from 'wasm-feature-detect';
++import avif_enc from './codec/enc/avif_enc';
+ let emscriptenModule;
+ export async function init(module) {
+-    if (await threads()) {
+-        const avifEncoder = await import('./codec/enc/avif_enc_mt');
+-        return initEmscriptenModule(avifEncoder.default, module);
+-    }
+-    const avifEncoder = await import('./codec/enc/avif_enc');
+-    return initEmscriptenModule(avifEncoder.default, module);
++    emscriptenModule = initEmscriptenModule(avif_enc, module);
+ }
+ export default async function encode(data, options = {}) {
+     if (!emscriptenModule)

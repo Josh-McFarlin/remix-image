@@ -4,7 +4,12 @@
 
 A React component for responsive images in Remix.
 
-This library turns:
+This library lets you:
+* Resize images to the minimum size needed for faster page loading
+* Transform images to more efficient file types for faster speed
+* Cache commonly requested assets for the best performance
+
+Turning:
 
 ```typescript jsx
 <Image
@@ -50,11 +55,6 @@ yarn add remix-image
 ---
 
 ## Other
-
-### Status
-
-At the moment this library is experimental and has not been used in a production environment.
-Further development is ongoing, but I welcome all pull-requests and issues created on GitHub.
 
 ### Credit
 

@@ -1,132 +1,222 @@
-import { Cache } from "../../../types/cache";
+import { redirect } from "@remix-run/server-runtime";
+import {
+  ImageFit,
+  ImagePosition,
+  MimeType,
+  TransformOptions,
+  UnsupportedImageError,
+} from "../../../types";
 import { RemixImageError } from "../../../types/error";
 import type { AssetLoader } from "../../../types/loader";
 import { generateKey } from "../../../utils/cache";
+import { mimeFromBuffer } from "../../../utils/fileType";
 import { imageResponse, textResponse } from "../../../utils/response";
-import { transformImage } from "../../../utils/transform";
-import { decodeQuery } from "../../../utils/url";
+import {
+  decodeQuery,
+  decodeTransformQuery,
+  parseURL,
+} from "../../../utils/url";
 import { fetchResolver } from "../../resolvers/fetchResolver";
 import { pureTransformer } from "../../transformers";
 
-export const imageLoader: AssetLoader = async (config, request) => {
+export const imageLoader: AssetLoader = async (
+  {
+    selfUrl,
+    cache = null,
+    resolver = fetchResolver,
+    transformer = pureTransformer,
+    useFallbackTransformer = true,
+    useFallbackFormat = true,
+    fallbackFormat = MimeType.JPEG,
+    defaultOptions = {},
+    redirectOnFail = false,
+  },
+  request
+) => {
+  const reqUrl = parseURL(request.url);
+  let src: string | null = null;
+
   try {
-    const cache = config.cache instanceof Cache ? config.cache : null;
-    const imageTransformer = config.transformer || pureTransformer;
-    const resolver = config.resolver || fetchResolver;
-
-    let selfUrl: URL;
-    try {
-      selfUrl = new URL(config.selfUrl);
-    } catch (error) {
-      throw new RemixImageError(`Invalid selfUrl: ${config.selfUrl}`);
+    if (!selfUrl) {
+      throw new RemixImageError(
+        "selfUrl is required in RemixImage loader config!",
+        500
+      );
     }
 
-    let reqUrl: URL;
-    try {
-      reqUrl = new URL(request.url);
-    } catch (error) {
-      throw new RemixImageError(`Invalid request url: ${request.url}`);
+    src = decodeQuery(reqUrl.searchParams, "src");
+    if (!src) {
+      throw new RemixImageError("An image URL must be provided!", 400);
     }
 
-    const width = decodeQuery(reqUrl.searchParams, "width") || "";
-    const height = decodeQuery(reqUrl.searchParams, "height") || "";
-    const quality = decodeQuery(reqUrl.searchParams, "quality") || "80";
-    const src = decodeQuery(reqUrl.searchParams, "src") || "";
+    const decodedQuery = decodeTransformQuery(reqUrl.search);
+    const transformOptions: TransformOptions = {
+      fit: ImageFit.CONTAIN,
+      position: ImagePosition.CENTER,
+      background: [0x00, 0x00, 0x00, 0x00],
+      quality: 80,
+      compressionLevel: 9,
+      loop: 0,
+      delay: 100,
+      ...defaultOptions,
+      ...decodedQuery,
+    } as TransformOptions;
 
-    const webpSupport =
-      request.headers.has("accept") &&
-      request.headers.get("accept")!.includes("image/webp");
+    const assetUrl = parseURL(src, selfUrl);
 
-    let resultImg: Buffer | undefined;
-    let contentType = "image/svg+xml";
-
-    if (parseInt(width) > 8000) {
-      return textResponse(406, "Requested Image too large!");
+    if (!transformOptions.width) {
+      throw new RemixImageError("A width is required!", 400);
+    }
+    if (transformOptions.width && transformOptions.width > 8000) {
+      throw new RemixImageError("Requested Image too large!", 406);
+    }
+    if (transformOptions.height && transformOptions.height > 8000) {
+      throw new RemixImageError("Requested Image too large!", 406);
     }
 
-    const cacheKey = generateKey(src, width, quality, webpSupport);
+    let resultImg: Uint8Array | undefined;
 
-    let assetUrl: URL;
-    try {
-      assetUrl = new URL(src, selfUrl);
-    } catch (error) {
-      throw new RemixImageError(`Cannot combine urls ${src} and ${selfUrl}`);
-    }
+    const cacheKey = generateKey(
+      src,
+      transformOptions.width,
+      transformOptions.height,
+      transformOptions.quality,
+      transformOptions.contentType
+    );
 
     if (cache && (await cache.has(cacheKey))) {
-      if ((await cache.status(cacheKey)) == "stale") {
-        setTimeout(async () => {
-          const res = await resolver(src, assetUrl.toString());
-
-          if (res.contentType === "image/svg+xml") {
-            contentType = res.contentType;
-            resultImg = res.buffer;
-          } else {
-            const transformed = await transformImage(
-              imageTransformer,
-              res.buffer,
-              {
-                width: parseInt(width, 10),
-                quality: parseInt(quality, 10),
-                allowWebP: webpSupport,
-              }
-            );
-
-            contentType = transformed.contentType;
-            resultImg = transformed.resultImg;
-          }
-
-          await cache.set(cacheKey, resultImg);
-        }, 1000);
-      }
-
       const cacheValue = await cache.get(cacheKey);
-      console.log(`Retrieved image [${cacheKey}] from cache.`);
 
       if (cacheValue) {
-        contentType = cacheValue.contentType;
-        resultImg = cacheValue.resultImg;
-      }
-    } else {
-      const res = await resolver(src, assetUrl.toString());
-
-      if (res.contentType === "image/svg+xml") {
-        contentType = res.contentType;
-        resultImg = res.buffer;
-      } else {
-        const transformed = await transformImage(imageTransformer, res.buffer, {
-          width: parseInt(width, 10),
-          quality: parseInt(quality, 10),
-          allowWebP: webpSupport,
-        });
-
-        contentType = transformed.contentType;
-        resultImg = transformed.resultImg;
-      }
-
-      console.log(`Fetched image [${cacheKey}] directly.`);
-      if (cache) {
-        await cache.set(cacheKey, resultImg);
+        console.log(`Retrieved image [${cacheKey}] from cache.`);
+        resultImg = cacheValue;
       }
     }
 
     if (!resultImg) {
-      return textResponse(404, "Requested Image not found!");
+      let res;
+
+      try {
+        res = await resolver(src, assetUrl.toString());
+
+        if (!res || !res.buffer) {
+          throw new RemixImageError("Requested image not found!", 404);
+        }
+        if (transformOptions.contentType == null) {
+          transformOptions.contentType = res.contentType;
+        }
+
+        console.log(
+          `Fetched image [${cacheKey}] directly using resolver: ${resolver.name}.`
+        );
+      } catch (error) {
+        throw new RemixImageError("Failed to retrieve requested image!", 500);
+      }
+
+      try {
+        if (!transformer.supportedInputs.has(res.contentType)) {
+          throw new UnsupportedImageError(
+            `Transformer does not allow this input content type: ${res.contentType}!`
+          );
+        } else if (
+          !transformer.supportedOutputs.has(transformOptions.contentType)
+        ) {
+          if (useFallbackFormat) {
+            console.log(
+              `Transformer does not allow this output content type: ${transformOptions.contentType}! Falling back to ${fallbackFormat}`
+            );
+            transformOptions.contentType = fallbackFormat;
+          } else {
+            throw new UnsupportedImageError(
+              `Transformer does not allow this output content type: ${transformOptions.contentType}!`
+            );
+          }
+        }
+
+        resultImg = await transformer.transform(
+          {
+            data: res.buffer,
+            contentType: res.contentType,
+          },
+          transformOptions
+        );
+
+        console.log(
+          `Successfully transformed image using transformer: ${transformer.name}`
+        );
+      } catch (error: any) {
+        console.error(
+          "Failed to use provided transformer:",
+          error?.message || error
+        );
+
+        if (
+          useFallbackTransformer &&
+          transformer !== pureTransformer &&
+          pureTransformer.supportedInputs.has(res.contentType)
+        ) {
+          if (
+            !pureTransformer.supportedOutputs.has(transformOptions.contentType)
+          ) {
+            if (useFallbackFormat) {
+              console.log(
+                `Transformer does not allow this output content type: ${transformOptions.contentType}! Falling back to ${fallbackFormat}`
+              );
+              transformOptions.contentType = fallbackFormat;
+            } else {
+              throw new UnsupportedImageError(
+                `Fallback transformer does not allow this output content type: ${transformOptions.contentType}!`
+              );
+            }
+          }
+
+          resultImg = await pureTransformer.transform(
+            {
+              data: res.buffer,
+              contentType: res.contentType,
+            },
+            transformOptions
+          );
+
+          console.log(
+            `Successfully transformed image using fallback transformer: ${pureTransformer.name}`
+          );
+        } else {
+          throw error;
+        }
+      }
     }
+
+    if (!resultImg) {
+      throw new RemixImageError("Failed to transform requested image!", 500);
+    }
+
+    if (cache) {
+      await cache.set(cacheKey, resultImg);
+    }
+
+    const resultContentType = mimeFromBuffer(resultImg);
 
     return imageResponse(
       resultImg,
       200,
-      contentType,
+      resultContentType,
       cache
         ? `private, max-age=${cache.config.ttl}, max-stale=${cache.config.tbd}`
         : `public, max-age=${60 * 60 * 24 * 365}`
     );
   } catch (error: any) {
-    console.error("imageLoader error:", error?.message || error);
+    console.error("RemixImage loader error:", error?.message);
+    console.error(error);
 
-    //if (error instanceof RemixImageError) {
-    return textResponse(500, error?.message || error);
-    //}
+    if (redirectOnFail && src) {
+      return redirect(src);
+    }
+
+    if (error instanceof RemixImageError) {
+      return textResponse(error.errorCode || 500, error.message);
+    } else {
+      return textResponse(500, "RemixImage encountered an unknown error!");
+    }
   }
 };

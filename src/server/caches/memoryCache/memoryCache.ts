@@ -1,5 +1,4 @@
-import { CacheConfig, Cache } from "../../../types/cache";
-import { fromBuffer } from "../../../utils/fileType";
+import { Cache, CacheConfig, CacheStatus } from "../../../types/cache";
 import { LRU } from "../../../utils/lru";
 
 export interface MemoryCacheConfig extends CacheConfig {
@@ -11,7 +10,7 @@ export interface MemoryCacheConfig extends CacheConfig {
 
 export class MemoryCache extends Cache {
   config: MemoryCacheConfig;
-  cache: LRU<Buffer>;
+  cache: LRU<Uint8Array>;
 
   constructor(config: Partial<MemoryCacheConfig> | null | undefined = {}) {
     super();
@@ -23,45 +22,31 @@ export class MemoryCache extends Cache {
       ...config,
     };
 
-    this.cache = new LRU<Buffer>(this.config.maxSize);
+    this.cache = new LRU<Uint8Array>(this.config.maxSize);
+  }
+
+  async status(key: string): Promise<CacheStatus> {
+    return this.cache.has(key) ? CacheStatus.HIT : CacheStatus.MISS;
   }
 
   async has(key: string): Promise<boolean> {
     return this.cache.has(key);
   }
 
-  async status(key: string): Promise<"hit" | "stale" | "miss"> {
-    return this.cache.has(key) ? "hit" : "miss";
-  }
-
-  async get(key: string): Promise<{
-    resultImg: Buffer;
-    contentType: string;
-  } | null> {
-    let contentType: string;
-
+  async get(key: string): Promise<Uint8Array | null> {
     if (!(await this.has(key))) {
       return null;
     }
 
     const cacheValue = this.cache.get(key)!;
-    try {
-      contentType = fromBuffer(cacheValue);
-      contentType = "image/png";
-    } catch {
-      contentType = "image/svg+xml";
-    }
 
-    this.cache.set(key, cacheValue, Buffer.byteLength(cacheValue));
+    this.cache.set(key, cacheValue, cacheValue.byteLength);
 
-    return {
-      resultImg: cacheValue,
-      contentType,
-    };
+    return cacheValue;
   }
 
-  async set(key: string, resultImg: Buffer): Promise<void> {
-    this.cache.set(key, resultImg, Buffer.byteLength(resultImg));
+  async set(key: string, resultImg: Uint8Array): Promise<void> {
+    this.cache.set(key, resultImg, resultImg.byteLength);
   }
 
   async clear(): Promise<void> {
