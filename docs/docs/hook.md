@@ -29,8 +29,9 @@ const Image: React.FC<ImageProps> = ({
 ```
 
 ## Parameters
-|    Name    |                                Type                                | Required | Default |                   Description                   |
-|:----------:|:------------------------------------------------------------------:|:--------:|:-------:|:-----------------------------------------------:|
-|  imgProps  |                   ComponentPropsWithoutRef<"img">                  |     X    |         | The props to be passed to the base img element. |
-|  loaderUrl |                               string                               |     X    |    []   |   The path of the image loader resource route.  |
-| responsive | { size: { width: number; height: number; }; maxWidth?: number; }[] |          |    []   |          An array of responsive sizes.          |
+|    Name    |                                Type                                | Required | Default |                                     Description                                     |
+|:----------:|:------------------------------------------------------------------:|:--------:|:-------:|:-----------------------------------------------------------------------------------:|
+|  imgProps  |                          { src: string }                           |     X    |         |                   The props to be passed to the base img element.                   |
+| loaderUrl  |                               string                               |     X    |    []   |                    The path of the image loader resource route.                     |
+| responsive | { size: { width: number; height: number; }; maxWidth?: number; }[] |          |    []   |                            An array of responsive sizes.                            |
+|  options   |                          TransformOptions                          |          |         | TransformOptions that can be used to override the defaults provided to the loader.  |

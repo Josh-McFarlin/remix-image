@@ -22,25 +22,37 @@ export interface CacheConfig {
   tbd: number;
 }
 
+export enum CacheStatus {
+  /**
+   * The cache contains the key and it has not yet expired
+   */
+  HIT = "hit",
+  /**
+   * The cache contains the key but it has expired
+   */
+  STALE = "stale",
+  /**
+   * The cache does not contain the key
+   */
+  MISS = "miss",
+}
+
 export abstract class Cache {
   abstract config: CacheConfig;
 
   abstract has(key: string): Promise<boolean>;
 
-  abstract status(key: string): Promise<"hit" | "stale" | "miss">;
+  abstract status(key: string): Promise<CacheStatus>;
 
-  abstract get(key: string): Promise<{
-    resultImg: Buffer;
-    contentType: string;
-  } | null>;
+  abstract get(key: string): Promise<Uint8Array | null>;
 
-  abstract set(key: string, resultImg: Buffer): Promise<void>;
+  abstract set(key: string, resultImg: Uint8Array): Promise<void>;
 
   abstract clear(): Promise<void>;
 }
 ```
 
-You will then provide an instance of this class to the ‘cache’ field of the ‘loader’ config
+You will then provide an instance of this class to the `cache` field of the ‘loader’ config
 ```typescript jsx
 import type { LoaderFunction } from "remix";
 import { imageLoader } from "remix-image/server";
@@ -57,9 +69,10 @@ export const loader: LoaderFunction = ({ request }) => {
 };
 ```
 
-## Example
+## Examples
 
-To see an example, look at [`diskCache`](https://github.com/Josh-McFarlin/remix-image/tree/master/src/server/caches/diskCache) in the library.
+* [diskCache](https://github.com/Josh-McFarlin/remix-image/tree/master/src/server/caches/diskCache)
+* [memoryCache](https://github.com/Josh-McFarlin/remix-image/tree/master/src/server/caches/memoryCache)
 
 ## Show Off
 

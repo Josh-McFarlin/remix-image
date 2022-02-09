@@ -15,21 +15,15 @@ export type Resolver = (
   asset: string,
   url: string
 ) => Promise<{
-  buffer: Buffer;
-  contentType: string;
+  buffer: Uint8Array;
+  contentType: MimeType;
 }>;
 ```
 such as:
 ```typescript
-import { fsResolver, fetchResolver } from "remix-image/server";
+import { fsResolver, fetchResolver, Resolver } from "remix-image/server";
 
-export const myResolver = async (
-  asset: string,
-  src: string
-): Promise<{
-  buffer: Buffer;
-  contentType: string;
-}> => {
+export const myResolver: Resolver = async (asset, src) => {
   if (src.startsWith("/") && (src.length === 1 || src[1] !== "/")) {
     return fsResolver(asset, src);
   } else {
@@ -38,7 +32,7 @@ export const myResolver = async (
 };
 ```
 
-You will then provide this function to the ‘resolver’ field of the loader config
+You will then provide this function to the `resolver` field of the loader config
 ```typescript jsx
 import type { LoaderFunction } from "remix";
 import { imageLoader } from "remix-image/server";
@@ -55,9 +49,11 @@ export const loader: LoaderFunction = ({ request }) => {
 };
 ```
 
-## Example
+## Examples
 
-To see an example, look at [`fsResolver`](https://github.com/Josh-McFarlin/remix-image/tree/master/src/server/resolvers/fsResolver) in the library.
+* [fsResolver](https://github.com/Josh-McFarlin/remix-image/tree/master/src/server/resolvers/fsResolver)
+* [fetchResolver](https://github.com/Josh-McFarlin/remix-image/tree/master/src/server/resolvers/fetchResolver)
+* [kvResolver](https://github.com/Josh-McFarlin/remix-image/tree/master/src/server/resolvers/kvResolver)
 
 ## Show Off
 
