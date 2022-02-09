@@ -19,6 +19,6 @@
     "experimentalDecorators": true,
     "forceConsistentCasingInFileNames": true
   },
-  "include": ["src/**/*", "./jest.setup.ts"],
+  "include": ["src/**/*"],
   "exclude": ["node_modules", "build"]
 }

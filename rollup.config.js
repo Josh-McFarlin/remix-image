@@ -5,7 +5,8 @@ import commonjs from "@rollup/plugin-commonjs";
 import json from "@rollup/plugin-json";
 import typescript from "rollup-plugin-typescript2";
 import postcss from "rollup-plugin-postcss";
-import nodePolyfills from "rollup-plugin-polyfill-node";
+import { terser } from "rollup-plugin-terser";
+import replace from "@rollup/plugin-replace";
 
 export default [
   {
@@ -49,6 +50,7 @@ export default [
       }),
       resolve({ preferBuiltins: false }),
       commonjs(),
+      terser(),
     ],
   },
   {
@@ -68,9 +70,14 @@ export default [
       }),
       resolve({ preferBuiltins: false }),
       commonjs(),
-      nodePolyfills({
-        include: null,
+      replace({
+        preventAssignment: true,
+        include: ["node_modules/jpeg-js/**/*.js"],
+        values: {
+          "Buffer.from": "new Uint8Array",
+        },
       }),
+      terser(),
     ],
   },
 ];

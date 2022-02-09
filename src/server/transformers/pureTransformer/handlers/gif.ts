@@ -4,7 +4,7 @@ import { ImageHandler } from "../types";
 
 export const GifHandler: ImageHandler = {
   async decode(buffer) {
-    const image = new GIFJS.GifReader(Buffer.from(buffer));
+    const image = new GIFJS.GifReader(buffer as Buffer);
 
     const dest = {
       width: image.width,
@@ -19,7 +19,9 @@ export const GifHandler: ImageHandler = {
   async encode(image, options) {
     const frames = [image.data];
 
-    const buf = new Buffer(image.width * image.height * frames.length + 1024);
+    const buf = new Uint8Array(
+      image.width * image.height * frames.length + 1024
+    );
 
     const gifImageData = new GIFJS.GifWriter(
       buf as Buffer,

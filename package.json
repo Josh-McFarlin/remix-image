@@ -19,7 +19,7 @@
     "url": "https://github.com/Josh-McFarlin/remix-image/issues"
   },
   "main": "build/index.js",
-  "types": "build/index.d.ts",
+  "types": "build/src/index.d.ts",
   "style": "build/styles.css",
   "exports": {
     ".": "./build/index.js",
@@ -48,7 +48,7 @@
   },
   "dependencies": {
     "@pdf-lib/upng": "^1.0.1",
-    "bmp-js": "^0.1.0",
+    "@wokwi/bmp-ts": "^3.0.0",
     "buffer": "^6.0.3",
     "clsx": "^1.1.1",
     "get-rgba-palette": "^2.0.1",
@@ -73,10 +73,10 @@
     "@rollup/plugin-inject": "^4.0.4",
     "@rollup/plugin-json": "^4.1.0",
     "@rollup/plugin-node-resolve": "^13.0.6",
+    "@rollup/plugin-replace": "^3.0.1",
     "@testing-library/jest-dom": "^5.16.0",
     "@testing-library/react": "^12.1.2",
     "@testing-library/user-event": "^13.5.0",
-    "@types/bmp-js": "^0.1.0",
     "@types/jest": "^27.0.3",
     "@types/omggif": "^1.0.2",
     "@types/pngjs": "^6.0.1",
