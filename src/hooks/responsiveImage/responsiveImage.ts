@@ -23,7 +23,7 @@ export const useResponsiveImage = (
 
   for (const { size } of responsive) {
     const srcSetUrl = encodeQuery(loaderUrl, {
-      src: image.src,
+      src: encodeURI(image.src || ""),
       width: size.width,
       height: size.height,
       ...options,

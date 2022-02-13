@@ -17,6 +17,7 @@ export const encodeQuery = (url: string, query: Record<string, any>): string =>
     {
       skipNull: true,
       arrayFormat: "bracket",
+      sort: false,
     }
   );
 
@@ -27,6 +28,7 @@ export const decodeTransformQuery = (
     arrayFormat: "bracket",
     parseNumbers: true,
     parseBooleans: true,
+    sort: false,
   });
 
 export const parseURL = (rawUrl: string, baseUrl?: URL | string): URL => {
