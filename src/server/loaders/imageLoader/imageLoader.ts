@@ -48,6 +48,11 @@ export const imageLoader: AssetLoader = async (
     if (!src) {
       throw new RemixImageError("An image URL must be provided!", 400);
     }
+    try {
+      src = decodeURI(src);
+    } catch (error) {
+      throw new RemixImageError("An invalid image URL was provided!", 400);
+    }
 
     const decodedQuery = decodeTransformQuery(reqUrl.search);
     const transformOptions: TransformOptions = {
