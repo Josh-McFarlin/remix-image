@@ -19,7 +19,7 @@
     "url": "https://github.com/Josh-McFarlin/remix-image/issues"
   },
   "main": "build/index.js",
-  "types": "build/src/index.d.ts",
+  "types": "build/index.d.ts",
   "style": "build/styles.css",
   "exports": {
     ".": "./build/index.js",
