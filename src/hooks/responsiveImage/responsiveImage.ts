@@ -1,5 +1,5 @@
 import type { ResponsiveSize, SizelessOptions } from "../../types/image";
-import { encodeTransformQuery } from "../../utils/url";
+import { encodeQuery } from "../../utils/url";
 
 export type ImageProps = {
   src?: string;
@@ -22,14 +22,12 @@ export const useResponsiveImage = (
   const srcSet: string[] = [];
 
   for (const { size } of responsive) {
-    const srcSetUrl =
-      loaderUrl +
-      `?src=${image.src}&` +
-      encodeTransformQuery({
-        width: size.width,
-        height: size.height,
-        ...options,
-      });
+    const srcSetUrl = encodeQuery(loaderUrl, {
+      src: image.src,
+      width: size.width,
+      height: size.height,
+      ...options,
+    });
 
     srcSet.push(srcSetUrl + ` ${size.width}w`);
 

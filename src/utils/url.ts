@@ -8,11 +8,17 @@ export const decodeQuery = (
 ): string | null =>
   queryParams.has(key) ? decodeURIComponent(queryParams.get(key)!) : null;
 
-export const encodeTransformQuery = (query: TransformOptions): string =>
-  qs.stringify(query, {
-    skipNull: true,
-    arrayFormat: "bracket",
-  });
+export const encodeQuery = (url: string, query: Record<string, any>): string =>
+  qs.stringifyUrl(
+    {
+      url,
+      query,
+    },
+    {
+      skipNull: true,
+      arrayFormat: "bracket",
+    }
+  );
 
 export const decodeTransformQuery = (
   queryString: string
