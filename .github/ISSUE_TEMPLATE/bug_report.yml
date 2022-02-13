@@ -30,13 +30,13 @@ body:
       description: |
         Which website or app were you using when the bug happened?
         Note:
-        - Your bug will may get fixed much faster if we can run your code and it doesn't have dependencies other than the Remix Auth npm package.
+        - Your bug will may get fixed much faster if we can run your code and it doesn't have dependencies other than the Remix Image npm package.
         - To create a shareable code example you can use Stackblitz (https://stackblitz.com/). Please no localhost URLs.
         - Please read these tips for providing a minimal example: https://stackoverflow.com/help/mcve.
       placeholder: |
         e.g. https://stackblitz.com/edit/...... OR Github Repo
     validations:
-      required: true
+      required: false
   - type: textarea
     id: steps
     attributes:
