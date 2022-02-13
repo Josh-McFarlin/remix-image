@@ -1,0 +1,8 @@
+blank_issues_enabled: false
+contact_links:
+  - name: 🤔 Feature Requests & Questions 
+    url: https://github.com/Josh-McFarlin/remix-image/discussions
+    about: Please ask and answer questions here.
+  - name: 💬 Remix Discord Channel 
+    url: https://rmx.as/discord
+    about: Please ask and answer questions here.
