@@ -140,6 +140,7 @@ export const imageLoader: AssetLoader = async (
 
         resultImg = await transformer.transform(
           {
+            url: assetUrl.toString(),
             data: res.buffer,
             contentType: res.contentType,
           },
@@ -177,6 +178,7 @@ export const imageLoader: AssetLoader = async (
 
           resultImg = await pureTransformer.transform(
             {
+              url: assetUrl.toString(),
               data: res.buffer,
               contentType: res.contentType,
             },

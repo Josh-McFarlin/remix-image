@@ -7,6 +7,7 @@ export type Transformer = {
   supportedOutputs: Set<MimeType>;
   transform: (
     input: {
+      url: string;
       data: Uint8Array;
       contentType: MimeType;
     },
