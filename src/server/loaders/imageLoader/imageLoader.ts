@@ -25,11 +25,13 @@ export const imageLoader: AssetLoader = async (
     cache = null,
     resolver = fetchResolver,
     transformer = pureTransformer,
-    useFallbackTransformer = true,
     useFallbackFormat = true,
     fallbackFormat = MimeType.JPEG,
+    useFallbackTransformer = true,
+    fallbackTransformer = pureTransformer,
     defaultOptions = {},
     redirectOnFail = false,
+    skipFormats = new Set([MimeType.SVG]),
   },
   request
 ) => {
@@ -114,21 +116,46 @@ export const imageLoader: AssetLoader = async (
         console.log(
           `Fetched image [${cacheKey}] directly using resolver: ${resolver.name}.`
         );
+
+        resultImg = res.buffer;
       } catch (error) {
         throw new RemixImageError("Failed to retrieve requested image!", 500);
       }
 
-      try {
+      if (skipFormats?.has(res.contentType)) {
+        console.log(`Skipping transformation of mime type: ${res.contentType}`);
+      } else if (transformer != null) {
+        let curTransformer = transformer;
+
         if (!transformer.supportedInputs.has(res.contentType)) {
-          throw new UnsupportedImageError(
-            `Transformer does not allow this input content type: ${res.contentType}!`
-          );
-        } else if (
-          !transformer.supportedOutputs.has(transformOptions.contentType)
+          if (
+            useFallbackTransformer &&
+            transformer !== fallbackTransformer &&
+            fallbackTransformer.supportedInputs.has(res.contentType) &&
+            fallbackTransformer.supportedOutputs.has(
+              transformOptions.contentType
+            )
+          ) {
+            console.error(
+              `Transformer does not allow this input content type: ${transformOptions.contentType}! Falling back to transformer: ${fallbackTransformer.name}`
+            );
+            curTransformer = fallbackTransformer;
+          } else {
+            throw new UnsupportedImageError(
+              `Transformer does not allow this input content type: ${res.contentType}!`
+            );
+          }
+        }
+
+        if (
+          !curTransformer.supportedOutputs.has(transformOptions.contentType)
         ) {
-          if (useFallbackFormat) {
-            console.log(
-              `Transformer does not allow this output content type: ${transformOptions.contentType}! Falling back to ${fallbackFormat}`
+          if (
+            useFallbackFormat &&
+            curTransformer.supportedOutputs.has(fallbackFormat)
+          ) {
+            console.error(
+              `Transformer does not allow this output content type: ${transformOptions.contentType}! Falling back to mime type: ${fallbackFormat}`
             );
             transformOptions.contentType = fallbackFormat;
           } else {
@@ -138,7 +165,7 @@ export const imageLoader: AssetLoader = async (
           }
         }
 
-        resultImg = await transformer.transform(
+        resultImg = await curTransformer.transform(
           {
             url: assetUrl.toString(),
             data: res.buffer,
@@ -148,49 +175,8 @@ export const imageLoader: AssetLoader = async (
         );
 
         console.log(
-          `Successfully transformed image using transformer: ${transformer.name}`
+          `Successfully transformed image using transformer: ${curTransformer.name}`
         );
-      } catch (error: any) {
-        console.error(
-          "Failed to use provided transformer:",
-          error?.message || error
-        );
-
-        if (
-          useFallbackTransformer &&
-          transformer !== pureTransformer &&
-          pureTransformer.supportedInputs.has(res.contentType)
-        ) {
-          if (
-            !pureTransformer.supportedOutputs.has(transformOptions.contentType)
-          ) {
-            if (useFallbackFormat) {
-              console.log(
-                `Transformer does not allow this output content type: ${transformOptions.contentType}! Falling back to ${fallbackFormat}`
-              );
-              transformOptions.contentType = fallbackFormat;
-            } else {
-              throw new UnsupportedImageError(
-                `Fallback transformer does not allow this output content type: ${transformOptions.contentType}!`
-              );
-            }
-          }
-
-          resultImg = await pureTransformer.transform(
-            {
-              url: assetUrl.toString(),
-              data: res.buffer,
-              contentType: res.contentType,
-            },
-            transformOptions
-          );
-
-          console.log(
-            `Successfully transformed image using fallback transformer: ${pureTransformer.name}`
-          );
-        } else {
-          throw error;
-        }
       }
     }
 

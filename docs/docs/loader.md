@@ -21,31 +21,38 @@ export const loader: LoaderFunction = ({ request }) => {
 ```
 
 ## Options
-|          Name          |    Type     | Required |     Default     |                                         Description                                          |
-|:----------------------:|:-----------:|:--------:|:---------------:|:--------------------------------------------------------------------------------------------:|
-|        selfUrl         |   string    |    X     |                 |                                 The URL of the local server.                                 |
-|        resolver        |  Resolver   |          |  fetchResolver  |                                  The image resolver to use.                                  |
-|      transformer       | Transformer |          | pureTransformer |                           The image transformation library to use.                           |
-|   useFallbackFormat    |   boolean   |          |      true       | If RemixImage should fallback to the fallback mime type if the output type is not supported. |
-|     fallbackFormat     |  MimeType   |          |  MimeType.JPEG  |   The output mime type the image should fallback to if the provided type is not supported.   |
-| useFallbackTransformer |   boolean   |          |      true       |    If RemixImage should fallback to the default transformer if custom transformer fails.     |
-|         cache          |    Cache    |          |                 |  The configuration for the local image cache. Setting this to null will disable the cache.   |
+|          Name          |           Type           | Required |       Default        |                                                   Description                                                    |
+|:----------------------:|:------------------------:|:--------:|:--------------------:|:----------------------------------------------------------------------------------------------------------------:|
+|        selfUrl         |          string          |    X     |                      |                                           The URL of the local server.                                           |
+|        resolver        |         Resolver         |          |    fetchResolver     |                                            The image resolver to use.                                            |
+|      transformer       |   Transformer or null    |          |   pureTransformer    | A transformer function that handles mutations of images. If this option is null, transformation will be skipped. |
+|   useFallbackFormat    |         boolean          |          |         true         |           If RemixImage should fallback to the fallback mime type if the output type is not supported.           |
+|     fallbackFormat     |         MimeType         |          |    MimeType.JPEG     |             The output mime type the image should fallback to if the provided type is not supported.             |
+| useFallbackTransformer |         boolean          |          |         true         |              If RemixImage should fallback to the default transformer if custom transformer fails.               |
+|  fallbackTransformer   |       Transformer        |          |   pureTransformer    |                 The transformer the loader should use if the provided custom transformer fails.                  |
+|         cache          |          Cache           |          |                      |            The configuration for the local image cache. Setting this to null will disable the cache.             |
+|     defaultOptions     | Partial<SizelessOptions> |          |                      |                        Default TransformOptions to use, can be overridden by the client.                         |
+|     redirectOnFail     |         boolean          |          |        false         |                              Redirect image to original source if RemixImage fails.                              |
+|      skipFormats       |  Set<MimeType> or null   |          | Set([MimeType.SVG])  |                       A set of mime types that should be returned without transformation.                        |
 
 ## Cache Types
-
 | Name        | Description                                                                                                                                               | Options                                               |
 |-------------|-----------------------------------------------------------------------------------------------------------------------------------------------------------|-------------------------------------------------------|
 | DiskCache   | A cache that stores images in memory and on disk (depending on size) for the best efficiency. To use, install the `hybrid-disk-cache` library from npm.   | { path: string, ttl: number, tbd: number }            |
 | MemoryCache | A cache that only stores images in memory. Designed for platforms that do not have native disk access like Cloudflare.                                    | { maxSize: number (bytes), ttl: number, tbd: number } |
 
 **Note:**
-Due to [remix request purging](https://remix.run/docs/en/v1.1.1/other-api/serve), `MemoryCache` will clear itself automatically on each request in development. This will not occur during production, and it will perform as expected.
+Due to [Remix request purging](https://remix.run/docs/en/v1.1.1/other-api/serve), `MemoryCache` will clear itself automatically on each request in development. This will not occur during production, and it will perform as expected.
 
 ## Transformer Types
 | Name            | Description                                                                                                                                                              |
 |-----------------|--------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
 | pureTransformer | The default image transformer, supports all platforms at the cost of performance.                                                                                        |
 | sharp           | A faster image transformer that uses the file-system, offers the best performance. To use, take a look at **[these docs](./tutorial-extras/sharp.md)**.                  |
+
+**Note:**
+By default, Remix-Image uses `pureTransformer`, which supports image transformations for the following types: `JPEG`, `PNG`, `GIF` (non-animated), `BMP`, and `TIFF`.
+If you would like to use additional file types, you must use a custom transformer.
 
 ## Resolver Types
 | Name          | Description                                                                                                                                                                                   |
