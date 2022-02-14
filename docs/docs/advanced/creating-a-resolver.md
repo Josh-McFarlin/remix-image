@@ -13,7 +13,8 @@ To make your own, just make a function that follows the [Resolver format](https:
 ```typescript
 export type Resolver = (
   asset: string,
-  url: string
+  url: string,
+  options: TransformOptions
 ) => Promise<{
   buffer: Uint8Array;
   contentType: MimeType;
@@ -23,11 +24,11 @@ such as:
 ```typescript
 import { fsResolver, fetchResolver, Resolver } from "remix-image/server";
 
-export const myResolver: Resolver = async (asset, src) => {
+export const myResolver: Resolver = async (asset, url, options) => {
   if (src.startsWith("/") && (src.length === 1 || src[1] !== "/")) {
-    return fsResolver(asset, src);
+    return fsResolver(asset, url, options);
   } else {
-    return fetchResolver(asset, src);
+    return fetchResolver(asset, url, options);
   }
 };
 ```

@@ -14,15 +14,15 @@ declare global {
 
 const whitelistedDomains = new Set([SELF_URL, "i.imgur.com"]);
 
-export const myResolver: Resolver = async (asset: string, url: string) => {
+export const myResolver: Resolver = async (asset, url, options) => {
   if (asset.startsWith("/") && (asset.length === 1 || asset[1] !== "/")) {
-    return kvResolver(asset, url);
+    return kvResolver(asset, url, options);
   } else {
     if (!whitelistedDomains.has(new URL(url).host)) {
       throw new Error("Domain not allowed!");
     }
 
-    return fetchResolver(asset, url);
+    return fetchResolver(asset, url, options);
   }
 };
 

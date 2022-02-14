@@ -104,7 +104,7 @@ export const imageLoader: AssetLoader = async (
       let res;
 
       try {
-        res = await resolver(src, assetUrl.toString());
+        res = await resolver(src, assetUrl.toString(), transformOptions);
 
         if (!res || !res.buffer) {
           throw new RemixImageError("Requested image not found!", 404);
