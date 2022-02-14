@@ -72,11 +72,11 @@ import {
   Resolver
 } from "remix-image/server";
 
-export const myResolver: Resolver = async (asset, url) => {
+export const myResolver: Resolver = async (asset, url, options) => {
   if (asset.startsWith("/") && (asset.length === 1 || asset[1] !== "/")) {
-    return fsResolver(asset, url);
+    return fsResolver(asset, url, options);
   } else {
-    return fetchResolver(asset, url);
+    return fetchResolver(asset, url, options);
   }
 };
 
