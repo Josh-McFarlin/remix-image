@@ -21,19 +21,19 @@ export const loader: LoaderFunction = ({ request }) => {
 ```
 
 ## Options
-|          Name          |           Type           | Required |       Default        |                                                   Description                                                    |
-|:----------------------:|:------------------------:|:--------:|:--------------------:|:----------------------------------------------------------------------------------------------------------------:|
-|        selfUrl         |          string          |    X     |                      |                                           The URL of the local server.                                           |
-|        resolver        |         Resolver         |          |    fetchResolver     |                                            The image resolver to use.                                            |
-|      transformer       |   Transformer or null    |          |   pureTransformer    | A transformer function that handles mutations of images. If this option is null, transformation will be skipped. |
-|   useFallbackFormat    |         boolean          |          |         true         |           If RemixImage should fallback to the fallback mime type if the output type is not supported.           |
-|     fallbackFormat     |         MimeType         |          |    MimeType.JPEG     |             The output mime type the image should fallback to if the provided type is not supported.             |
-| useFallbackTransformer |         boolean          |          |         true         |              If RemixImage should fallback to the default transformer if custom transformer fails.               |
-|  fallbackTransformer   |       Transformer        |          |   pureTransformer    |                 The transformer the loader should use if the provided custom transformer fails.                  |
-|         cache          |          Cache           |          |                      |            The configuration for the local image cache. Setting this to null will disable the cache.             |
-|     defaultOptions     | Partial<SizelessOptions> |          |                      |                        Default TransformOptions to use, can be overridden by the client.                         |
-|     redirectOnFail     |         boolean          |          |        false         |                              Redirect image to original source if RemixImage fails.                              |
-|      skipFormats       |  Set<MimeType> or null   |          | Set([MimeType.SVG])  |                       A set of mime types that should be returned without transformation.                        |
+|          Name          |              Type              | Required |       Default        |                                                   Description                                                    |
+|:----------------------:|:------------------------------:|:--------:|:--------------------:|:----------------------------------------------------------------------------------------------------------------:|
+|        selfUrl         |             string             |    X     |                      |                                           The URL of the local server.                                           |
+|        resolver        |            Resolver            |          |    fetchResolver     |                                            The image resolver to use.                                            |
+|      transformer       |      Transformer or null       |          |   pureTransformer    | A transformer function that handles mutations of images. If this option is null, transformation will be skipped. |
+|   useFallbackFormat    |            boolean             |          |         true         |           If RemixImage should fallback to the fallback mime type if the output type is not supported.           |
+|     fallbackFormat     |            MimeType            |          |    MimeType.JPEG     |             The output mime type the image should fallback to if the provided type is not supported.             |
+| useFallbackTransformer |            boolean             |          |         true         |              If RemixImage should fallback to the default transformer if custom transformer fails.               |
+|  fallbackTransformer   |          Transformer           |          |   pureTransformer    |                 The transformer the loader should use if the provided custom transformer fails.                  |
+|         cache          |             Cache              |          |                      |            The configuration for the local image cache. Setting this to null will disable the cache.             |
+|     defaultOptions     | Partial&lt;SizelessOptions&gt; |          |                      |                        Default TransformOptions to use, can be overridden by the client.                         |
+|     redirectOnFail     |            boolean             |          |        false         |                              Redirect image to original source if RemixImage fails.                              |
+|      skipFormats       |  Set&lt;MimeType&gt; or null   |          | Set([MimeType.SVG])  |                       A set of mime types that should be returned without transformation.                        |
 
 ## Cache Types
 | Name        | Description                                                                                                                                               | Options                                               |
