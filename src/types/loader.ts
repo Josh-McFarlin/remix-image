@@ -21,10 +21,12 @@ export interface LoaderConfig {
   fallbackTransformer?: Transformer;
   /** A cache to store computed RemixImage transformations. (optional) */
   cache?: Cache;
-  /** Default TransformOptions to use. (optional) */
+  /** Default TransformOptions to use, can be overridden by the client. (optional) */
   defaultOptions?: Partial<SizelessOptions>;
   /** Redirect image to original source if RemixImage fails. (optional, default false) */
   redirectOnFail?: boolean;
+  /** A set of mime types that should be returned without transformation. (optional, default Set([MimeType.SVG]) */
+  skipFormats?: Set<MimeType> | null;
 }
 
 export type AssetLoader = (

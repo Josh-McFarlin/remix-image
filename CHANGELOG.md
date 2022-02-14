@@ -8,10 +8,16 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 
 - Added an optional `fallbackTransformer` parameter to `LoaderConfig`. Set to `pureTransformer` by default, this option lets you choose which transformer the loader will fall back to if your custom transformer fails or if the content type is not supported. 
+- Added an optional `skipFormats` parameter to `LoaderConfig`. This is a set of mime types that should be returned without transformation. Defaults to `Set([MimeType.SVG])`.
 
 ### Changed
 
 - Made `null` a valid option for the `transformer` parameter of `LoaderConfig`. If this parameter is set to null, image transformation will be skipped.
+
+### Docs
+
+- Added documentation for `LoaderConfig` parameters: `defaultOptions`, `redirectOnFail`, and `skipFormats`.
+- Added default (`pureTransformer`) supported file types to documentation.
 
 ## [0.3.5] - 2022-02-13
 

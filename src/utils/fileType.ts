@@ -1,3 +1,4 @@
+import isSvg from "is-svg";
 import { RemixImageError, UnsupportedImageError } from "../types/error";
 import { MimeType } from "../types/file";
 
@@ -40,6 +41,8 @@ export const mimeFromBuffer = (buffer: Uint8Array): MimeType => {
     return MimeType.TIFF;
   } else if (check(buffer, [0x4d, 0x4d, 0x00, 0x2a])) {
     return MimeType.TIFF;
+  } else if (isSvg(new TextDecoder().decode(buffer))) {
+    return MimeType.SVG;
   } else {
     const magic = getMagicNumbers(buffer, 0, 8);
 

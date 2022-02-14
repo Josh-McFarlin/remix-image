@@ -31,6 +31,7 @@ export const imageLoader: AssetLoader = async (
     fallbackTransformer = pureTransformer,
     defaultOptions = {},
     redirectOnFail = false,
+    skipFormats = new Set([MimeType.SVG]),
   },
   request
 ) => {
@@ -121,7 +122,9 @@ export const imageLoader: AssetLoader = async (
         throw new RemixImageError("Failed to retrieve requested image!", 500);
       }
 
-      if (transformer != null) {
+      if (skipFormats?.has(res.contentType)) {
+        console.log(`Skipping transformation of mime type: ${res.contentType}`);
+      } else if (transformer != null) {
         let curTransformer = transformer;
 
         if (!transformer.supportedInputs.has(res.contentType)) {
