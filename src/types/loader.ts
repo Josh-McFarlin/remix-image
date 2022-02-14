@@ -9,14 +9,16 @@ export interface LoaderConfig {
   selfUrl: string;
   /** A resolver function that handles retrieving image assets. (optional, default fetchResolver) */
   resolver?: Resolver;
-  /** A transformer function that handles mutations of images. (optional, default pureTransformer) */
-  transformer?: Transformer;
+  /** A transformer function that handles mutations of images. If this option is null, transformation will be skipped. (optional, default pureTransformer) */
+  transformer?: Transformer | null;
   /** If RemixImage should fallback to the fallback mime type if the output type is not supported. (optional, default true) */
   useFallbackFormat?: boolean;
-  /** The output mime type the image should fallback to if the provided type is not supported. (optional, default MimeType.JPEG) */
+  /** The output mime type the image should fallback to if the provided output type is not supported. (optional, default MimeType.JPEG) */
   fallbackFormat?: MimeType;
-  /** If RemixImage should fallback to the default transformer if custom transformer fails. (optional, default true) */
+  /** If RemixImage should fallback to the fallback transformer if custom transformer fails. (optional, default true) */
   useFallbackTransformer?: boolean;
+  /** The transformer the loader should use if the provided custom transformer fails. (optional, default pureTransformer) */
+  fallbackTransformer?: Transformer;
   /** A cache to store computed RemixImage transformations. (optional) */
   cache?: Cache;
   /** Default TransformOptions to use. (optional) */

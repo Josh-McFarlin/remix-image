@@ -21,15 +21,16 @@ export const loader: LoaderFunction = ({ request }) => {
 ```
 
 ## Options
-|          Name          |    Type     | Required |     Default     |                                         Description                                          |
-|:----------------------:|:-----------:|:--------:|:---------------:|:--------------------------------------------------------------------------------------------:|
-|        selfUrl         |   string    |    X     |                 |                                 The URL of the local server.                                 |
-|        resolver        |  Resolver   |          |  fetchResolver  |                                  The image resolver to use.                                  |
-|      transformer       | Transformer |          | pureTransformer |                           The image transformation library to use.                           |
-|   useFallbackFormat    |   boolean   |          |      true       | If RemixImage should fallback to the fallback mime type if the output type is not supported. |
-|     fallbackFormat     |  MimeType   |          |  MimeType.JPEG  |   The output mime type the image should fallback to if the provided type is not supported.   |
-| useFallbackTransformer |   boolean   |          |      true       |    If RemixImage should fallback to the default transformer if custom transformer fails.     |
-|         cache          |    Cache    |          |                 |  The configuration for the local image cache. Setting this to null will disable the cache.   |
+|          Name          |        Type         | Required |     Default     |                                                   Description                                                    |
+|:----------------------:|:-------------------:|:--------:|:---------------:|:----------------------------------------------------------------------------------------------------------------:|
+|        selfUrl         |       string        |    X     |                 |                                           The URL of the local server.                                           |
+|        resolver        |      Resolver       |          |  fetchResolver  |                                            The image resolver to use.                                            |
+|      transformer       | Transformer or null |          | pureTransformer | A transformer function that handles mutations of images. If this option is null, transformation will be skipped. |
+|   useFallbackFormat    |       boolean       |          |      true       |           If RemixImage should fallback to the fallback mime type if the output type is not supported.           |
+|     fallbackFormat     |      MimeType       |          |  MimeType.JPEG  |             The output mime type the image should fallback to if the provided type is not supported.             |
+| useFallbackTransformer |       boolean       |          |      true       |              If RemixImage should fallback to the default transformer if custom transformer fails.               |
+|  fallbackTransformer   |     Transformer     |          | pureTransformer |                 The transformer the loader should use if the provided custom transformer fails.                  |
+|         cache          |        Cache        |          |                 |            The configuration for the local image cache. Setting this to null will disable the cache.             |
 
 ## Cache Types
 

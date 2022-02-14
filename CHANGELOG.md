@@ -3,11 +3,21 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [Unreleased]
+
+### Added
+
+- Added an optional `fallbackTransformer` parameter to `LoaderConfig`. Set to `pureTransformer` by default, this option lets you choose which transformer the loader will fall back to if your custom transformer fails or if the content type is not supported. 
+
+### Changed
+
+- Made `null` a valid option for the `transformer` parameter of `LoaderConfig`. If this parameter is set to null, image transformation will be skipped.
+
 ## [0.3.5] - 2022-02-13
 
 ### Changed
 
-- Added url parameter to transformer function to enable external transformer API usage
+- Added `url` parameter to transformer function to enable external transformer API usage
 
 ## [0.3.4] - 2022-02-13
 
