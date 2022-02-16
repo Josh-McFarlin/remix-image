@@ -20,7 +20,7 @@ export interface LoaderConfig {
   /** The transformer the loader should use if the provided custom transformer fails. (optional, default pureTransformer) */
   fallbackTransformer?: Transformer;
   /** A cache to store computed RemixImage transformations. (optional) */
-  cache?: Cache;
+  cache?: Cache | null;
   /** Default TransformOptions to use, can be overridden by the client. (optional) */
   defaultOptions?: Partial<SizelessOptions>;
   /** Redirect image to original source if RemixImage fails. (optional, default false) */

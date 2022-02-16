@@ -1,5 +1,6 @@
 import { MimeType } from "../../../types/file";
 import { Transformer } from "../../../types/transformer";
+import { blurImage } from "./gaussian";
 import { typeHandlers } from "./handlers";
 import { bilinearInterpolation } from "./interpolation";
 
@@ -35,6 +36,7 @@ export const pureTransformer: Transformer = {
       compressionLevel,
       loop,
       delay,
+      blurRadius,
     }
   ) => {
     const inputHandler = typeHandlers[inputContentType];
@@ -57,6 +59,15 @@ export const pureTransformer: Transformer = {
     };
 
     bilinearInterpolation(rgba, rawImageData);
+
+    if (blurRadius) {
+      blurImage(
+        rawImageData.data,
+        rawImageData.width,
+        rawImageData.height,
+        blurRadius
+      );
+    }
 
     const outputHandler = typeHandlers[outputContentType || inputContentType];
     return outputHandler.encode(rawImageData, {
