@@ -7,6 +7,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
+- Added `rotation` parameter to `TransformOptions` to allow rotation of images.
 - Added `blurRadius` parameter to `TransformOptions` to allow Gaussian blur of images.
 
 ## [0.3.7] - 2022-02-14

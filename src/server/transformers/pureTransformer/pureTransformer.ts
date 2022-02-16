@@ -1,8 +1,9 @@
 import { MimeType } from "../../../types/file";
 import { Transformer } from "../../../types/transformer";
-import { blurImage } from "./gaussian";
 import { typeHandlers } from "./handlers";
 import { bilinearInterpolation } from "./interpolation";
+import { blurImage } from "./operations/gaussian";
+import { rotateImage } from "./operations/rotate";
 
 const supportedInputs = new Set([
   MimeType.JPEG,
@@ -37,6 +38,7 @@ export const pureTransformer: Transformer = {
       loop,
       delay,
       blurRadius,
+      rotate,
     }
   ) => {
     const inputHandler = typeHandlers[inputContentType];
@@ -60,12 +62,21 @@ export const pureTransformer: Transformer = {
 
     bilinearInterpolation(rgba, rawImageData);
 
-    if (blurRadius) {
-      blurImage(
+    if (blurRadius && blurRadius > 0) {
+      rawImageData.data = blurImage(
         rawImageData.data,
         rawImageData.width,
         rawImageData.height,
         blurRadius
+      );
+    }
+
+    if (rotate && rotate != 0) {
+      rawImageData.data = rotateImage(
+        rawImageData.data,
+        rawImageData.width,
+        rawImageData.height,
+        rotate
       );
     }
 

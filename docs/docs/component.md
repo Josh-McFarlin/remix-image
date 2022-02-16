@@ -60,7 +60,9 @@ export interface TransformOptions {
   loop?: number;
   /** Delay between animation frames (in milliseconds). (optional, default 100) */
   delay?: number;
-  /** The number of pixels to blur the image by. (optional, default 0) */
-  blurRadius?: number;
+  /** The number of pixels to blur the image by. (optional, default null) */
+  blurRadius?: number | null;
+  /** The number of degrees to rotate the image by. (optional, default null) */
+  rotate?: number | null;
 }
 ```

@@ -65,6 +65,8 @@ export const imageLoader: AssetLoader = async (
       compressionLevel: 9,
       loop: 0,
       delay: 100,
+      blurRadius: null,
+      rotate: null,
       ...defaultOptions,
       ...decodedQuery,
     } as TransformOptions;
