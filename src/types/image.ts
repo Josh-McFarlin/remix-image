@@ -25,6 +25,12 @@ export enum ImagePosition {
   RIGHT = "right",
 }
 
+export enum FlipDirection {
+  HORIZONTAL = "horizontal",
+  VERTICAL = "vertical",
+  BOTH = "both",
+}
+
 export interface TransformOptions {
   /** Width of resulting image. */
   width: number;
@@ -50,6 +56,8 @@ export interface TransformOptions {
   blurRadius?: number | null;
   /** The number of degrees to rotate the image by. (optional, default null) */
   rotate?: number | null;
+  /** The direction to mirror the image by. (optional, default null) */
+  flip?: FlipDirection | null;
 }
 
 export type SizelessOptions = Omit<TransformOptions, "width" | "height">;

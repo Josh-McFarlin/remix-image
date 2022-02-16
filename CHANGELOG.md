@@ -7,6 +7,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
+- Added `flip` parameter to `TransformOptions` to allow mirroring of images.
 - Added `rotation` parameter to `TransformOptions` to allow rotation of images.
 - Added `blurRadius` parameter to `TransformOptions` to allow Gaussian blur of images.
 

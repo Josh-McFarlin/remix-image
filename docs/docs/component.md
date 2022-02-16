@@ -64,5 +64,7 @@ export interface TransformOptions {
   blurRadius?: number | null;
   /** The number of degrees to rotate the image by. (optional, default null) */
   rotate?: number | null;
+  /** The direction to mirror the image by. (optional, default null) */
+  flip?: FlipDirection | null;
 }
 ```

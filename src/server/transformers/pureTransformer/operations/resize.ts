@@ -20,9 +20,9 @@
  * THE SOFTWARE.
  */
 
-import { ImageData } from "./types";
+import { ImageData } from "../types";
 
-export const bilinearInterpolation = (src: ImageData, dst: ImageData) => {
+export const resizeImage = (src: ImageData, dst: ImageData): Uint8Array => {
   const wSrc = src.width;
   const hSrc = src.height;
 
@@ -91,4 +91,6 @@ export const bilinearInterpolation = (src: ImageData, dst: ImageData) => {
       assign(posDst, 3, x, xMin, xMax, y, yMin, yMax);
     }
   }
+
+  return dst.data;
 };
