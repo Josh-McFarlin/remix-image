@@ -1,4 +1,3 @@
-import { Request as NodeRequest } from "@remix-run/node/fetch";
 import { MimeType } from "../../../types/file";
 import type { Resolver } from "../../../types/resolver";
 
@@ -7,9 +6,9 @@ export const fetchResolver: Resolver = async (_asset, url) => {
     headers: {
       accept: "image/*",
     },
-  }) as unknown as NodeRequest;
+  });
 
-  const imageResponse = await fetch(imgRequest as unknown as Request);
+  const imageResponse = await fetch(imgRequest);
   const arrBuff = await imageResponse.arrayBuffer();
 
   const buffer = new Uint8Array(arrBuff);
