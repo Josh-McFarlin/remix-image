@@ -1,6 +1,6 @@
 module.exports = {
   testEnvironment: "jsdom",
-  roots: ["./src"],
+  roots: ["./__tests__"],
   setupFilesAfterEnv: ["./jest.setup.ts"],
   moduleFileExtensions: ["js", "ts", "tsx"],
   testPathIgnorePatterns: ["node_modules/"],

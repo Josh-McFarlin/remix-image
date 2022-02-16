@@ -26,7 +26,9 @@ export default [
         extract: path.resolve("build/styles.css"),
       }),
       typescript({
-        useTsconfigDeclarationDir: true,
+        tsconfigOverride: {
+          exclude: ["node_modules", "build", "__tests__"],
+        },
       }),
       commonjs(),
       resolve(),
@@ -46,7 +48,9 @@ export default [
       peerDepsExternal(),
       json(),
       typescript({
-        useTsconfigDeclarationDir: true,
+        tsconfigOverride: {
+          exclude: ["node_modules", "build", "__tests__"],
+        },
       }),
       resolve({ preferBuiltins: false }),
       commonjs(),
@@ -66,7 +70,9 @@ export default [
       peerDepsExternal(),
       json(),
       typescript({
-        useTsconfigDeclarationDir: true,
+        tsconfigOverride: {
+          exclude: ["node_modules", "build", "__tests__"],
+        },
       }),
       resolve({ preferBuiltins: false }),
       commonjs(),
