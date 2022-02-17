@@ -1,3 +1,5 @@
+import { ImageData } from "../types";
+
 const updateDataTextureFromChannelArrs = (
   rgba: Uint8Array,
   w: number,
@@ -167,29 +169,53 @@ const boxesForGauss = (sigma: number, n: number) => {
   return sizes;
 };
 
-export const blurImage = (
-  rgba: Uint8Array,
-  w: number,
-  h: number,
-  blurRadius: number
-) => {
-  const dtChannelsOld = splitDataTextureIntoChannelArrays(rgba, w, h);
-  const dtChannelsBlurred = splitDataTextureIntoChannelArrays(rgba, w, h);
+export const blurImage = (src: ImageData, blurRadius: number): ImageData => {
+  const dtChannelsOld = splitDataTextureIntoChannelArrays(
+    src.data,
+    src.width,
+    src.height
+  );
+  const dtChannelsBlurred = splitDataTextureIntoChannelArrays(
+    src.data,
+    src.width,
+    src.height
+  );
   const bxs = boxesForGauss(blurRadius, 3);
 
-  gaussBlur_4(dtChannelsOld[0], dtChannelsBlurred[0], w, h, blurRadius, bxs);
-  gaussBlur_4(dtChannelsOld[1], dtChannelsBlurred[1], w, h, blurRadius, bxs);
-  gaussBlur_4(dtChannelsOld[2], dtChannelsBlurred[2], w, h, blurRadius, bxs);
+  gaussBlur_4(
+    dtChannelsOld[0],
+    dtChannelsBlurred[0],
+    src.width,
+    src.height,
+    blurRadius,
+    bxs
+  );
+  gaussBlur_4(
+    dtChannelsOld[1],
+    dtChannelsBlurred[1],
+    src.width,
+    src.height,
+    blurRadius,
+    bxs
+  );
+  gaussBlur_4(
+    dtChannelsOld[2],
+    dtChannelsBlurred[2],
+    src.width,
+    src.height,
+    blurRadius,
+    bxs
+  );
 
   updateDataTextureFromChannelArrs(
-    rgba,
-    w,
-    h,
+    src.data,
+    src.width,
+    src.height,
     dtChannelsBlurred[0],
     dtChannelsBlurred[1],
     dtChannelsBlurred[2],
     dtChannelsBlurred[3]
   );
 
-  return rgba;
+  return src;
 };

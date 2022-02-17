@@ -22,23 +22,23 @@
 
 import { ImageData } from "../types";
 
-export const resizeImage = (src: ImageData, dst: ImageData): Uint8Array => {
+export const resizeImage = (
+  src: ImageData,
+  width: number,
+  height: number
+): ImageData => {
   const wSrc = src.width;
   const hSrc = src.height;
 
-  const wDst = dst.width;
-  const hDst = dst.height;
+  const dstBuffer = new Uint8Array(width * height * 4);
 
-  const bufSrc = src.data;
-  const bufDst = dst.data;
-
-  const interpolate = function (
+  const interpolate = (
     k: number,
     kMin: number,
     vMin: number,
     kMax: number,
     vMax: number
-  ) {
+  ) => {
     // special case - k is integer
     if (kMin === kMax) {
       return vMin;
@@ -47,7 +47,7 @@ export const resizeImage = (src: ImageData, dst: ImageData): Uint8Array => {
     return Math.round((k - kMin) * vMax + (kMax - k) * vMin);
   };
 
-  const assign = function (
+  const assign = (
     pos: number,
     offset: number,
     x: number,
@@ -56,32 +56,38 @@ export const resizeImage = (src: ImageData, dst: ImageData): Uint8Array => {
     y: number,
     yMin: number,
     yMax: number
-  ) {
+  ) => {
     let posMin = (yMin * wSrc + xMin) * 4 + offset;
     let posMax = (yMin * wSrc + xMax) * 4 + offset;
-    const vMin = interpolate(x, xMin, bufSrc[posMin], xMax, bufSrc[posMax]);
+    const vMin = interpolate(x, xMin, src.data[posMin], xMax, src.data[posMax]);
 
     // special case, y is integer
     if (yMax === yMin) {
-      bufDst[pos + offset] = vMin;
+      dstBuffer[pos + offset] = vMin;
     } else {
       posMin = (yMax * wSrc + xMin) * 4 + offset;
       posMax = (yMax * wSrc + xMax) * 4 + offset;
-      const vMax = interpolate(x, xMin, bufSrc[posMin], xMax, bufSrc[posMax]);
+      const vMax = interpolate(
+        x,
+        xMin,
+        src.data[posMin],
+        xMax,
+        src.data[posMax]
+      );
 
-      bufDst[pos + offset] = interpolate(y, yMin, vMin, yMax, vMax);
+      dstBuffer[pos + offset] = interpolate(y, yMin, vMin, yMax, vMax);
     }
   };
 
-  for (let i = 0; i < hDst; i++) {
-    for (let j = 0; j < wDst; j++) {
-      const posDst = (i * wDst + j) * 4;
+  for (let i = 0; i < height; i++) {
+    for (let j = 0; j < width; j++) {
+      const posDst = (i * width + j) * 4;
       // x & y in src coordinates
-      const x = (j * wSrc) / wDst;
+      const x = (j * wSrc) / width;
       const xMin = Math.floor(x);
       const xMax = Math.min(Math.ceil(x), wSrc - 1);
 
-      const y = (i * hSrc) / hDst;
+      const y = (i * hSrc) / height;
       const yMin = Math.floor(y);
       const yMax = Math.min(Math.ceil(y), hSrc - 1);
 
@@ -92,5 +98,9 @@ export const resizeImage = (src: ImageData, dst: ImageData): Uint8Array => {
     }
   }
 
-  return dst.data;
+  src.data = dstBuffer;
+  src.width = width;
+  src.height = height;
+
+  return src;
 };

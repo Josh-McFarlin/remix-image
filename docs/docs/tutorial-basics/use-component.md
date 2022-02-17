@@ -64,5 +64,7 @@ export interface TransformOptions {
   rotate?: number | null;
   /** The direction to mirror the image by. (optional, default null) */
   flip?: FlipDirection | null;
+  /** The location to crop the source image before any other operations are applied. (optional, default null) */
+  crop?: CropOptions | null;
 }
 ```

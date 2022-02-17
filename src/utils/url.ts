@@ -8,11 +8,20 @@ export const decodeQuery = (
 ): string | null =>
   queryParams.has(key) ? decodeURIComponent(queryParams.get(key)!) : null;
 
-export const encodeQuery = (url: string, query: Record<string, any>): string =>
-  qs.stringifyUrl(
+export const encodeQuery = (
+  url: string,
+  query: Record<string, any>
+): string => {
+  const fixedQuery = query;
+
+  if (Object.prototype.hasOwnProperty.call(query, "crop")) {
+    fixedQuery.crop = JSON.stringify(fixedQuery.crop);
+  }
+
+  return qs.stringifyUrl(
     {
       url,
-      query,
+      query: fixedQuery,
     },
     {
       skipNull: true,
@@ -20,16 +29,27 @@ export const encodeQuery = (url: string, query: Record<string, any>): string =>
       sort: false,
     }
   );
+};
 
 export const decodeTransformQuery = (
   queryString: string
-): Partial<TransformOptions> =>
-  qs.parse(queryString, {
+): Partial<TransformOptions> => {
+  const parsed = qs.parse(queryString, {
     arrayFormat: "bracket",
     parseNumbers: true,
     parseBooleans: true,
     sort: false,
   });
+
+  if (
+    Object.prototype.hasOwnProperty.call(parsed, "crop") &&
+    parsed.crop != null
+  ) {
+    parsed.crop = JSON.parse(parsed.crop as string);
+  }
+
+  return parsed;
+};
 
 export const parseURL = (rawUrl: string, baseUrl?: URL | string): URL => {
   let urlObject: URL;

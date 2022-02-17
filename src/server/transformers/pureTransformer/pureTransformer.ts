@@ -38,6 +38,7 @@ export const pureTransformer: Transformer = {
       blurRadius,
       rotate,
       flip,
+      crop,
     }
   ) => {
     const inputHandler = typeHandlers[inputContentType];
@@ -56,6 +57,7 @@ export const pureTransformer: Transformer = {
       rotate,
       flip,
       blurRadius,
+      crop,
     });
 
     const outputHandler = typeHandlers[outputContentType || inputContentType];
