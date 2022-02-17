@@ -1,7 +1,7 @@
 import type { Options as KvAssetHandlerOptions } from "@cloudflare/kv-asset-handler";
 import { getAssetFromKV, NotFoundError } from "@cloudflare/kv-asset-handler";
-import type { Resolver } from "../../../types/resolver";
-import { mimeFromBuffer } from "../../../utils/fileType";
+import type { Resolver } from "../../types/resolver";
+import { mimeFromBuffer } from "../../utils/fileType";
 
 export interface FetchEvent {
   request: Request;

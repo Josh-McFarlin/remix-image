@@ -1,6 +1,6 @@
-import { Cache, CacheConfig, CacheStatus } from "../../../types/cache";
-import { mB } from "../../../utils/cache";
-import { LRU } from "../../../utils/lru";
+import { Cache, CacheConfig, CacheStatus } from "../../types/cache";
+import { mB } from "../../utils/cache";
+import { LRU } from "../../utils/lru";
 
 export interface MemoryCacheConfig extends CacheConfig {
   /**

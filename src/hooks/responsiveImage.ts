@@ -1,7 +1,7 @@
-import type { ResponsiveSize, SizelessOptions } from "../../types/image";
-import { encodeQuery } from "../../utils/url";
+import type { ResponsiveSize, SizelessOptions } from "../types/image";
+import { encodeQuery } from "../utils/url";
 
-export type ImageProps = {
+export type ImageSource = {
   src?: string;
 };
 
@@ -12,7 +12,7 @@ export type ResponsiveHookResult = {
 };
 
 export const useResponsiveImage = (
-  image: ImageProps,
+  image: ImageSource,
   loaderUrl: string,
   responsive: ResponsiveSize[],
   options: SizelessOptions = {}

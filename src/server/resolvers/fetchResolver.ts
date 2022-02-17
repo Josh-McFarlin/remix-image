@@ -1,5 +1,5 @@
-import { MimeType } from "../../../types/file";
-import type { Resolver } from "../../../types/resolver";
+import { MimeType } from "../../types/file";
+import type { Resolver } from "../../types/resolver";
 
 export const fetchResolver: Resolver = async (_asset, url) => {
   const imgRequest = new Request(url, {

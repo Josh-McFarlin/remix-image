@@ -5,19 +5,15 @@ import {
   MimeType,
   TransformOptions,
   UnsupportedImageError,
-} from "../../../types";
-import { RemixImageError } from "../../../types/error";
-import type { AssetLoader } from "../../../types/loader";
-import { generateKey } from "../../../utils/cache";
-import { mimeFromBuffer } from "../../../utils/fileType";
-import { imageResponse, textResponse } from "../../../utils/response";
-import {
-  decodeQuery,
-  decodeTransformQuery,
-  parseURL,
-} from "../../../utils/url";
-import { fetchResolver } from "../../resolvers/fetchResolver";
-import { pureTransformer } from "../../transformers";
+} from "../../types";
+import { RemixImageError } from "../../types/error";
+import type { AssetLoader } from "../../types/loader";
+import { generateKey } from "../../utils/cache";
+import { mimeFromBuffer } from "../../utils/fileType";
+import { imageResponse, textResponse } from "../../utils/response";
+import { decodeQuery, decodeTransformQuery, parseURL } from "../../utils/url";
+import { fetchResolver } from "../resolvers/fetchResolver";
+import { pureTransformer } from "../transformers";
 
 export const imageLoader: AssetLoader = async (
   {

@@ -1,5 +1,5 @@
 import BaseCache from "hybrid-disk-cache";
-import { CacheConfig, Cache, CacheStatus } from "../../../types/cache";
+import { CacheConfig, Cache, CacheStatus } from "../../types/cache";
 
 export interface DiskCacheConfig extends CacheConfig {
   /**

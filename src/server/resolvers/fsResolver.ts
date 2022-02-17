@@ -1,7 +1,7 @@
 import fs from "fs";
 import path from "path";
-import type { Resolver } from "../../../types/resolver";
-import { mimeFromBuffer } from "../../../utils/fileType";
+import type { Resolver } from "../../types/resolver";
+import { mimeFromBuffer } from "../../utils/fileType";
 
 export const fsResolver: Resolver = async (asset) => {
   const filePath = path.resolve("public", asset.slice(1));
