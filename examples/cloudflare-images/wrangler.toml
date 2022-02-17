@@ -1,0 +1,24 @@
+name = "remix-cloudflare-workers-images"
+type = "javascript"
+
+zone_id = ""
+account_id = ""
+route = ""
+workers_dev = true
+
+[site]
+bucket = "./public"
+entry-point = "."
+
+[build]
+command = "npm run build:worker"
+watch_dir = "build/index.js"
+
+[build.upload]
+format="service-worker"
+
+[vars]
+SELF_URL = "http://127.0.0.1:8787"
+
+[env.production.vars]
+SELF_URL = "https://remix-cloudflare-workers-images-production.josh-mcfarlin.workers.dev"

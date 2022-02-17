@@ -1,4 +1,4 @@
-import { LRU } from "./lru";
+import { LRU } from "../src/utils/lru";
 
 describe("LRU", () => {
   test("should instantiate", () => {

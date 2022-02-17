@@ -3,6 +3,15 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [Unreleased]
+
+### Added
+
+- Added `crop` parameter to `TransformOptions` to allow cropping of images.
+- Added `flip` parameter to `TransformOptions` to allow mirroring of images.
+- Added `rotation` parameter to `TransformOptions` to allow rotation of images.
+- Added `blurRadius` parameter to `TransformOptions` to allow Gaussian blur of images.
+
 ## [0.3.7] - 2022-02-14
 
 ### Added

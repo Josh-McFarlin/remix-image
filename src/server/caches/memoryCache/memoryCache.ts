@@ -1,4 +1,5 @@
 import { Cache, CacheConfig, CacheStatus } from "../../../types/cache";
+import { mB } from "../../../utils/cache";
 import { LRU } from "../../../utils/lru";
 
 export interface MemoryCacheConfig extends CacheConfig {
@@ -16,7 +17,7 @@ export class MemoryCache extends Cache {
     super();
 
     this.config = {
-      maxSize: 5e7, // 50 MB
+      maxSize: mB(50),
       ttl: 24 * 60 * 60,
       tbd: 365 * 24 * 60 * 60,
       ...config,

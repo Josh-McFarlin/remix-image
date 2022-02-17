@@ -25,6 +25,23 @@ export enum ImagePosition {
   RIGHT = "right",
 }
 
+export enum FlipDirection {
+  HORIZONTAL = "horizontal",
+  VERTICAL = "vertical",
+  BOTH = "both",
+}
+
+export interface CropOptions {
+  /** The x position of the upper left pixel. */
+  x: number;
+  /** The y position of the upper left pixel. */
+  y: number;
+  /** The number of pixels wide to crop the image. */
+  width: number;
+  /** The number of pixels high to crop the image. */
+  height: number;
+}
+
 export interface TransformOptions {
   /** Width of resulting image. */
   width: number;
@@ -46,6 +63,14 @@ export interface TransformOptions {
   loop?: number;
   /** Delay between animation frames (in milliseconds). (optional, default 100) */
   delay?: number;
+  /** The number of pixels to blur the image by. (optional, default null) */
+  blurRadius?: number | null;
+  /** The number of degrees to rotate the image by. (optional, default null) */
+  rotate?: number | null;
+  /** The direction to mirror the image by. (optional, default null) */
+  flip?: FlipDirection | null;
+  /** The location to crop the source image before any other operations are applied. (optional, default null) */
+  crop?: CropOptions | null;
 }
 
 export type SizelessOptions = Omit<TransformOptions, "width" | "height">;

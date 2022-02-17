@@ -1,4 +1,4 @@
-import { DoublyLinkedList } from "./linkedList";
+import { DoublyLinkedList } from "../src/utils/linkedList";
 
 describe("DoublyLinkedList", () => {
   test("should instantiate", () => {

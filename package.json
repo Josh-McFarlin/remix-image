@@ -62,6 +62,7 @@
   "devDependencies": {
     "@babel/core": "^7.16.0",
     "@cloudflare/kv-asset-handler": "^0.2.0",
+    "@cloudflare/workers-types": "^3.4.0",
     "@commitlint/cli": "^16.1.0",
     "@commitlint/config-conventional": "^16.0.0",
     "@commitlint/cz-commitlint": "^16.1.0",

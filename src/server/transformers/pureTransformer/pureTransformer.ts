@@ -1,7 +1,7 @@
 import { MimeType } from "../../../types/file";
 import { Transformer } from "../../../types/transformer";
 import { typeHandlers } from "./handlers";
-import { bilinearInterpolation } from "./interpolation";
+import { applyOperations } from "./operations";
 
 const supportedInputs = new Set([
   MimeType.JPEG,
@@ -35,28 +35,30 @@ export const pureTransformer: Transformer = {
       compressionLevel,
       loop,
       delay,
+      blurRadius,
+      rotate,
+      flip,
+      crop,
     }
   ) => {
     const inputHandler = typeHandlers[inputContentType];
     const rgba = await inputHandler.decode(data);
 
-    let targetWidth = width || rgba.width * ((height || 0) / rgba.height);
-    let targetHeight = height || rgba.height * ((width || 0) / rgba.width);
+    const targetWidth = width || rgba.width * ((height || 0) / rgba.height);
+    const targetHeight = height || rgba.height * ((width || 0) / rgba.width);
 
     if (targetWidth <= 0 || targetHeight <= 0) {
       throw new Error("At least one dimension must be provided!");
     }
 
-    targetWidth = Math.round(targetWidth);
-    targetHeight = Math.round(targetHeight);
-
-    const rawImageData = {
-      data: new Uint8Array(targetWidth * targetHeight * 4),
-      width: targetWidth,
-      height: targetHeight,
-    };
-
-    bilinearInterpolation(rgba, rawImageData);
+    const rawImageData = applyOperations(rgba, {
+      width: Math.round(targetWidth),
+      height: Math.round(targetHeight),
+      rotate,
+      flip,
+      blurRadius,
+      crop,
+    });
 
     const outputHandler = typeHandlers[outputContentType || inputContentType];
     return outputHandler.encode(rawImageData, {
