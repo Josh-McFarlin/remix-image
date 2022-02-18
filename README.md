@@ -1,5 +1,11 @@
 # Remix-Image
 
+![](https://badgen.net/npm/v/remix-image)
+![](https://badgen.net/npm/license/remix-image)
+![](https://badgen.net/npm/types/remix-image)
+![](https://badgen.net/bundlephobia/min/remix-image)
+![](https://badgen.net/npm/dt/remix-image)
+
 ## 👋 Intro
 
 A React component for responsive images in Remix.
