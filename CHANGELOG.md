@@ -3,6 +3,13 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [Unreleased]
+
+### Changed
+
+- Replaced built-in `pureTransformer` code with the library `js-image-lib` (which is the same code, but moved to its own library for better developer experience.)
+- Replaced built-in mime type detector code with the library `mime-tree`
+
 ## [0.3.8] - 2022-02-16
 
 ### Added

@@ -19,6 +19,6 @@
     "experimentalDecorators": true,
     "forceConsistentCasingInFileNames": true
   },
-  "include": ["src/**/*", "__tests__/**/*"],
+  "include": ["src/**/*", "tests/**/*"],
   "exclude": ["node_modules", "build"]
 }

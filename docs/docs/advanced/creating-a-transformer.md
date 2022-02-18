@@ -45,7 +45,6 @@ export const loader: LoaderFunction = ({ request }) => {
 
 ## Examples
 
-* [pureTransformer](https://github.com/Josh-McFarlin/remix-image/tree/master/src/server/transformers/pureTransformer)
 * [sharp](https://github.com/Josh-McFarlin/remix-image/tree/master/examples/sharp/sharpTransformer)
 * [gif-resizer](https://github.com/Josh-McFarlin/remix-image/tree/master/examples/gif-resizer/gifTransformer)
 

@@ -27,7 +27,7 @@ export default [
       }),
       typescript({
         tsconfigOverride: {
-          exclude: ["node_modules", "build", "__tests__"],
+          exclude: ["node_modules", "build", "tests"],
         },
       }),
       commonjs(),
@@ -49,7 +49,7 @@ export default [
       json(),
       typescript({
         tsconfigOverride: {
-          exclude: ["node_modules", "build", "__tests__"],
+          exclude: ["node_modules", "build", "tests"],
         },
       }),
       resolve({ preferBuiltins: false }),
@@ -71,7 +71,7 @@ export default [
       json(),
       typescript({
         tsconfigOverride: {
-          exclude: ["node_modules", "build", "__tests__"],
+          exclude: ["node_modules", "build", "tests"],
         },
       }),
       resolve({ preferBuiltins: false }),

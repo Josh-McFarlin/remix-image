@@ -26,6 +26,11 @@ export const generatePalette = (buffer: Uint8Array, count: number): Color[] => {
   return colors;
 };
 
+/**
+ * Maps the pixels in an RGBA image to the index of the closest color in a palette
+ * @param image The image to map
+ * @param palette The palette to map pixels to
+ */
 export const mapImage = (image: Uint8Array, palette: Color[]): number[] => {
   const result = new Array<number>(image.length / 4);
 
@@ -43,7 +48,7 @@ export const mapImage = (image: Uint8Array, palette: Color[]): number[] => {
     if (colorToIndex.has(color)) {
       result[i / 4] = colorToIndex.get(color)!;
     } else {
-      let maxDist = 1000;
+      let maxDist: number | null = null;
       let index = 0;
 
       palette.map((cur, i) => {
@@ -54,7 +59,7 @@ export const mapImage = (image: Uint8Array, palette: Color[]): number[] => {
             Math.pow(color[3] - cur[3], 2)
         );
 
-        if (dist < maxDist) {
+        if (maxDist == null || dist < maxDist) {
           maxDist = dist;
           index = i;
         }

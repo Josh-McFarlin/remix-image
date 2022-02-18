@@ -1,7 +1,9 @@
 import type { Options as KvAssetHandlerOptions } from "@cloudflare/kv-asset-handler";
 import { getAssetFromKV, NotFoundError } from "@cloudflare/kv-asset-handler";
-import type { Resolver } from "../../../types/resolver";
-import { mimeFromBuffer } from "../../../utils/fileType";
+import isSvg from "is-svg";
+import mimeFromBuffer from "mime-tree";
+import { MimeType, UnsupportedImageError } from "../../types";
+import type { Resolver } from "../../types/resolver";
 
 export interface FetchEvent {
   request: Request;
@@ -57,7 +59,16 @@ export const kvResolver: Resolver = async (_asset, url) => {
   const arrBuff = await imageResponse.arrayBuffer();
 
   const buffer = new Uint8Array(arrBuff);
-  const contentType = mimeFromBuffer(buffer);
+  let contentType: MimeType | null = null;
+  try {
+    contentType = mimeFromBuffer(buffer);
+  } catch (error) {
+    if (isSvg(new TextDecoder().decode(buffer))) {
+      contentType = MimeType.SVG;
+    } else {
+      throw new UnsupportedImageError("Buffer is not a supported image type!");
+    }
+  }
 
   return {
     buffer,

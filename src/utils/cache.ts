@@ -2,16 +2,16 @@ export const generateKey = (...args: (string | number | null | undefined)[]) =>
   args.filter((i) => i != null).join("_");
 
 /**
- * Returns the number of kilobytes
+ * Convert kilobytes to bytes
  */
 export const kB = (num: number): number => num * 1e3;
 
 /**
- * Returns the number of megabytes
+ * Converts megabytes to bytes
  */
 export const mB = (num: number): number => num * 1e6;
 
 /**
- * Returns the number of gigabytes
+ * Converts gigabytes to bytes
  */
 export const GB = (num: number): number => num * 1e9;
