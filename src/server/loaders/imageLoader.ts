@@ -9,7 +9,6 @@ import {
 import { RemixImageError } from "../../types/error";
 import type { AssetLoader } from "../../types/loader";
 import { generateKey } from "../../utils/cache";
-import { mimeFromBuffer } from "../../utils/fileType";
 import { imageResponse, textResponse } from "../../utils/response";
 import { decodeQuery, decodeTransformQuery, parseURL } from "../../utils/url";
 import { fetchResolver } from "../resolvers/fetchResolver";
@@ -187,12 +186,10 @@ export const imageLoader: AssetLoader = async (
       await cache.set(cacheKey, resultImg);
     }
 
-    const resultContentType = mimeFromBuffer(resultImg);
-
     return imageResponse(
       resultImg,
       200,
-      resultContentType,
+      transformOptions.contentType!,
       cache
         ? `private, max-age=${cache.config.ttl}, max-stale=${cache.config.tbd}`
         : `public, max-age=${60 * 60 * 24 * 365}`

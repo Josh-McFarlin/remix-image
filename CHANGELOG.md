@@ -8,6 +8,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Changed
 
 - Replaced built-in `pureTransformer` code with the library `js-image-lib` (which is the same code, but moved to its own library for better developer experience.)
+- Replaced built-in mime type detector code with the library `mime-tree`
 
 ## [0.3.8] - 2022-02-16
 
