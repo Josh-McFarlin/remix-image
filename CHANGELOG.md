@@ -7,7 +7,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
-- Added `baseUrl` property to `LoaderConfig` and `Resolver` to allow custom base paths for assets
+- Added `basePath` property to `LoaderConfig` and `Resolver` to allow custom base paths for assets
 
 ### Documentation
 

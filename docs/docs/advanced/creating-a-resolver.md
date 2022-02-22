@@ -14,7 +14,8 @@ To make your own, just make a function that follows the [Resolver format](https:
 export type Resolver = (
   asset: string,
   url: string,
-  options: TransformOptions
+  options: TransformOptions,
+  basePath: string
 ) => Promise<{
   buffer: Uint8Array;
   contentType: MimeType;
@@ -24,11 +25,11 @@ such as:
 ```typescript
 import { fsResolver, fetchResolver, Resolver } from "remix-image/server";
 
-export const myResolver: Resolver = async (asset, url, options) => {
+export const myResolver: Resolver = async (asset, url, options, basePath) => {
   if (src.startsWith("/") && (src.length === 1 || src[1] !== "/")) {
-    return fsResolver(asset, url, options);
+    return fsResolver(asset, url, options, basePath);
   } else {
-    return fetchResolver(asset, url, options);
+    return fetchResolver(asset, url, options, basePath);
   }
 };
 ```
