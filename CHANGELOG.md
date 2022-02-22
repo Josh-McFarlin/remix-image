@@ -9,9 +9,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Added `basePath` property to `LoaderConfig` and `Resolver` to allow custom base paths for assets
 
+### Changed
+
+- Replaced `hybrid-disk-cache` package with the updated version `@next-boost/hybrid-disk-cache`
+
 ### Documentation
 
 - Added Vercel deployment example
+- Replaced functions in examples with best practices (file cache, sharp)
 
 ## [0.3.10] - 2022-02-17
 
