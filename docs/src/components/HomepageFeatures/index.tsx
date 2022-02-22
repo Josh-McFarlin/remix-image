@@ -1,1 +1,2 @@
-export { default, FeatureItem } from "./HomepageFeatures";
+export { default } from "./HomepageFeatures";
+export * from "./HomepageFeatures";

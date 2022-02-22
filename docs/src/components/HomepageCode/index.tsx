@@ -1,1 +1,2 @@
-export { default, CodeItem } from "./HomepageCode";
+export { default } from "./HomepageCode";
+export * from "./HomepageCode";
