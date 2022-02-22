@@ -4,7 +4,8 @@ import { TransformOptions } from "./image";
 export type Resolver = (
   asset: string,
   url: string,
-  options: TransformOptions
+  options: TransformOptions,
+  basePath: string
 ) => Promise<{
   buffer: Uint8Array;
   contentType: MimeType;

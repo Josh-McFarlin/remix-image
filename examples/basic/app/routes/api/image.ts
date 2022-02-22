@@ -8,11 +8,11 @@ import {
 } from "remix-image/server";
 import { sharpTransformer } from "../../utils/sharp";
 
-export const fetchImage: Resolver = async (asset, url, options) => {
+export const fetchImage: Resolver = async (asset, url, options, basePath) => {
   if (url.startsWith("/") && (url.length === 1 || url[1] !== "/")) {
-    return fsResolver(asset, url, options);
+    return fsResolver(asset, url, options, basePath);
   } else {
-    return fetchResolver(asset, url, options);
+    return fetchResolver(asset, url, options, basePath);
   }
 };
 

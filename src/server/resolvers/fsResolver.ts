@@ -5,8 +5,8 @@ import mimeFromBuffer from "mime-tree";
 import { MimeType, UnsupportedImageError } from "../../types";
 import type { Resolver } from "../../types/resolver";
 
-export const fsResolver: Resolver = async (asset) => {
-  const filePath = path.resolve("public", asset.slice(1));
+export const fsResolver: Resolver = async (asset, _url, _options, basePath) => {
+  const filePath = path.resolve(basePath, asset.slice(1));
 
   const buffer = fs.readFileSync(filePath);
   let contentType: MimeType | null = null;
