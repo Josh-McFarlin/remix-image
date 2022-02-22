@@ -27,6 +27,7 @@ export const imageLoader: AssetLoader = async (
     defaultOptions = {},
     redirectOnFail = false,
     skipFormats = new Set([MimeType.SVG]),
+    basePath = "public",
   },
   request
 ) => {
@@ -102,7 +103,12 @@ export const imageLoader: AssetLoader = async (
       let res;
 
       try {
-        res = await resolver(src, assetUrl.toString(), transformOptions);
+        res = await resolver(
+          src,
+          assetUrl.toString(),
+          transformOptions,
+          basePath
+        );
 
         if (!res || !res.buffer) {
           throw new RemixImageError("Requested image not found!", 404);

@@ -1,0 +1,35 @@
+{
+  "private": true,
+  "name": "vercel-example",
+  "description": "An example showing a basic setup on Vercel.",
+  "license": "MIT",
+  "homepage": "https://remix-image-vercel.vercel.app",
+  "scripts": {
+    "build": "cross-env NODE_ENV=production remix build",
+    "dev": "cross-env NODE_ENV=development remix dev",
+    "postinstall": "remix setup node"
+  },
+  "dependencies": {
+    "@next-boost/hybrid-disk-cache": "^0.3.0",
+    "@remix-run/react": "^1.2.2",
+    "@remix-run/vercel": "^1.2.2",
+    "react": "^17.0.2",
+    "react-dom": "^17.0.2",
+    "remix": "^1.2.2",
+    "remix-image": "latest",
+    "sharp": "^0.30.1"
+  },
+  "devDependencies": {
+    "@remix-run/dev": "^1.2.2",
+    "@remix-run/serve": "^1.2.2",
+    "@types/react": "^17.0.24",
+    "@types/react-dom": "^17.0.9",
+    "@types/sharp": "^0.29.5",
+    "cross-env": "^7.0.3",
+    "typescript": "^4.5.5"
+  },
+  "engines": {
+    "node": ">=14"
+  },
+  "sideEffects": false
+}

@@ -27,6 +27,8 @@ export interface LoaderConfig {
   redirectOnFail?: boolean;
   /** A set of mime types that should be returned without transformation. (optional, default Set([MimeType.SVG]) */
   skipFormats?: Set<MimeType> | null;
+  /** The base file path used for the resolver. (optional, default "public) */
+  basePath?: string;
 }
 
 export type AssetLoader = (
