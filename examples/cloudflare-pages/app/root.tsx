@@ -12,7 +12,7 @@ import appStyles from "./styles/app.css";
 
 export const meta: MetaFunction = () => {
   return {
-    title: "Remix-Image Cloudflare Images",
+    title: "Remix-Image Cloudflare Pages",
   };
 };
 
@@ -33,7 +33,7 @@ export default function App() {
         <Outlet />
         <ScrollRestoration />
         <Scripts />
-        {process.env.NODE_ENV === "development" && <LiveReload />}
+        <LiveReload />
       </body>
     </html>
   );
