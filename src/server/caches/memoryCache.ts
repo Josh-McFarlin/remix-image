@@ -1,6 +1,6 @@
+import LRU from "lru-cache";
 import { Cache, CacheConfig, CacheStatus } from "../../types/cache";
 import { mB } from "../../utils/cache";
-import { LRU } from "../../utils/lru";
 
 export interface MemoryCacheConfig extends CacheConfig {
   /**
@@ -11,7 +11,7 @@ export interface MemoryCacheConfig extends CacheConfig {
 
 export class MemoryCache extends Cache {
   config: MemoryCacheConfig;
-  cache: LRU<Uint8Array>;
+  cache: LRU<string, Uint8Array>;
 
   constructor(config: Partial<MemoryCacheConfig> | null | undefined = {}) {
     super();
@@ -23,7 +23,12 @@ export class MemoryCache extends Cache {
       ...config,
     };
 
-    this.cache = new LRU<Uint8Array>(this.config.maxSize);
+    this.cache = new LRU<string, Uint8Array>({
+      max: this.config.maxSize,
+      ttl: this.config.ttl,
+      allowStale: true,
+      updateAgeOnGet: true,
+    });
   }
 
   async status(key: string): Promise<CacheStatus> {
@@ -35,19 +40,13 @@ export class MemoryCache extends Cache {
   }
 
   async get(key: string): Promise<Uint8Array | null> {
-    if (!(await this.has(key))) {
-      return null;
-    }
-
-    const cacheValue = this.cache.get(key)!;
-
-    this.cache.set(key, cacheValue, cacheValue.byteLength);
-
-    return cacheValue;
+    return this.cache.get(key) ?? null;
   }
 
   async set(key: string, resultImg: Uint8Array): Promise<void> {
-    this.cache.set(key, resultImg, resultImg.byteLength);
+    this.cache.set(key, resultImg, {
+      size: resultImg.byteLength,
+    });
   }
 
   async clear(): Promise<void> {

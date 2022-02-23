@@ -5,19 +5,11 @@ import {
   Outlet,
   Scripts,
   ScrollRestoration,
-  LinksFunction,
 } from "remix";
 import type { MetaFunction } from "remix";
-import appStyles from "./styles/app.css";
 
 export const meta: MetaFunction = () => {
-  return {
-    title: "Remix-Image Cloudflare Pages",
-  };
-};
-
-export const links: LinksFunction = () => {
-  return [{ rel: "stylesheet", href: appStyles }];
+  return { title: "New Remix App" };
 };
 
 export default function App() {
@@ -33,7 +25,7 @@ export default function App() {
         <Outlet />
         <ScrollRestoration />
         <Scripts />
-        {process.env.NODE_ENV === "development" && <LiveReload />}
+        <LiveReload />
       </body>
     </html>
   );

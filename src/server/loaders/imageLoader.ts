@@ -1,4 +1,5 @@
 import { redirect } from "@remix-run/server-runtime";
+import mimeFromBuffer from "mime-tree";
 import {
   ImageFit,
   ImagePosition,
@@ -8,7 +9,6 @@ import {
 } from "../../types";
 import { RemixImageError } from "../../types/error";
 import type { AssetLoader } from "../../types/loader";
-import { generateKey } from "../../utils/cache";
 import { imageResponse, textResponse } from "../../utils/response";
 import { decodeQuery, decodeTransformQuery, parseURL } from "../../utils/url";
 import { fetchResolver } from "../resolvers/fetchResolver";
@@ -43,6 +43,7 @@ export const imageLoader: AssetLoader = async (
     }
 
     src = decodeQuery(reqUrl.searchParams, "src");
+
     if (!src) {
       throw new RemixImageError("An image URL must be provided!", 400);
     }
@@ -80,15 +81,8 @@ export const imageLoader: AssetLoader = async (
       throw new RemixImageError("Requested Image too large!", 406);
     }
 
+    const cacheKey = reqUrl.search;
     let resultImg: Uint8Array | undefined;
-
-    const cacheKey = generateKey(
-      src,
-      transformOptions.width,
-      transformOptions.height,
-      transformOptions.quality,
-      transformOptions.contentType
-    );
 
     if (cache && (await cache.has(cacheKey))) {
       const cacheValue = await cache.get(cacheKey);
@@ -96,6 +90,10 @@ export const imageLoader: AssetLoader = async (
       if (cacheValue) {
         console.log(`Retrieved image [${cacheKey}] from cache.`);
         resultImg = cacheValue;
+
+        if (!transformOptions.contentType) {
+          transformOptions.contentType = mimeFromBuffer(resultImg);
+        }
       }
     }
 
