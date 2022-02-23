@@ -53,8 +53,7 @@
     "is-svg": "^4.3.2",
     "js-image-lib": "^0.1.6",
     "mime-tree": "^0.1.4",
-    "query-string": "^7.1.0",
-    "remix-image": "^0.3.11"
+    "query-string": "^7.1.0"
   },
   "devDependencies": {
     "@babel/core": "^7.16.0",
