@@ -12,7 +12,7 @@ import appStyles from "./styles/app.css";
 
 export const meta: MetaFunction = () => {
   return {
-    title: "Remix-Image Cloudflare Pages",
+    title: "Remix-Image Cloudflare Images",
   };
 };
 
