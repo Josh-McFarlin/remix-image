@@ -12,12 +12,11 @@ const cache = new MemoryCache({
 });
 
 export const loader: LoaderFunction = ({ request, context }) => {
-  const SELF_URL = context?.SELF_URL || context?.env?.SELF_URL;
+  const SELF_URL = context?.env?.SELF_URL || context?.SELF_URL;
 
   const resolver: Resolver = async (asset, url, options, basePath) => {
     if (asset.startsWith("/") && (asset.length === 1 || asset[1] !== "/")) {
-      const fetchUrl = new URL(url, SELF_URL).toString();
-      const imageResponse = await context.ASSETS.fetch(fetchUrl);
+      const imageResponse = await context.ASSETS.fetch(url, request.clone());
       const arrBuff = await imageResponse.arrayBuffer();
 
       const buffer = new Uint8Array(arrBuff);

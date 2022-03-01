@@ -82,118 +82,119 @@ export const imageLoader: AssetLoader = async (
     }
 
     const cacheKey = reqUrl.search;
+    let isNewImage = true;
+    let shouldTransform = true;
+    let loadedImg: Uint8Array | undefined;
     let resultImg: Uint8Array | undefined;
+    let inputContentType: MimeType | undefined;
+    let outputContentType: MimeType | undefined;
 
     if (cache && (await cache.has(cacheKey))) {
       const cacheValue = await cache.get(cacheKey);
 
       if (cacheValue) {
         console.log(`Retrieved image [${cacheKey}] from cache.`);
-        resultImg = cacheValue;
+        isNewImage = false;
+        shouldTransform = false;
 
-        if (!transformOptions.contentType) {
-          transformOptions.contentType = mimeFromBuffer(resultImg);
-        }
+        loadedImg = cacheValue;
+        inputContentType = mimeFromBuffer(loadedImg);
       }
     }
 
-    if (!resultImg) {
-      let res;
+    if (!loadedImg) {
+      const res = await resolver(
+        src,
+        assetUrl.toString(),
+        transformOptions,
+        basePath
+      );
 
-      try {
-        res = await resolver(
-          src,
-          assetUrl.toString(),
-          transformOptions,
-          basePath
-        );
+      console.log(
+        `Fetched image [${cacheKey}] directly using resolver: ${resolver.name}.`
+      );
+      isNewImage = true;
+      shouldTransform = true;
 
-        if (!res || !res.buffer) {
-          throw new RemixImageError("Requested image not found!", 404);
-        }
-        if (transformOptions.contentType == null) {
-          transformOptions.contentType = res.contentType;
-        }
+      loadedImg = res.buffer;
+      inputContentType = res.contentType;
+    }
 
-        console.log(
-          `Fetched image [${cacheKey}] directly using resolver: ${resolver.name}.`
-        );
+    if (!loadedImg || !inputContentType) {
+      throw new RemixImageError("Failed to transform requested image!", 500);
+    }
 
-        resultImg = res.buffer;
-      } catch (error) {
-        throw new RemixImageError("Failed to retrieve requested image!", 500);
-      }
+    if (!outputContentType) {
+      outputContentType = inputContentType;
+    }
 
-      if (skipFormats?.has(res.contentType)) {
-        console.log(`Skipping transformation of mime type: ${res.contentType}`);
-      } else if (transformer != null) {
-        let curTransformer = transformer;
+    if (skipFormats?.has(inputContentType)) {
+      console.log(`Skipping transformation of mime type: ${inputContentType}`);
+    } else if (shouldTransform && transformer != null) {
+      let curTransformer = transformer;
 
-        if (!transformer.supportedInputs.has(res.contentType)) {
-          if (
-            useFallbackTransformer &&
-            transformer !== fallbackTransformer &&
-            fallbackTransformer.supportedInputs.has(res.contentType) &&
-            fallbackTransformer.supportedOutputs.has(
-              transformOptions.contentType
-            )
-          ) {
-            console.error(
-              `Transformer does not allow this input content type: ${transformOptions.contentType}! Falling back to transformer: ${fallbackTransformer.name}`
-            );
-            curTransformer = fallbackTransformer;
-          } else {
-            throw new UnsupportedImageError(
-              `Transformer does not allow this input content type: ${res.contentType}!`
-            );
-          }
-        }
-
+      if (!transformer.supportedInputs.has(inputContentType)) {
         if (
-          !curTransformer.supportedOutputs.has(transformOptions.contentType)
+          useFallbackTransformer &&
+          transformer !== fallbackTransformer &&
+          fallbackTransformer.supportedInputs.has(inputContentType)
         ) {
-          if (
-            useFallbackFormat &&
-            curTransformer.supportedOutputs.has(fallbackFormat)
-          ) {
-            console.error(
-              `Transformer does not allow this output content type: ${transformOptions.contentType}! Falling back to mime type: ${fallbackFormat}`
-            );
-            transformOptions.contentType = fallbackFormat;
-          } else {
-            throw new UnsupportedImageError(
-              `Transformer does not allow this output content type: ${transformOptions.contentType}!`
-            );
-          }
+          console.error(
+            `Transformer does not allow this input content type: ${inputContentType}! Falling back to transformer: ${fallbackTransformer.name}`
+          );
+          curTransformer = fallbackTransformer;
+        } else {
+          throw new UnsupportedImageError(
+            `Transformer does not allow this input content type: ${inputContentType}!`
+          );
         }
-
-        resultImg = await curTransformer.transform(
-          {
-            url: assetUrl.toString(),
-            data: res.buffer,
-            contentType: res.contentType,
-          },
-          transformOptions
-        );
-
-        console.log(
-          `Successfully transformed image using transformer: ${curTransformer.name}`
-        );
       }
+
+      if (!curTransformer.supportedOutputs.has(outputContentType)) {
+        if (
+          useFallbackFormat &&
+          curTransformer.supportedOutputs.has(fallbackFormat)
+        ) {
+          console.error(
+            `Transformer does not allow this output content type: ${outputContentType}! Falling back to mime type: ${fallbackFormat}`
+          );
+          outputContentType = fallbackFormat;
+        } else {
+          throw new UnsupportedImageError(
+            `Transformer does not allow this output content type: ${outputContentType}!`
+          );
+        }
+      }
+
+      resultImg = await curTransformer.transform(
+        {
+          url: assetUrl.toString(),
+          data: loadedImg,
+          contentType: inputContentType!,
+        },
+        {
+          ...transformOptions,
+          contentType: outputContentType!,
+        }
+      );
+
+      console.log(
+        `Successfully transformed image using transformer: ${curTransformer.name}`
+      );
     }
 
     if (!resultImg) {
       throw new RemixImageError("Failed to transform requested image!", 500);
     }
 
-    if (cache) {
+    if (isNewImage && cache) {
       await cache.set(cacheKey, resultImg);
     }
 
     return imageResponse(
       resultImg,
       200,
-      transformOptions.contentType!,
+      outputContentType,
       cache
         ? `private, max-age=${cache.config.ttl}, max-stale=${cache.config.tbd}`
         : `public, max-age=${60 * 60 * 24 * 365}`
