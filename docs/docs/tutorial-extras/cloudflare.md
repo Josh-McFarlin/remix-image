@@ -4,8 +4,8 @@ sidebar_position: 3
 
 # Cloudflare
 
-## What?
 Some platforms like Cloudflare Workers do not support file-systems and Node packages.
+Therefore, you must setup Remix-Image to not use any of these packages.
 
 ## Transformer
 To use `remix-image` on Cloudflare and similar, use `MemoryCache` and `pureTransformer` because they are pure JavaScript.
@@ -29,9 +29,8 @@ export const loader: LoaderFunction = ({ request }) => {
 Also, `pureTransformer` is used by default, it does not need to be specified in the config.
 This is only shown in the following example to show it must be used instead of other `transformer` options.
 
-
-## Resolver
-By default, `remix-image` will work on Cloudflare if all assets server are being fetched from another server.
+## Resolver for Cloudflare Workers
+By default, `remix-image` will work on Cloudflare Workers if all assets are being fetched from another server.
 If you are trying to serve assets stored in your app's `public` directory, you must use the `kvResolver`.
 
 If you would like to use both `fetchResolver` and `fsResolver`, you can create a custom resolver as shown below:
@@ -44,16 +43,10 @@ import {
   Resolver
 } from "remix-image/serverPure";
 
-const whitelistedDomains = new Set(["http://localhost:3000", "i.imgur.com"]);
-
 export const myResolver: Resolver = async (asset, url, options) => {
   if (asset.startsWith("/") && (asset.length === 1 || asset[1] !== "/")) {
     return kvResolver(asset, url, options);
   } else {
-    if (!whitelistedDomains.has(new URL(url).host)) {
-      throw new Error("Domain not allowed!");
-    }
-
     return fetchResolver(asset, url, options);
   }
 };
@@ -70,3 +63,67 @@ export const loader: LoaderFunction = ({ request }) => {
 ```
 
 For an example project hosted on Cloudflare Workers, look at [this example](https://github.com/Josh-McFarlin/remix-image/tree/master/examples/cloudflare).
+
+
+## Resolver for Cloudflare Pages
+By default, `remix-image` will work on Cloudflare Pages if all assets are being fetched from another server.
+If you are trying to serve assets stored in your app's `public` directory, you must create a custom resolver that uses info from the request:
+```typescript jsx
+import {
+  imageLoader,
+  MemoryCache,
+  kvResolver,
+  fetchResolver,
+  Resolver,
+  MimeType,
+  RemixImageError
+} from "remix-image/serverPure";
+
+const cache = new MemoryCache({
+  maxSize: 5e7,
+});
+
+export const loader: LoaderFunction = ({ request, context }) => {
+  const SELF_URL = context?.env?.SELF_URL || context?.SELF_URL;
+
+  const resolver: Resolver = async (asset, url, options, basePath) => {
+    if (asset.startsWith("/") && (asset.length === 1 || asset[1] !== "/")) {
+      const imageResponse = await context.ASSETS.fetch(url, request.clone());
+      const arrBuff = await imageResponse.arrayBuffer();
+
+      if (!arrBuff || arrBuff.byteLength < 2) {
+        throw new RemixImageError("Invalid image retrieved from resolver!");
+      }
+
+      const buffer = new Uint8Array(arrBuff);
+      const contentType = imageResponse.headers.get(
+        "content-type"
+      )! as MimeType;
+
+      return {
+        buffer,
+        contentType,
+      };
+    } else {
+      return fetchResolver(asset, url, options, basePath);
+    }
+  };
+
+  const config = {
+    selfUrl: SELF_URL,
+    cache,
+    resolver,
+  };
+
+  return imageLoader(config, request);
+};
+```
+
+This setup also requires setting an environment variable `SELF_URL` with the URL of your server.
+For development, you can set the following script in your `package.json`:
+```json
+"dev:wrangler": "cross-env NODE_ENV=development wrangler pages dev ./public --binding \"SELF_URL\"=\"http://localhost:8788\"",
+```
+For production, you should create the environment variable `SELF_URL` on the [Cloudflare website](https://developers.cloudflare.com/pages/platform/build-configuration/#environment-variables).
+
+For an example project hosted on Cloudflare Pages, look at [this example](https://github.com/Josh-McFarlin/remix-image/tree/master/examples/cloudflare-pages).
