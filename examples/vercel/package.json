@@ -17,7 +17,7 @@
     "react": "^17.0.2",
     "react-dom": "^17.0.2",
     "remix": "^1.2.2",
-    "remix-image": "latest",
+    "remix-image": "^0.3.15",
     "sharp": "^0.30.1"
   },
   "devDependencies": {

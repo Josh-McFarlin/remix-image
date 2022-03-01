@@ -46,7 +46,9 @@
     "prepare": "husky install",
     "commit": "git-cz",
     "release": "dotenv release-it --",
-    "install-examples": "find examples -maxdepth 1 -type d \\( ! -name . \\) -exec bash -c \"cd '{}' && npm install\" \\;"
+    "install-examples": "find examples -maxdepth 1 -type d \\( ! -name . \\) -exec bash -c \"cd '{}' && npm i -S remix-image\" \\;",
+    "update-docs": "npm run deploy --prefix docs",
+    "postpublish": "npm run install-examples && npm run update-docs"
   },
   "dependencies": {
     "clsx": "^1.1.1",
@@ -54,7 +56,8 @@
     "js-image-lib": "^0.1.6",
     "lru-cache": "^7.4.0",
     "mime-tree": "^0.1.4",
-    "query-string": "^7.1.0"
+    "query-string": "^7.1.0",
+    "remix-image": "^0.3.15"
   },
   "devDependencies": {
     "@babel/core": "^7.16.0",

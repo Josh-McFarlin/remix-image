@@ -13,6 +13,7 @@ examples/**/build
 examples/**/.cache
 examples/**/tmp
 examples/**/.mf
+examples/**/functions
 
 docs/.docusaurus
 docs/build

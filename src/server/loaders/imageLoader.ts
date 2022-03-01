@@ -128,9 +128,9 @@ export const imageLoader: AssetLoader = async (
       outputContentType = inputContentType;
     }
 
-    if (skipFormats?.has(inputContentType)) {
-      console.log(`Skipping transformation of mime type: ${inputContentType}`);
-    } else if (shouldTransform && transformer != null) {
+    if (!shouldTransform || skipFormats?.has(inputContentType)) {
+      resultImg = loadedImg;
+    } else if (transformer != null) {
       let curTransformer = transformer;
 
       if (!transformer.supportedInputs.has(inputContentType)) {
