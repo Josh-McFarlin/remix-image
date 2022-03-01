@@ -47,8 +47,7 @@
     "commit": "git-cz",
     "release": "dotenv release-it --",
     "install-examples": "find examples -maxdepth 1 -type d \\( ! -name . \\) -exec bash -c \"cd '{}' && npm i -S remix-image\" \\;",
-    "update-docs": "npm run deploy --prefix docs",
-    "postpublish": "npm run install-examples && npm run update-docs"
+    "update-docs": "npm run deploy --prefix docs"
   },
   "dependencies": {
     "clsx": "^1.1.1",
@@ -57,7 +56,7 @@
     "lru-cache": "^7.4.0",
     "mime-tree": "^0.1.4",
     "query-string": "^7.1.0",
-    "remix-image": "^0.3.15"
+    "remix-image": "^0.3.16"
   },
   "devDependencies": {
     "@babel/core": "^7.16.0",
@@ -68,6 +67,7 @@
     "@commitlint/cz-commitlint": "^16.1.0",
     "@commitlint/prompt-cli": "^16.1.0",
     "@next-boost/hybrid-disk-cache": "^0.3.0",
+    "@release-it/bumper": "^3.0.1",
     "@release-it/keep-a-changelog": "^2.3.0",
     "@remix-run/node": "^1.1.1",
     "@remix-run/react": "^1.1.1",
