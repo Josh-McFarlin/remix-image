@@ -6,9 +6,9 @@ import {
   MimeType,
   TransformOptions,
   UnsupportedImageError,
-} from "../../../../../types";
-import { RemixImageError } from "../../../../../types/error";
-import type { AssetLoader } from "../../../../../types/loader";
+} from "../../types";
+import { RemixImageError } from "../../types/error";
+import type { AssetLoader } from "../../types/loader";
 import { imageResponse, textResponse } from "../../utils/response";
 import { decodeQuery, decodeTransformQuery, parseURL } from "../../utils/url";
 import { fetchResolver } from "../resolvers/fetchResolver";

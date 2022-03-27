@@ -21,15 +21,11 @@
   "scripts": {
     "format": "prettier --write \"**/*.{js,jsx,ts,tsx,json,css,scss}\"",
     "lint": "eslint --fix --ext ts --ext tsx --ext js --ext jsx .",
-    "prebuild": "rimraf coverage build tmp",
     "typecheck": "tsc --project tsconfig.json --noEmit",
-    "build": "rollup -c",
-    "watch": "rollup -c -w",
     "test": "jest --passWithNoTests",
     "test:watch": "jest --watch",
     "prepare": "husky install",
     "commit": "git-cz",
-    "release": "dotenv release-it --",
     "install-examples": "find examples -maxdepth 1 -type d \\( ! -name . \\) -exec bash -c \"cd '{}' && npm i -S remix-image\" \\;",
     "update-docs": "npm run deploy --prefix docs"
   },

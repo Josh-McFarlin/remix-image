@@ -1,6 +1,6 @@
 import qs from "query-string";
-import { RemixImageError } from "../../../../types/error";
-import type { TransformOptions } from "../../../../types/image";
+import { RemixImageError } from "../types/error";
+import type { TransformOptions } from "../types/image";
 
 export const decodeQuery = (
   queryParams: URLSearchParams,

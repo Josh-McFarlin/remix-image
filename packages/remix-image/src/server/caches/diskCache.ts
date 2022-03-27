@@ -1,5 +1,5 @@
 import BaseCache from "@next-boost/hybrid-disk-cache";
-import { CacheConfig, Cache, CacheStatus } from "../../../../../types/cache";
+import { CacheConfig, Cache, CacheStatus } from "../../types/cache";
 
 export interface DiskCacheConfig extends CacheConfig {
   /**

@@ -1,5 +1,5 @@
 import getPalette from "get-rgba-palette";
-import type { Color } from "../../../../types";
+import type { Color } from "../types";
 
 export const rgbToHex = (r: number, g: number, b: number): number =>
   (r << 16) + (g << 8) + b;

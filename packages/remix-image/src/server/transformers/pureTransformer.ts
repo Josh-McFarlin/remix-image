@@ -1,6 +1,6 @@
 import { imageTransformer } from "js-image-lib";
-import { MimeType } from "../../../../../types/file";
-import { Transformer } from "../../../../../types/transformer";
+import { MimeType } from "../../types/file";
+import { Transformer } from "../../types/transformer";
 
 const supportedInputs = new Set([
   MimeType.JPEG,
