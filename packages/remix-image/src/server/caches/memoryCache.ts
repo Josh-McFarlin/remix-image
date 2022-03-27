@@ -1,5 +1,5 @@
 import LRU from "lru-cache";
-import { Cache, CacheConfig, CacheStatus } from "../../types/cache";
+import { Cache, CacheConfig, CacheStatus } from "../../../../../types/cache";
 import { mB } from "../../utils/cache";
 
 export interface MemoryCacheConfig extends CacheConfig {

@@ -1,23 +1,40 @@
 {
-  "name": "remix-image-monorepo",
+  "name": "remix-image",
+  "version": "0.3.16",
+  "description": "A React component for responsive images in Remix",
   "author": "Josh McFarlin <josh@mcfarl.in>",
   "license": "MIT",
-  "private": true,
+  "sideEffects": false,
+  "keywords": [
+    "react",
+    "remix",
+    "image",
+    "responsive"
+  ],
   "homepage": "https://remix-image.mcfarl.in",
   "repository": {
     "type": "git",
-    "url": "https://github.com/Josh-McFarlin/remix-image.git"
+    "url": "https://github.com/Josh-McFarlin/remix-image.git",
+    "directory": "packages/remix-image"
   },
   "bugs": {
     "url": "https://github.com/Josh-McFarlin/remix-image/issues"
   },
-  "workspaces": [
-    "packages/remix-image"
-  ],
-  "lint-staged": {
-    "*.{ts,tsx,js,jsx}": "eslint --cache --fix",
-    "*.{js,jsx,ts,tsx,json,css,scss}": "prettier --write"
+  "main": "build/index.js",
+  "types": "build/index.d.ts",
+  "style": "build/styles.css",
+  "exports": {
+    ".": "./build/index.js",
+    "./server": "./build/server.js",
+    "./serverPure": "./build/serverPure.js"
   },
+  "files": [
+    "build",
+    "package.json",
+    "README.md",
+    "server.d.ts",
+    "serverPure.d.ts"
+  ],
   "scripts": {
     "format": "prettier --write \"**/*.{js,jsx,ts,tsx,json,css,scss}\"",
     "lint": "eslint --fix --ext ts --ext tsx --ext js --ext jsx .",
@@ -27,21 +44,23 @@
     "watch": "rollup -c -w",
     "test": "jest --passWithNoTests",
     "test:watch": "jest --watch",
-    "prepare": "husky install",
     "commit": "git-cz",
     "release": "dotenv release-it --",
     "install-examples": "find examples -maxdepth 1 -type d \\( ! -name . \\) -exec bash -c \"cd '{}' && npm i -S remix-image\" \\;",
     "update-docs": "npm run deploy --prefix docs"
   },
   "dependencies": {
-    "mime-tree": "^0.1.4"
+    "clsx": "^1.1.1",
+    "is-svg": "^4.3.2",
+    "js-image-lib": "^0.1.6",
+    "lru-cache": "^7.4.0",
+    "query-string": "^7.1.0"
   },
   "devDependencies": {
     "@babel/core": "^7.16.0",
-    "@commitlint/cli": "^16.1.0",
-    "@commitlint/config-conventional": "^16.0.0",
-    "@commitlint/cz-commitlint": "^16.1.0",
-    "@commitlint/prompt-cli": "^16.1.0",
+    "@cloudflare/kv-asset-handler": "^0.2.0",
+    "@cloudflare/workers-types": "^3.4.0",
+    "@next-boost/hybrid-disk-cache": "^0.3.0",
     "@release-it/bumper": "^3.0.1",
     "@release-it/keep-a-changelog": "^2.3.0",
     "@remix-run/node": "^1.1.1",
@@ -56,6 +75,7 @@
     "@testing-library/react": "^12.1.2",
     "@testing-library/user-event": "^13.5.0",
     "@types/jest": "^27.0.3",
+    "@types/lru-cache": "^7.4.0",
     "@types/react": "^17.0.37",
     "@typescript-eslint/eslint-plugin": "^5.5.0",
     "@typescript-eslint/parser": "^5.5.0",
@@ -74,10 +94,8 @@
     "eslint-plugin-react": "^7.27.1",
     "eslint-plugin-react-hooks": "^4.3.0",
     "html-webpack-plugin": "^5.5.0",
-    "husky": "^7.0.4",
     "identity-obj-proxy": "^3.0.0",
     "jest": "^27.4.3",
-    "lint-staged": "^12.1.2",
     "node-sass": "^6.0.1",
     "postcss": "^8.4.4",
     "prettier": "2.5.1",
@@ -103,7 +121,11 @@
     "ts-jest": "^27.1.0",
     "typescript": "^4.5.2"
   },
-  "engines": {
-    "node": ">=14"
+  "peerDependencies": {
+    "@cloudflare/kv-asset-handler": "^0.2.0",
+    "@next-boost/hybrid-disk-cache": "^0.3.0",
+    "react": ">=16.8.0",
+    "react-dom": ">=16.8.0",
+    "remix": "^1.0.0"
   }
 }

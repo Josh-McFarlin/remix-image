@@ -7,6 +7,7 @@ import {
   MimeType,
   RemixImageError,
 } from "remix-image/serverPure";
+import { magickTransformer } from "../../utils/imagemagick";
 
 const cache = new MemoryCache({
   maxSize: 5e7,
@@ -42,6 +43,7 @@ export const loader: LoaderFunction = ({ request, context }) => {
     selfUrl: SELF_URL,
     cache,
     resolver,
+    transformer: magickTransformer,
   };
 
   return imageLoader(config, request);

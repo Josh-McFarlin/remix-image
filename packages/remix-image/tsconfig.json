@@ -1,7 +1,8 @@
 {
   "compilerOptions": {
     "declaration": true,
-    "outDir": "build",
+    "outDir": "../../build/node_modules/remix-image",
+    "rootDir": ".",
     "declarationDir": "build",
     "module": "ESNext",
     "target": "ESNext",
@@ -19,7 +20,6 @@
     "experimentalDecorators": true,
     "forceConsistentCasingInFileNames": true
   },
-  "include": ["tests/**/*"],
-  "exclude": ["node_modules", "build"],
-  "references": [{ "path": "packages/remix-image" }]
+  "include": ["src/**/*"],
+  "exclude": ["node_modules", "build"]
 }

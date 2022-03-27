@@ -1,4 +1,4 @@
-import { LRU } from "../src/utils/lru";
+import { LRU } from "../packages/remix-image/src/utils/lru";
 
 describe("LRU", () => {
   test("should instantiate", () => {

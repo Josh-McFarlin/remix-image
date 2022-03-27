@@ -1,4 +1,4 @@
-import { DoublyLinkedList } from "../src/utils/linkedList";
+import { DoublyLinkedList } from "../packages/remix-image/src/utils/linkedList";
 
 describe("DoublyLinkedList", () => {
   test("should instantiate", () => {
