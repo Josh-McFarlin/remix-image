@@ -1,0 +1,39 @@
+{
+  "name": "remix-image-sharp",
+  "version": "0.0.1",
+  "description": "A Sharp transformer for remix-image",
+  "author": "Josh McFarlin <josh@mcfarl.in>",
+  "license": "MIT",
+  "sideEffects": false,
+  "homepage": "https://remix-image.mcfarl.in",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/Josh-McFarlin/remix-image.git",
+    "directory": "packages/remix-image-sharp"
+  },
+  "bugs": {
+    "url": "https://github.com/Josh-McFarlin/remix-image/issues"
+  },
+  "main": "build/index.js",
+  "types": "build/index.d.ts",
+  "files": [
+    "build",
+    "package.json",
+    "README.md"
+  ],
+  "scripts": {
+    "prebuild": "rimraf coverage build tmp",
+    "typecheck": "tsc --project tsconfig.json --noEmit",
+    "build": "rollup -c",
+    "watch": "rollup -c -w",
+    "release": "dotenv release-it --"
+  },
+  "dependencies": {
+    "is-svg": "^4.3.2",
+    "remix-image": "^0.3.16",
+    "sharp": "^0.30.3"
+  },
+  "devDependencies": {
+    "@types/sharp": "^0.30.0"
+  }
+}

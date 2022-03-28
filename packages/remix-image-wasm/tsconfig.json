@@ -6,5 +6,6 @@
     "declarationDir": "build"
   },
   "include": ["src/**/*"],
-  "exclude": ["tests", "node_modules", "build"]
+  "exclude": ["tests", "node_modules", "build"],
+  "references": [{ "path": "../remix-image" }]
 }

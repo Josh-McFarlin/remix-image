@@ -1,4 +1,5 @@
 {
+  "files": [],
   "compilerOptions": {
     "composite": true,
     "declaration": true,
@@ -17,5 +18,9 @@
     "experimentalDecorators": true,
     "forceConsistentCasingInFileNames": true
   },
-  "references": [{ "path": "packages/remix-image" }]
+  "references": [
+    { "path": "packages/remix-image" },
+    { "path": "packages/remix-image-sharp" },
+    { "path": "packages/remix-image-wasm" }
+  ]
 }

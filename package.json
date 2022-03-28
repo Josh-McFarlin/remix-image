@@ -12,7 +12,9 @@
     "url": "https://github.com/Josh-McFarlin/remix-image/issues"
   },
   "workspaces": [
-    "packages/remix-image"
+    "packages/remix-image",
+    "packages/remix-image-sharp",
+    "packages/remix-image-wasm"
   ],
   "lint-staged": {
     "*.{ts,tsx,js,jsx}": "eslint --cache --fix",
@@ -39,7 +41,7 @@
     "@commitlint/cz-commitlint": "^16.1.0",
     "@commitlint/prompt-cli": "^16.1.0",
     "@release-it/bumper": "^3.0.1",
-    "@release-it/keep-a-changelog": "^2.3.0",
+    "@release-it/keep-a-changelog": "^2.5.0",
     "@remix-run/node": "^1.1.1",
     "@remix-run/react": "^1.1.1",
     "@remix-run/server-runtime": "^1.1.1",
@@ -79,7 +81,7 @@
     "prettier": "2.5.1",
     "react": "^17.0.2",
     "react-dom": "^17.0.2",
-    "release-it": "^14.12.3",
+    "release-it": "^14.13.1",
     "remix": "^1.1.1",
     "rimraf": "^3.0.2",
     "rollup": "^2.60.2",
