@@ -27,10 +27,9 @@
     "typecheck": "tsc --project tsconfig.json --noEmit",
     "test": "jest --passWithNoTests",
     "test:watch": "jest --watch",
-    "prepare": "husky install",
     "commit": "git-cz",
-    "install-examples": "find examples -maxdepth 1 -type d \\( ! -name . \\) -exec bash -c \"cd '{}' && npm i -S remix-image\" \\;",
-    "update-docs": "npm run deploy --prefix docs"
+    "update-docs": "npm run deploy --prefix docs",
+    "prepare": "husky install"
   },
   "dependencies": {
     "mime-tree": "^0.1.4"

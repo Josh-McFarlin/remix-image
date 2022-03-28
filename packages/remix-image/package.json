@@ -36,8 +36,12 @@
     "serverPure.d.ts"
   ],
   "scripts": {
-    "prebuild": "rimraf coverage build tmp",
+    "format": "prettier --write \"**/*.{js,jsx,ts,tsx,json,css,scss}\"",
+    "lint": "eslint --fix --ext ts --ext tsx --ext js --ext jsx .",
     "typecheck": "tsc --project tsconfig.json --noEmit",
+    "test": "jest --passWithNoTests",
+    "test:watch": "jest --watch",
+    "prebuild": "rimraf coverage build tmp",
     "build": "rollup -c",
     "watch": "rollup -c -w",
     "release": "dotenv release-it --"
