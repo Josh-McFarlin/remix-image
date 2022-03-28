@@ -29,7 +29,7 @@
     "release": "dotenv release-it --"
   },
   "dependencies": {
-    "@longlost/wasm-imagemagick": "^2.2.1",
+    "@imagemagick/magick-wasm": "^0.0.10",
     "is-svg": "^4.3.2",
     "remix-image": "^0.3.16"
   }

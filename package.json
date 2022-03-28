@@ -12,6 +12,7 @@
     "url": "https://github.com/Josh-McFarlin/remix-image/issues"
   },
   "workspaces": [
+    "examples/*",
     "packages/remix-image",
     "packages/remix-image-sharp",
     "packages/remix-image-wasm"

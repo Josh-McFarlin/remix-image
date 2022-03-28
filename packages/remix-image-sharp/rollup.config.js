@@ -8,7 +8,7 @@ import { terser } from "rollup-plugin-terser";
 
 export default [
   {
-    input: "src/server/index.ts",
+    input: "src/index.ts",
     output: [
       {
         file: "build/index.js",

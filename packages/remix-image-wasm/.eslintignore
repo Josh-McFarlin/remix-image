@@ -1,3 +1,6 @@
-server.d.ts
-serverPure.d.ts
+out/
+build/
+coverage/
+dist/
+node_modules/
 rollup.config.js

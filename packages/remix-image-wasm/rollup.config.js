@@ -1,14 +1,14 @@
-import path from "path";
 import peerDepsExternal from "rollup-plugin-peer-deps-external";
 import resolve from "@rollup/plugin-node-resolve";
 import commonjs from "@rollup/plugin-commonjs";
 import json from "@rollup/plugin-json";
 import typescript from "rollup-plugin-typescript2";
 import { terser } from "rollup-plugin-terser";
+// import copy from "rollup-plugin-copy";
 
 export default [
   {
-    input: "src/server/index.ts",
+    input: "src/index.ts",
     output: [
       {
         file: "build/index.js",
@@ -16,7 +16,19 @@ export default [
         sourcemap: true,
       },
     ],
-    external: ["fs", "path"],
+    external: [
+      "fs",
+      "path",
+      "child_process",
+      "stream",
+      "net",
+      "https",
+      "http",
+      "url",
+      "tls",
+      "crypto",
+      "zlib",
+    ],
     plugins: [
       peerDepsExternal(),
       json(),
@@ -28,6 +40,14 @@ export default [
       resolve({ preferBuiltins: false }),
       commonjs(),
       terser(),
+      // copy({
+      //   targets: [
+      //     {
+      //       src: "node_modules/@imagemagick/magick-wasm/wasm/magick.wasm",
+      //       dest: "build",
+      //     },
+      //   ],
+      // }),
     ],
   },
 ];
