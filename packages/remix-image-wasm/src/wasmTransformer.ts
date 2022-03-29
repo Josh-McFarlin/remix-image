@@ -97,7 +97,6 @@ export const wasmTransformer: Transformer = {
         if (position === ImagePosition.RIGHT) {
           //
         }
-        //newSize.
         image.resize(newSize);
 
         if (rotate && rotate != 0) {

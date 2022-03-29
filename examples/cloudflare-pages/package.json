@@ -19,7 +19,7 @@
     "react": "^17.0.2",
     "react-dom": "^17.0.2",
     "remix": "^1.3.3",
-    "remix-image": "latest"
+    "remix-image": "*"
   },
   "devDependencies": {
     "@cloudflare/workers-types": "^3.2.0",

@@ -32,12 +32,14 @@
     "watch": "rollup -c -w",
     "release": "dotenv release-it --"
   },
-  "dependencies": {
-    "is-svg": "^4.3.2",
+  "devDependencies": {
+    "@types/sharp": "^0.30.0",
     "remix-image": "^0.3.16",
     "sharp": "^0.30.3"
   },
-  "devDependencies": {
-    "@types/sharp": "^0.30.0"
+  "peerDependencies": {
+    "sharp": "^0.30.3",
+    "remix": "^1.0.0",
+    "remix-image": "^0.3.16"
   }
 }

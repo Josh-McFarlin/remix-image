@@ -3,6 +3,8 @@
   "name": "cloudflare-wasm-example",
   "description": "An example showing a WASM transformer on Cloudflare Workers",
   "license": "MIT",
+  "sideEffects": false,
+  "main": "build/index.js",
   "scripts": {
     "build": "remix build",
     "deploy": "npm run build && wrangler publish",
@@ -20,8 +22,8 @@
     "react": "^17.0.2",
     "react-dom": "^17.0.2",
     "remix": "^1.3.3",
-    "remix-image": "latest",
-    "remix-image-wasm": "latest"
+    "remix-image": "*",
+    "remix-image-wasm": "*"
   },
   "devDependencies": {
     "@cloudflare/workers-types": "^2.2.2",
@@ -37,7 +39,5 @@
   },
   "engines": {
     "node": ">=14"
-  },
-  "sideEffects": false,
-  "main": "build/index.js"
+  }
 }
