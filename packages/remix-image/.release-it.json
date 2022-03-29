@@ -20,7 +20,7 @@
   },
   "hooks": {
     "before:init": "npm run test",
-    "after:bump": "npm run build",
+    "after:bump": ["npm run build", "npm run update-examples"],
     "after:release": [
       "npm run update-docs",
       "echo Successfully released ${name} v${version} to ${repo.repository}."

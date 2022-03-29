@@ -8,6 +8,7 @@ node_modules/
 
 examples/
 docs/
+scripts/
 
 rollup.config.js
 jest.config.js
