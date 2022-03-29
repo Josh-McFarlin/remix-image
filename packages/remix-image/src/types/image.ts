@@ -20,6 +20,7 @@ export enum ImageFit {
 }
 
 export enum ImagePosition {
+  CENTER = "center",
   BOTTOM = "bottom",
   LEFT = "left",
   LEFTBOTTOM = "left bottom",

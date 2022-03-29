@@ -4,6 +4,7 @@ import commonjs from "@rollup/plugin-commonjs";
 import json from "@rollup/plugin-json";
 import typescript from "rollup-plugin-typescript2";
 import { terser } from "rollup-plugin-terser";
+import nodePolyfills from "rollup-plugin-polyfill-node";
 // import copy from "rollup-plugin-copy";
 
 export default [
@@ -16,19 +17,6 @@ export default [
         sourcemap: true,
       },
     ],
-    external: [
-      "fs",
-      "path",
-      "child_process",
-      "stream",
-      "net",
-      "https",
-      "http",
-      "url",
-      "tls",
-      "crypto",
-      "zlib",
-    ],
     plugins: [
       peerDepsExternal(),
       json(),
@@ -37,9 +25,13 @@ export default [
           exclude: ["node_modules", "build", "tests"],
         },
       }),
-      resolve({ preferBuiltins: false }),
       commonjs(),
-      terser(),
+      nodePolyfills({
+        include: null,
+      }),
+      resolve({ preferBuiltins: false }),
+
+      //terser(),
       // copy({
       //   targets: [
       //     {

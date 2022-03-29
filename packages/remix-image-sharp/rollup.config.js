@@ -1,4 +1,3 @@
-import path from "path";
 import peerDepsExternal from "rollup-plugin-peer-deps-external";
 import resolve from "@rollup/plugin-node-resolve";
 import commonjs from "@rollup/plugin-commonjs";
@@ -16,7 +15,7 @@ export default [
         sourcemap: true,
       },
     ],
-    external: ["fs", "path"],
+    external: ["fs", "path", "stream", "child_process", "os", "sharp"],
     plugins: [
       peerDepsExternal(),
       json(),
