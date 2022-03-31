@@ -14,7 +14,8 @@
   "workspaces": [
     "packages/remix-image",
     "packages/remix-image-sharp",
-    "packages/remix-image-wasm"
+    "packages/remix-image-wasm",
+    "packages/remix-image-imagemagick"
   ],
   "lint-staged": {
     "*.{ts,tsx,js,jsx}": "eslint --cache --fix",
