@@ -44,8 +44,7 @@
     "prebuild": "rimraf coverage build tmp",
     "build": "rollup -c",
     "watch": "rollup -c -w",
-    "release": "dotenv release-it --",
-    "update-examples": "node ../../scripts/version.js"
+    "release": "dotenv release-it --"
   },
   "dependencies": {
     "clsx": "^1.1.1",

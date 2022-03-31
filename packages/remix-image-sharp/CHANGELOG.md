@@ -5,6 +5,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Docs
+
+- Update documentation
+
+## [0.0.1]
+
 ### Fix
 
 - Fix Rollup issues preventing publishing
