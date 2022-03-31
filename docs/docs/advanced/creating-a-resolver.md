@@ -9,7 +9,7 @@ An example could be retrieving images stored on an authenticated server that is 
 
 ## Instructions
 
-To make your own, just make a function that follows the [Resolver format](https://github.com/Josh-McFarlin/remix-image/blob/master/src/types/resolver.ts):
+To make your own, just make a function that follows the [Resolver format](https://github.com/Josh-McFarlin/remix-image/blob/master/packages/remix-image/src/types/resolver.ts):
 ```typescript
 export type Resolver = (
   asset: string,
@@ -53,9 +53,9 @@ export const loader: LoaderFunction = ({ request }) => {
 
 ## Examples
 
-* [fsResolver](https://github.com/Josh-McFarlin/remix-image/tree/master/src/server/resolvers/fsResolver)
-* [fetchResolver](https://github.com/Josh-McFarlin/remix-image/tree/master/src/server/resolvers/fetchResolver)
-* [kvResolver](https://github.com/Josh-McFarlin/remix-image/tree/master/src/server/resolvers/kvResolver)
+* [fsResolver](https://github.com/Josh-McFarlin/remix-image/tree/master/packages/remix-image/src/server/resolvers/fsResolver)
+* [fetchResolver](https://github.com/Josh-McFarlin/remix-image/tree/master/packages/remix-image/src/server/resolvers/fetchResolver)
+* [kvResolver](https://github.com/Josh-McFarlin/remix-image/tree/master/packages/remix-image/src/server/resolvers/kvResolver)
 
 ## Show Off
 

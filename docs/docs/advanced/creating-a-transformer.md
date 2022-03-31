@@ -9,7 +9,7 @@ An example could be resizing images using Cloudinary or Cloudflare Images.
 
 ## Instructions
 
-To make your own, just make a class that follows the [Transformer format](https://github.com/Josh-McFarlin/remix-image/blob/master/src/types/transformer.ts):
+To make your own, just make a class that follows the [Transformer format](https://github.com/Josh-McFarlin/remix-image/blob/master/packages/remix-image/src/types/transformer.ts):
 ```typescript
 export type Transformer = {
   name: string;
@@ -45,8 +45,9 @@ export const loader: LoaderFunction = ({ request }) => {
 
 ## Examples
 
-* [sharp](https://github.com/Josh-McFarlin/remix-image/tree/master/examples/sharp/sharpTransformer)
-* [gif-resizer](https://github.com/Josh-McFarlin/remix-image/tree/master/examples/gif-resizer/gifTransformer)
+* [Sharp](https://github.com/Josh-McFarlin/remix-image/tree/master/packages/remix-image-sharp)
+* [ImageMagick](https://github.com/Josh-McFarlin/remix-image/tree/master/packages/remix-image-imagemagick)
+* [WebAssembly](https://github.com/Josh-McFarlin/remix-image/tree/master/packages/remix-image-wasm)
 
 ## Show Off
 
