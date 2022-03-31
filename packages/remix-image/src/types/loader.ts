@@ -1,8 +1,7 @@
 import type { Cache } from "./cache";
 import type { MimeType } from "./file";
-import type { SizelessOptions } from "./image";
 import type { Resolver } from "./resolver";
-import type { Transformer } from "./transformer";
+import type { SizelessOptions, Transformer } from "./transformer";
 
 export interface LoaderConfig {
   /** The URL for this Remix server. */

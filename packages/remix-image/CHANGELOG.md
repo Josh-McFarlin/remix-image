@@ -5,7 +5,18 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added
+
+- Created transformer packages for Sharp, WebAssembly, and ImageMagick
+
+### Changed
+
+- Modified repo to use npm packages
+- Moved several transformation-related types to `src/types/transformer` for clarity
+
 ### Docs
+
+- Update documentation to use new links for packages
 
 ## [0.3.16] - 2022-03-01
 

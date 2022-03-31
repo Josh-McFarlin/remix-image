@@ -1,7 +1,8 @@
 import clsx from "clsx";
 import React from "react";
 import { useResponsiveImage } from "../../hooks";
-import type { ResponsiveSize, SizelessOptions } from "../../types/image";
+import type { ResponsiveSize } from "../../types/image";
+import type { SizelessOptions } from "../../types/transformer";
 import classes from "./Image.module.scss";
 
 export interface ImageProps extends React.ComponentProps<"img"> {

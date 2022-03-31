@@ -1,5 +1,5 @@
 import { MimeType } from "./file";
-import { TransformOptions } from "./image";
+import { TransformOptions } from "./transformer";
 
 export type Resolver = (
   asset: string,

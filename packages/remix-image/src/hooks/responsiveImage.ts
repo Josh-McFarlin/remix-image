@@ -1,4 +1,5 @@
-import type { ResponsiveSize, SizelessOptions } from "../types/image";
+import type { ResponsiveSize } from "../types/image";
+import type { SizelessOptions } from "../types/transformer";
 import { encodeQuery } from "../utils/url";
 
 export type ImageSource = {
