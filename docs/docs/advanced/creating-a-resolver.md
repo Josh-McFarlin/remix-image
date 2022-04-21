@@ -26,7 +26,7 @@ such as:
 import { fsResolver, fetchResolver, Resolver } from "remix-image/server";
 
 export const myResolver: Resolver = async (asset, url, options, basePath) => {
-  if (src.startsWith("/") && (src.length === 1 || src[1] !== "/")) {
+  if (url.startsWith("/") && (url.length === 1 || url[1] !== "/")) {
     return fsResolver(asset, url, options, basePath);
   } else {
     return fetchResolver(asset, url, options, basePath);
