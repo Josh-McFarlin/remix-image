@@ -1,6 +1,6 @@
 {
   "name": "vercel-example",
-  "version": "0.3.17",
+  "version": "0.3.18",
   "description": "An example showing a basic setup on Vercel.",
   "license": "MIT",
   "private": true,
