@@ -1,8 +1,9 @@
 {
-  "private": true,
   "name": "cloudflare-images-example",
+  "version": "0.3.16",
   "description": "An example showing Remix-Image on Cloudflare Workers using Cloudflare Images for transformations",
   "license": "MIT",
+  "private": true,
   "scripts": {
     "build": "remix build",
     "dev": "remix watch",

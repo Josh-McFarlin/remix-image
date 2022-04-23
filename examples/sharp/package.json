@@ -1,8 +1,9 @@
 {
-  "private": true,
   "name": "sharp-example",
+  "version": "0.3.16",
   "description": "An example showing a Sharp transformer on Remix server.",
   "license": "MIT",
+  "private": true,
   "scripts": {
     "build": "remix build",
     "dev": "remix dev",

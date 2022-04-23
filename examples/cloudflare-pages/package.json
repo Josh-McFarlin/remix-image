@@ -1,8 +1,9 @@
 {
-  "private": true,
   "name": "cloudflare-pages-example",
+  "version": "0.3.16",
   "description": "An example showing Remix-Image on Cloudflare Pages",
   "license": "MIT",
+  "private": true,
   "scripts": {
     "postinstall": "remix setup cloudflare-pages",
     "build": "cross-env NODE_ENV=production remix build",

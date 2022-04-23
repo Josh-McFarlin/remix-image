@@ -1,8 +1,9 @@
 {
-  "private": true,
   "name": "gif-resizer-example",
+  "version": "0.3.16",
   "description": "An example showing a transformer capable of resizing animated gifs.",
   "license": "MIT",
+  "private": true,
   "scripts": {
     "build": "remix build",
     "dev": "remix dev",

@@ -1,8 +1,9 @@
 {
-  "private": true,
   "name": "vercel-example",
+  "version": "0.3.16",
   "description": "An example showing a basic setup on Vercel.",
   "license": "MIT",
+  "private": true,
   "homepage": "https://remix-image-vercel.vercel.app",
   "scripts": {
     "build": "cross-env NODE_ENV=production remix build",
