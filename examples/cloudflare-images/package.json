@@ -1,6 +1,6 @@
 {
   "name": "cloudflare-images-example",
-  "version": "0.3.16",
+  "version": "0.3.17",
   "description": "An example showing Remix-Image on Cloudflare Workers using Cloudflare Images for transformations",
   "license": "MIT",
   "private": true,

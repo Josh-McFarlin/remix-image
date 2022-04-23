@@ -1,6 +1,6 @@
 {
   "name": "cloudflare-wasm-example",
-  "version": "0.3.16",
+  "version": "0.3.17",
   "description": "An example showing a WASM transformer on Cloudflare Workers",
   "license": "MIT",
   "private": true,
