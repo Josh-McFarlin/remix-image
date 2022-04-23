@@ -4,3 +4,4 @@ export * from "./resolvers/fetchResolver";
 export * from "./resolvers/kvResolver";
 export * from "./loaders";
 export * from "../utils";
+export * from "../types";

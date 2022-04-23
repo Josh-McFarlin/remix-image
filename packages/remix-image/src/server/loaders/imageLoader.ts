@@ -28,6 +28,8 @@ export const imageLoader: AssetLoader = async (
     redirectOnFail = false,
     skipFormats = new Set([MimeType.SVG]),
     basePath = "public",
+    whitelistedDomains = null,
+    blacklistedDomains = null,
   },
   request
 ) => {
@@ -41,6 +43,17 @@ export const imageLoader: AssetLoader = async (
         500
       );
     }
+
+    let selfUrlObj;
+    try {
+      selfUrlObj = new URL(selfUrl);
+    } catch (error) {
+      throw new RemixImageError("selfUrl is not a valid URL!");
+    }
+    const whitelist = whitelistedDomains
+      ? new Set([...whitelistedDomains, selfUrlObj.host])
+      : null;
+    const blacklist = blacklistedDomains ? new Set(blacklistedDomains) : null;
 
     src = decodeQuery(reqUrl.searchParams, "src");
 
@@ -103,6 +116,15 @@ export const imageLoader: AssetLoader = async (
     }
 
     if (!loadedImg) {
+      if (whitelist && !whitelist.has(assetUrl.host)) {
+        throw new RemixImageError(
+          "The requested image host is not included on the whitelist!"
+        );
+      }
+      if (blacklist && blacklist.has(assetUrl.host)) {
+        throw new RemixImageError("The requested image host is not allowed!");
+      }
+
       const res = await resolver(
         src,
         assetUrl.toString(),
@@ -200,6 +222,10 @@ export const imageLoader: AssetLoader = async (
         : `public, max-age=${60 * 60 * 24 * 365}`
     );
   } catch (error: any) {
+    if (process?.env?.NODE_ENV === "test") {
+      throw error;
+    }
+
     console.error("RemixImage loader error:", error?.message);
     console.error(error);
 

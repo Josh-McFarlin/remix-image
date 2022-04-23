@@ -26,8 +26,12 @@ export interface LoaderConfig {
   redirectOnFail?: boolean;
   /** A set of mime types that should be returned without transformation. (optional, default Set([MimeType.SVG]) */
   skipFormats?: Set<MimeType> | null;
-  /** The base file path used for the resolver. (optional, default "public) */
+  /** The base file path used for the resolver. (optional, default "public") */
   basePath?: string;
+  /** An array of domains that assets can be fetched from. Set to null to disable. (optional, default null) */
+  whitelistedDomains?: string[] | null;
+  /** An array of domains that assets are not allowed to be fetched from. Only used if whitelistedDomains is not null. (optional, default null) */
+  blacklistedDomains?: string[] | null;
 }
 
 export type AssetLoader = (

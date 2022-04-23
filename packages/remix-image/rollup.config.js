@@ -26,6 +26,7 @@ export default [
         extract: path.resolve("build/styles.css"),
       }),
       typescript({
+        useTsconfigDeclarationDir: true,
         tsconfigOverride: {
           exclude: ["node_modules", "build", "tests"],
         },
@@ -38,7 +39,7 @@ export default [
     input: "src/server/index.ts",
     output: [
       {
-        file: "build/server.js",
+        file: "build/server/index.js",
         format: "cjs",
         sourcemap: true,
       },
@@ -48,6 +49,7 @@ export default [
       peerDepsExternal(),
       json(),
       typescript({
+        useTsconfigDeclarationDir: true,
         tsconfigOverride: {
           exclude: ["node_modules", "build", "tests"],
         },
@@ -61,7 +63,7 @@ export default [
     input: "src/server/pure.ts",
     output: [
       {
-        file: "build/serverPure.js",
+        file: "build/server/pure.js",
         format: "cjs",
         sourcemap: true,
       },
@@ -70,6 +72,7 @@ export default [
       peerDepsExternal(),
       json(),
       typescript({
+        useTsconfigDeclarationDir: true,
         tsconfigOverride: {
           exclude: ["node_modules", "build", "tests"],
         },

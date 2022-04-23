@@ -13,3 +13,4 @@ scripts/
 rollup.config.js
 jest.config.js
 jest.setup.ts
+babel.config.js
