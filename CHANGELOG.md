@@ -5,7 +5,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
-### Docs
+### Fix
+
+- Fix asset not using requested content type when specified
 
 ## [0.3.16] - 2022-03-01
 

@@ -87,7 +87,7 @@ export const imageLoader: AssetLoader = async (
     let loadedImg: Uint8Array | undefined;
     let resultImg: Uint8Array | undefined;
     let inputContentType: MimeType | undefined;
-    let outputContentType: MimeType | undefined;
+    let outputContentType: MimeType | undefined = transformOptions.contentType;
 
     if (cache && (await cache.has(cacheKey))) {
       const cacheValue = await cache.get(cacheKey);
