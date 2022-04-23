@@ -23,6 +23,7 @@
     "after:bump": "npm run build",
     "after:release": [
       "npm run update-docs",
+      "npm run install-examples",
       "echo Successfully released ${name} v${version} to ${repo.repository}."
     ]
   }
