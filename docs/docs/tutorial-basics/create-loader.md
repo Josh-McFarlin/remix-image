@@ -8,7 +8,7 @@ Create a new resource route that imports the `imageLoader` function and exports 
 To do this, create a new file in `app/routes` such as `app/routes/api/image.js`.
 By default, the image component uses the route `"/api/image"`, but any route can be used.
 ```typescript jsx
-import type { LoaderFunction } from "remix";
+import type { LoaderFunction } from "@remix-run/server-runtime";
 import { imageLoader, DiskCache } from "remix-image/server";
 
 const config = {
