@@ -38,7 +38,7 @@ export const useResponsiveImage = (
   }
 
   const sizes = [...responsive]
-    .sort((resp1, resp2) => resp1.size.width - resp2.size.width)
+    .sort((resp1, resp2) => (resp1.maxWidth || Infinity) - (resp2.maxWidth || Infinity)
     .map((resp) =>
       resp.maxWidth
         ? `(max-width: ${resp.maxWidth}px) ${resp.size.width}px`
