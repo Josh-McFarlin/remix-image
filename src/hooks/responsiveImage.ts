@@ -14,7 +14,7 @@ export type ResponsiveHookResult = {
 export const useResponsiveImage = (
   image: ImageSource,
   loaderUrl: string,
-  responsive: ResponsiveSize[],
+  responsive: [ResponsiveSize, ...ResponsiveSize[]],
   options: SizelessOptions = {}
 ): ResponsiveHookResult => {
   let largestSrc = image.src || "";

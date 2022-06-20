@@ -6,7 +6,7 @@ import classes from "./Image.module.scss";
 
 export interface ImageProps extends React.ComponentProps<"img"> {
   loaderUrl?: string;
-  responsive?: ResponsiveSize[];
+  responsive: [ResponsiveSize, ...ResponsiveSize[]];
   options?: SizelessOptions;
 }
 
@@ -15,7 +15,7 @@ export const Image = React.forwardRef<HTMLImageElement, ImageProps>(
     {
       className,
       loaderUrl = "/api/image",
-      responsive = [],
+      responsive,
       options = {},
       ...imgProps
     },
