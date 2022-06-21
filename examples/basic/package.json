@@ -1,6 +1,6 @@
 {
   "name": "basic-example",
-  "version": "0.3.18",
+  "version": "0.4.0",
   "description": "An example showing a basic setup on Remix server.",
   "license": "MIT",
   "private": true,
