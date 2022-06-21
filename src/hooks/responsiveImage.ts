@@ -12,6 +12,14 @@ export type ResponsiveHookResult = {
   sizes?: string;
 };
 
+const sizeComparator = (resp1: ResponsiveSize, resp2: ResponsiveSize): number =>
+  (resp1.maxWidth || Infinity) - (resp2.maxWidth || Infinity);
+
+const sizeConverter = (resp: ResponsiveSize): string =>
+  resp.maxWidth
+    ? `(max-width: ${resp.maxWidth}px) ${resp.size.width}px`
+    : `${resp.size.width}px`;
+
 export const useResponsiveImage = (
   image: ImageSource,
   loaderUrl: string,
@@ -39,16 +47,7 @@ export const useResponsiveImage = (
       }
     }
 
-    const sizes = [...responsive]
-      .sort(
-        (resp1, resp2) =>
-          (resp1.maxWidth || Infinity) - (resp2.maxWidth || Infinity)
-      )
-      .map((resp) =>
-        resp.maxWidth
-          ? `(max-width: ${resp.maxWidth}px) ${resp.size.width}px`
-          : `${resp.size.width}px`
-      );
+    const sizes = [...responsive].sort(sizeComparator).map(sizeConverter);
 
     if (responsive.length === 1 && responsive[0].maxWidth != null) {
       sizes.push(`${responsive[0].size.width}px`);

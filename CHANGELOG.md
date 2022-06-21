@@ -7,6 +7,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
 
+- Change sorting method of responsiveImage hook to order by maxWidth
 - Changed `ImagePosition` to string union with additional options
 - Converted `ImageFit` and `FlipDirection` types to string unions to match `ImagePosition`
 
