@@ -52,7 +52,7 @@
   "dependencies": {
     "clsx": "^1.1.1",
     "is-svg": "^4.3.2",
-    "js-image-lib": "^0.1.6",
+    "js-image-lib": "^0.2.0",
     "lru-cache": "^7.4.0",
     "mime-tree": "^0.1.4",
     "query-string": "^7.1.0"

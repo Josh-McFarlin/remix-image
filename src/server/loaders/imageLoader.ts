@@ -1,12 +1,6 @@
 import { redirect } from "@remix-run/server-runtime";
 import mimeFromBuffer from "mime-tree";
-import {
-  ImageFit,
-  ImagePosition,
-  MimeType,
-  TransformOptions,
-  UnsupportedImageError,
-} from "../../types";
+import { MimeType, TransformOptions, UnsupportedImageError } from "../../types";
 import { RemixImageError } from "../../types/error";
 import type { AssetLoader } from "../../types/loader";
 import { imageResponse, textResponse } from "../../utils/response";
@@ -55,8 +49,8 @@ export const imageLoader: AssetLoader = async (
 
     const decodedQuery = decodeTransformQuery(reqUrl.search);
     const transformOptions: TransformOptions = {
-      fit: ImageFit.CONTAIN,
-      position: ImagePosition.CENTER,
+      fit: "contain",
+      position: "center",
       background: [0x00, 0x00, 0x00, 0x00],
       quality: 80,
       compressionLevel: 9,
