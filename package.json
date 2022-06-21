@@ -52,10 +52,10 @@
   "dependencies": {
     "clsx": "^1.1.1",
     "is-svg": "^4.3.2",
-    "js-image-lib": "^0.1.6",
-    "lru-cache": "^7.4.0",
+    "js-image-lib": "^0.2.0",
+    "lru-cache": "^7.10.1",
     "mime-tree": "^0.1.4",
-    "query-string": "^7.1.0"
+    "query-string": "^7.1.1"
   },
   "devDependencies": {
     "@babel/core": "^7.16.0",
@@ -80,7 +80,6 @@
     "@testing-library/react": "^12.1.2",
     "@testing-library/user-event": "^13.5.0",
     "@types/jest": "^27.0.3",
-    "@types/lru-cache": "^7.4.0",
     "@types/react": "^17.0.37",
     "@typescript-eslint/eslint-plugin": "^5.5.0",
     "@typescript-eslint/parser": "^5.5.0",

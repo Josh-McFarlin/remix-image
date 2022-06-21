@@ -28,6 +28,7 @@ export class MemoryCache extends Cache {
       ttl: this.config.ttl,
       allowStale: true,
       updateAgeOnGet: true,
+      sizeCalculation: (value) => value.byteLength,
     });
   }
 
