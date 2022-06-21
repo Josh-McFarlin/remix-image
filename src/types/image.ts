@@ -19,12 +19,6 @@ export enum ImageFit {
   OUTSIDE = "outside",
 }
 
-export enum ImagePosition {
-  LEFT = "left",
-  CENTER = "center",
-  RIGHT = "right",
-}
-
 export enum FlipDirection {
   HORIZONTAL = "horizontal",
   VERTICAL = "vertical",
@@ -52,7 +46,7 @@ export interface TransformOptions {
   /** How the image should be resized to fit both provided dimensions. (optional, default 'contain') */
   fit?: ImageFit;
   /** Position to use when fit is cover or contain. (optional, default 'center') */
-  position?: ImagePosition;
+  position?: string;
   /** Background color of resulting image. (optional, default [0x00, 0x00, 0x00, 0x00]) */
   background?: Color;
   /** Quality, integer 1-100. (optional, default 80) */
