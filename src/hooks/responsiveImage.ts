@@ -1,3 +1,4 @@
+import React from "react";
 import type { ResponsiveSize, SizelessOptions } from "../types/image";
 import { encodeQuery } from "../utils/url";
 
@@ -17,46 +18,48 @@ export const useResponsiveImage = (
   responsive: ResponsiveSize[],
   options: SizelessOptions = {}
 ): ResponsiveHookResult => {
-  let largestSrc = image.src || "";
-  let largestWidth = 0;
-  const srcSet: string[] = [];
+  return React.useMemo(() => {
+    let largestSrc = image.src || "";
+    let largestWidth = 0;
+    const srcSet: string[] = [];
 
-  for (const { size } of responsive) {
-    const srcSetUrl = encodeQuery(loaderUrl, {
-      src: encodeURI(image.src || ""),
-      width: size.width,
-      height: size.height,
-      ...options,
-    });
+    for (const { size } of responsive) {
+      const srcSetUrl = encodeQuery(loaderUrl, {
+        src: encodeURI(image.src || ""),
+        width: size.width,
+        height: size.height,
+        ...options,
+      });
 
-    srcSet.push(srcSetUrl + ` ${size.width}w`);
+      srcSet.push(srcSetUrl + ` ${size.width}w`);
 
-    if (size.width > largestWidth) {
-      largestWidth = size.width;
-      largestSrc = srcSetUrl;
+      if (size.width > largestWidth) {
+        largestWidth = size.width;
+        largestSrc = srcSetUrl;
+      }
     }
-  }
 
-  const sizes = [...responsive]
-    .sort(
-      (resp1, resp2) =>
-        (resp1.maxWidth || Infinity) - (resp2.maxWidth || Infinity)
-    )
-    .map((resp) =>
-      resp.maxWidth
-        ? `(max-width: ${resp.maxWidth}px) ${resp.size.width}px`
-        : `${resp.size.width}px`
-    );
+    const sizes = [...responsive]
+      .sort(
+        (resp1, resp2) =>
+          (resp1.maxWidth || Infinity) - (resp2.maxWidth || Infinity)
+      )
+      .map((resp) =>
+        resp.maxWidth
+          ? `(max-width: ${resp.maxWidth}px) ${resp.size.width}px`
+          : `${resp.size.width}px`
+      );
 
-  if (responsive.length === 1 && responsive[0].maxWidth != null) {
-    sizes.push(`${responsive[0].size.width}px`);
-  }
+    if (responsive.length === 1 && responsive[0].maxWidth != null) {
+      sizes.push(`${responsive[0].size.width}px`);
+    }
 
-  return {
-    src: largestSrc,
-    ...(srcSet.length && {
-      srcSet: srcSet.join(", "),
-      sizes: sizes.join(", "),
-    }),
-  };
+    return {
+      src: largestSrc,
+      ...(srcSet.length && {
+        srcSet: srcSet.join(", "),
+        sizes: sizes.join(", "),
+      }),
+    };
+  }, [image.src, loaderUrl, responsive, options]);
 };
