@@ -1,4 +1,5 @@
 import type { LoaderFunction } from "remix";
+import { wasmTransformer } from "remix-image-wasm";
 import {
   imageLoader,
   MemoryCache,
@@ -7,7 +8,6 @@ import {
   LoaderConfig,
   Resolver,
 } from "remix-image/serverPure";
-import { wasmTransformer } from "../../../wasmTransformer";
 
 declare global {
   // @ts-ignore fix missing

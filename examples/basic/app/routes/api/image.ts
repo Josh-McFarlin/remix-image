@@ -1,4 +1,5 @@
 import type { LoaderFunction } from "remix";
+import { sharpTransformer } from "remix-image-sharp";
 import {
   imageLoader,
   DiskCache,
@@ -6,7 +7,6 @@ import {
   fetchResolver,
   Resolver,
 } from "remix-image/server";
-import { sharpTransformer } from "../../utils/sharp";
 
 export const fetchImage: Resolver = async (asset, url, options, basePath) => {
   if (url.startsWith("/") && (url.length === 1 || url[1] !== "/")) {

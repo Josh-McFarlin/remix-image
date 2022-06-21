@@ -1,16 +1,8 @@
 {
-  "name": "remix-image",
-  "version": "0.4.0",
-  "description": "A React component for responsive images in Remix",
+  "name": "remix-image-monorepo",
   "author": "Josh McFarlin <josh@mcfarl.in>",
   "license": "MIT",
-  "sideEffects": false,
-  "keywords": [
-    "react",
-    "remix",
-    "image",
-    "responsive"
-  ],
+  "private": true,
   "homepage": "https://remix-image.mcfarl.in",
   "repository": {
     "type": "git",
@@ -19,58 +11,43 @@
   "bugs": {
     "url": "https://github.com/Josh-McFarlin/remix-image/issues"
   },
-  "main": "build/index.js",
-  "types": "build/index.d.ts",
-  "style": "build/styles.css",
-  "exports": {
-    ".": "./build/index.js",
-    "./server": "./build/server.js",
-    "./serverPure": "./build/serverPure.js"
-  },
-  "files": [
-    "build",
-    "package.json",
-    "README.md",
-    "server.d.ts",
-    "serverPure.d.ts"
+  "workspaces": [
+    "packages/remix-image",
+    "packages/remix-image-sharp",
+    "packages/remix-image-wasm",
+    "packages/remix-image-imagemagick"
   ],
+  "lint-staged": {
+    "*.{ts,tsx,js,jsx}": "eslint --cache --fix",
+    "*.{js,jsx,ts,tsx,json,css,scss}": "prettier --write"
+  },
   "scripts": {
     "format": "prettier --write \"**/*.{js,jsx,ts,tsx,json,css,scss}\"",
     "lint": "eslint --fix --ext ts --ext tsx --ext js --ext jsx .",
-    "prebuild": "rimraf coverage build tmp",
     "typecheck": "tsc --project tsconfig.json --noEmit",
-    "build": "rollup -c",
-    "watch": "rollup -c -w",
     "test": "jest --passWithNoTests",
     "test:watch": "jest --watch",
-    "prepare": "husky install",
     "commit": "git-cz",
-    "release": "dotenv release-it --",
-    "install-examples": "cd examples && find . -maxdepth 1 -mindepth 1 -type d -exec bash -c \"cd '{}' && npm i -S remix-image\" \\;",
-    "update-docs": "npm run deploy --prefix docs"
+    "update-docs": "npm run deploy --prefix docs",
+    "update-examples": "node ./scripts/version.js",
+    "prepare": "husky install"
   },
   "dependencies": {
-    "clsx": "^1.1.1",
-    "is-svg": "^4.3.2",
-    "js-image-lib": "^0.2.0",
-    "lru-cache": "^7.10.1",
+    "core-js": "^3.21.1",
     "mime-tree": "^0.1.4",
-    "query-string": "^7.1.1"
+    "regenerator-runtime": "^0.13.9"
   },
   "devDependencies": {
-    "@babel/core": "^7.16.0",
-    "@cloudflare/kv-asset-handler": "^0.2.0",
-    "@cloudflare/workers-types": "^3.4.0",
+    "@babel/core": "^7.17.8",
+    "@babel/preset-env": "^7.16.11",
+    "@babel/preset-react": "^7.16.7",
+    "@babel/preset-typescript": "^7.16.7",
     "@commitlint/cli": "^16.1.0",
     "@commitlint/config-conventional": "^16.0.0",
     "@commitlint/cz-commitlint": "^16.1.0",
     "@commitlint/prompt-cli": "^16.1.0",
-    "@next-boost/hybrid-disk-cache": "^0.3.0",
     "@release-it/bumper": "^3.0.1",
-    "@release-it/keep-a-changelog": "^2.3.0",
-    "@remix-run/node": "^1.1.1",
-    "@remix-run/react": "^1.1.1",
-    "@remix-run/server-runtime": "^1.1.1",
+    "@release-it/keep-a-changelog": "^2.5.0",
     "@rollup/plugin-commonjs": "^21.0.1",
     "@rollup/plugin-inject": "^4.0.4",
     "@rollup/plugin-json": "^4.1.0",
@@ -83,12 +60,11 @@
     "@types/react": "^17.0.37",
     "@typescript-eslint/eslint-plugin": "^5.5.0",
     "@typescript-eslint/parser": "^5.5.0",
-    "autoprefixer": "^10.4.0",
+    "babel-jest": "^27.5.1",
     "babel-loader": "^8.2.3",
+    "chalk": "^4.1.2",
     "commitizen": "^4.2.4",
     "concurrently": "^6.4.0",
-    "css-loader": "^5.2.7",
-    "cssnano": "^5.0.12",
     "dotenv-cli": "^4.1.1",
     "eslint": "^8.4.0",
     "eslint-config-prettier": "^8.3.0",
@@ -97,45 +73,24 @@
     "eslint-plugin-jsx-a11y": "^6.5.1",
     "eslint-plugin-react": "^7.27.1",
     "eslint-plugin-react-hooks": "^4.3.0",
+    "fs-extra": "^10.0.1",
     "html-webpack-plugin": "^5.5.0",
     "husky": "^7.0.4",
     "identity-obj-proxy": "^3.0.0",
     "jest": "^27.4.3",
+    "jsonfile": "^6.1.0",
     "lint-staged": "^12.1.2",
-    "node-sass": "^6.0.1",
-    "postcss": "^8.4.4",
     "prettier": "2.5.1",
-    "react": "^17.0.2",
-    "react-dom": "^17.0.2",
-    "release-it": "^14.12.3",
-    "remix": "^1.1.1",
+    "release-it": "^14.13.1",
     "rimraf": "^3.0.2",
     "rollup": "^2.60.2",
-    "rollup-plugin-copy": "^3.4.0",
-    "rollup-plugin-delete": "^2.0.0",
-    "rollup-plugin-multi-input": "^1.3.1",
-    "rollup-plugin-node-builtins": "^2.1.2",
-    "rollup-plugin-node-globals": "^1.4.0",
     "rollup-plugin-peer-deps-external": "^2.2.4",
-    "rollup-plugin-polyfill-node": "^0.8.0",
-    "rollup-plugin-postcss": "^4.0.2",
-    "rollup-plugin-scss": "^3.0.0",
     "rollup-plugin-terser": "^7.0.2",
     "rollup-plugin-typescript2": "^0.31.1",
-    "sass-loader": "^10.2.0",
-    "style-loader": "^2.0.0",
     "ts-jest": "^27.1.0",
     "typescript": "^4.5.2"
   },
-  "peerDependencies": {
-    "@cloudflare/kv-asset-handler": "^0.2.0",
-    "@next-boost/hybrid-disk-cache": "^0.3.0",
-    "react": ">=16.8.0",
-    "react-dom": ">=16.8.0",
-    "remix": "^1.0.0"
-  },
-  "lint-staged": {
-    "*.{ts,tsx,js,jsx}": "eslint --cache --fix",
-    "*.{js,jsx,ts,tsx,json,css,scss}": "prettier --write"
+  "engines": {
+    "node": ">=14"
   }
 }

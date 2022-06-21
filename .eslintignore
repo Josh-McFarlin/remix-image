@@ -6,12 +6,11 @@ node_modules/
 .idea_modules/
 .idea/
 
-server.d.ts
-serverPure.d.ts
-
 examples/
 docs/
+scripts/
 
 rollup.config.js
 jest.config.js
 jest.setup.ts
+babel.config.js

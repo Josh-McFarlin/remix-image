@@ -9,7 +9,7 @@ An example could be storing images in a Cloud storage provider such as AWS S3 or
 
 ## Instructions
 
-To make your own, just make a class that follows the [Cache format](https://github.com/Josh-McFarlin/remix-image/blob/master/src/types/cache.ts):
+To make your own, just make a class that follows the [Cache format](https://github.com/Josh-McFarlin/remix-image/blob/master/packages/remix-image/src/types/cache.ts):
 ```typescript
 export interface CacheConfig {
   /**
@@ -71,8 +71,8 @@ export const loader: LoaderFunction = ({ request }) => {
 
 ## Examples
 
-* [diskCache](https://github.com/Josh-McFarlin/remix-image/tree/master/src/server/caches/diskCache)
-* [memoryCache](https://github.com/Josh-McFarlin/remix-image/tree/master/src/server/caches/memoryCache)
+* [diskCache](https://github.com/Josh-McFarlin/remix-image/tree/master/packages/remix-image/src/server/caches/diskCache)
+* [memoryCache](https://github.com/Josh-McFarlin/remix-image/tree/master/packages/remix-image/src/server/caches/memoryCache)
 
 ## Show Off
 
