@@ -1,25 +1,63 @@
-import { imageTransformer } from "js-image-lib";
-import { MimeType } from "../../types/file";
-import { Transformer } from "../../types/transformer";
-
-const supportedInputs = new Set([
-  MimeType.JPEG,
-  MimeType.PNG,
-  MimeType.GIF,
-  MimeType.BMP,
-  MimeType.TIFF,
-]);
-
-const supportedOutputs = new Set([
-  MimeType.JPEG,
-  MimeType.PNG,
-  MimeType.GIF,
-  MimeType.BMP,
-]);
+import ImageTransformer, {
+  supportedInputs,
+  supportedOutputs,
+} from "js-image-lib";
+import { Transformer, ImagePosition } from "../../types/transformer";
 
 export const pureTransformer: Transformer = {
   name: "pureTransformer",
   supportedInputs,
   supportedOutputs,
-  transform: async (src, options) => imageTransformer(src, options),
+  transform: async (
+    { data, contentType: inputContentType },
+    {
+      contentType: outputContentType,
+      width,
+      height,
+      fit,
+      position,
+      background,
+      quality,
+      loop,
+      delay,
+      blurRadius,
+      rotate,
+      flip,
+      crop,
+      compressionLevel,
+    }
+  ) => {
+    const image = new ImageTransformer(data, inputContentType, {
+      background,
+      loop,
+      delay,
+      quality,
+      compressionLevel,
+    });
+
+    if (crop) {
+      image.crop(crop.x, crop.y, crop.width, crop.height);
+    }
+
+    if (width != null || height != null) {
+      image.resize(width as any, height as any, {
+        fit,
+        position: position as ImagePosition,
+      });
+    }
+
+    if (flip) {
+      image.flip(flip);
+    }
+
+    if (rotate && rotate !== 0) {
+      image.rotate(rotate);
+    }
+
+    if (blurRadius && blurRadius > 0) {
+      image.blur(blurRadius);
+    }
+
+    return image.toBuffer(outputContentType);
+  },
 };

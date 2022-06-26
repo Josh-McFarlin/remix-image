@@ -1,0 +1,8 @@
+{
+  "files": [],
+  "references": [
+    { "path": "packages/remix-image" },
+    { "path": "packages/remix-image-sharp" },
+    { "path": "packages/remix-image-wasm" }
+  ]
+}

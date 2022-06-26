@@ -7,12 +7,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
-- Created transformer packages for Sharp, WebAssembly, and ImageMagick
+- Created transformer packages for Sharp (`remix-image-sharp`) and WebAssembly (`remix-image-wasm`)
 
 ### Changed
 
 - Modified repo to use npm packages
 - Moved several transformation-related types to `src/types/transformer` for clarity
+- Changed default image fit to `cover`
 
 ### Docs
 

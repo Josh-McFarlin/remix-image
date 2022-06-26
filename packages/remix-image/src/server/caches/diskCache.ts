@@ -16,10 +16,9 @@ export class DiskCache extends Cache {
     super();
 
     this.config = {
-      path: "tmp/img",
-      ttl: 24 * 60 * 60,
-      tbd: 365 * 24 * 60 * 60,
-      ...config,
+      path: config?.path ?? "tmp/img",
+      ttl: config?.ttl ?? 24 * 60 * 60,
+      tbd: config?.tbd ?? 365 * 24 * 60 * 60,
     };
 
     this.cache = new BaseCache(this.config);

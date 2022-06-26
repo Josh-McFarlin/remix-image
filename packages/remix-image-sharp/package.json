@@ -32,14 +32,15 @@
     "watch": "rollup -c -w",
     "release": "dotenv release-it --"
   },
+  "dependencies": {
+    "remix-image": "^0.4.0"
+  },
   "devDependencies": {
     "@types/sharp": "^0.30.4",
-    "remix-image": "^0.4.0",
-    "sharp": "^0.30.6"
+    "sharp": "^0.30.7"
   },
   "peerDependencies": {
-    "sharp": "^0.30.6",
     "remix": "^1.0.0",
-    "remix-image": "^0.4.0"
+    "sharp": "^0.30.7"
   }
 }

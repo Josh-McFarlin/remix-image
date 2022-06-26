@@ -14,10 +14,10 @@ A Sharp transformer for Remix-Image
 
 ### Install
 
-To install this library, use on of the following commands:
+To install this library, use one of the following commands:
 ```bash
-npm install -S remix-image-sharp
-yarn add remix-image-sharp
+npm install -S remix-image-sharp sharp
+yarn add remix-image-sharp sharp
 ```
 
 ### Implement

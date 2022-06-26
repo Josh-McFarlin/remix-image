@@ -46,7 +46,6 @@ export const loader: LoaderFunction = ({ request }) => {
 ## Examples
 
 * [Sharp](https://github.com/Josh-McFarlin/remix-image/tree/master/packages/remix-image-sharp)
-* [ImageMagick](https://github.com/Josh-McFarlin/remix-image/tree/master/packages/remix-image-imagemagick)
 * [WebAssembly](https://github.com/Josh-McFarlin/remix-image/tree/master/packages/remix-image-wasm)
 
 ## Show Off

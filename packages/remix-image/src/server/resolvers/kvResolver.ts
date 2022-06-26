@@ -16,7 +16,10 @@ const handleAsset = (
   event: FetchEvent,
   options?: Partial<KvAssetHandlerOptions>
 ): Promise<Response> => {
-  if (process.env.NODE_ENV === "development") {
+  if (
+    typeof process !== "undefined" &&
+    process?.env?.NODE_ENV === "development"
+  ) {
     return getAssetFromKV(event, {
       cacheControl: {
         bypassCache: true,

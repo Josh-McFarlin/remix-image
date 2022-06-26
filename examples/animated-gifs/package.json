@@ -1,0 +1,30 @@
+{
+  "private": true,
+  "sideEffects": false,
+  "scripts": {
+    "build": "remix build",
+    "dev": "remix dev",
+    "start": "remix-serve build"
+  },
+  "dependencies": {
+    "@remix-run/node": "^1.6.0",
+    "@remix-run/react": "^1.6.0",
+    "@remix-run/serve": "^1.6.0",
+    "omggif": "^1.0.10",
+    "react": "^17.0.2",
+    "react-dom": "^17.0.2",
+    "remix-image": "file:../../packages/remix-image"
+  },
+  "devDependencies": {
+    "@remix-run/dev": "^1.6.0",
+    "@remix-run/eslint-config": "^1.6.0",
+    "@types/omggif": "^1.0.3",
+    "@types/react": "^17.0.45",
+    "@types/react-dom": "^17.0.17",
+    "eslint": "^8.15.0",
+    "typescript": "^4.6.4"
+  },
+  "engines": {
+    "node": ">=14"
+  }
+}

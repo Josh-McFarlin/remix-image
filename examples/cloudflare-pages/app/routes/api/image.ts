@@ -1,21 +1,19 @@
-import type { LoaderFunction } from "remix";
+import type { LoaderFunction } from "@remix-run/cloudflare";
+import type { Resolver, MimeType } from "remix-image/serverPure";
 import {
   imageLoader,
   MemoryCache,
   fetchResolver,
-  Resolver,
-  MimeType,
   RemixImageError,
 } from "remix-image/serverPure";
-import { magickTransformer } from "remix-image-imagemagick";
 
 const cache = new MemoryCache({
   maxSize: 5e7,
 });
 
-export const loader: LoaderFunction = ({ request, context }) => {
-  const SELF_URL = context?.env?.SELF_URL || context?.SELF_URL;
+const SELF_URL = "http://localhost:8788";
 
+export const loader: LoaderFunction = ({ request, context }) => {
   const resolver: Resolver = async (asset, url, options, basePath) => {
     if (asset.startsWith("/") && (asset.length === 1 || asset[1] !== "/")) {
       const imageResponse = await context.ASSETS.fetch(url, request.clone());
@@ -43,7 +41,6 @@ export const loader: LoaderFunction = ({ request, context }) => {
     selfUrl: SELF_URL,
     cache,
     resolver,
-    transformer: magickTransformer,
   };
 
   return imageLoader(config, request);

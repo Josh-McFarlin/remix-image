@@ -38,10 +38,10 @@ import Image from "remix-image";
 ### TransformOptions
 ```typescript
 export interface TransformOptions {
-  /** Width of resulting image. */
-  width: number;
-  /** Height of resulting image. If width is present, this take priority. */
-  height?: number;
+  /** Width of resulting image. (optional, default null) */
+  width?: number | null;
+  /** Height of resulting image. If width is present, this takes priority. (optional, default null) */
+  height?: number | null;
   /** The content type of the resulting image. (optional, default source type) */
   contentType?: MimeType;
   /** How the image should be resized to fit both provided dimensions. (optional, default 'contain') */

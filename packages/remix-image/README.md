@@ -47,7 +47,7 @@ Where the `responsive` sizes provided through the props are turned into image UR
 
 ### Install
 
-To install this library, use on of the following commands:
+To install this library, use one of the following commands:
 ```bash
 npm install -S remix-image
 yarn add remix-image

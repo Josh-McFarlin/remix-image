@@ -1,3 +1,4 @@
+import type { MetaFunction, LinksFunction } from "@remix-run/node";
 import {
   Links,
   LiveReload,
@@ -5,13 +6,12 @@ import {
   Outlet,
   Scripts,
   ScrollRestoration,
-} from "remix";
-import type { MetaFunction, LinksFunction } from "remix";
+} from "@remix-run/react";
 import appStyles from "./styles/app.css";
 
 export const meta: MetaFunction = () => ({
   charset: "utf-8",
-  title: "Remix-Image Example",
+  title: "Remix-Image Basic Example",
   viewport: "width=device-width,initial-scale=1",
 });
 

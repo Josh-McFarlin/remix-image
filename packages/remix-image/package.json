@@ -22,7 +22,6 @@
   },
   "main": "build/index.js",
   "types": "build/index.d.ts",
-  "style": "build/styles.css",
   "exports": {
     ".": "./build/index.js",
     "./server": "./build/server/index.js",
@@ -47,9 +46,8 @@
     "release": "dotenv release-it --"
   },
   "dependencies": {
-    "clsx": "^1.1.1",
     "is-svg": "^4.3.2",
-    "js-image-lib": "^0.2.0",
+    "js-image-lib": "^1.0.1",
     "lru-cache": "^7.10.1",
     "query-string": "^7.1.1"
   },
@@ -61,20 +59,11 @@
     "@remix-run/react": "^1.6.0",
     "@remix-run/server-runtime": "^1.6.0",
     "@types/react": "^17.0.37",
-    "autoprefixer": "^10.4.0",
     "babel-loader": "^8.2.3",
-    "css-loader": "^6.7.1",
-    "cssnano": "^5.1.12",
-    "node-sass": "^7.0.1",
-    "postcss": "^8.4.14",
     "react": "^17.0.2",
     "react-dom": "^17.0.2",
     "remix": "^1.6.0",
-    "rollup-plugin-copy": "^3.4.0",
-    "rollup-plugin-postcss": "^4.0.2",
-    "rollup-plugin-scss": "^3.0.0",
-    "sass-loader": "^13.0.0",
-    "style-loader": "^3.3.1"
+    "rollup-plugin-copy": "^3.4.0"
   },
   "peerDependencies": {
     "@cloudflare/kv-asset-handler": "^0.2.0",

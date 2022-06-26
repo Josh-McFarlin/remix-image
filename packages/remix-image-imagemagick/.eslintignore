@@ -1,6 +1,0 @@
-out/
-build/
-coverage/
-dist/
-node_modules/
-rollup.config.js

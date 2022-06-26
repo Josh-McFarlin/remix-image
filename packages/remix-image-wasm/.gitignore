@@ -1,0 +1,8 @@
+avif_enc.wasm
+avif_dec.wasm
+jpeg_enc.wasm
+jpeg_dec.wasm
+png.wasm
+webp_enc.wasm
+webp_dec.wasm
+resize.wasm

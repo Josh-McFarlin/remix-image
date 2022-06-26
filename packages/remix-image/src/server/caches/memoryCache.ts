@@ -17,17 +17,16 @@ export class MemoryCache extends Cache {
     super();
 
     this.config = {
-      maxSize: mB(50),
-      ttl: 24 * 60 * 60,
-      tbd: 365 * 24 * 60 * 60,
-      ...config,
+      maxSize: config?.maxSize ?? mB(50),
+      ttl: config?.ttl ?? 24 * 60 * 60,
+      tbd: config?.tbd ?? 365 * 24 * 60 * 60,
     };
 
     this.cache = new LRU<string, Uint8Array>({
-      max: this.config.maxSize,
       ttl: this.config.ttl,
       allowStale: true,
       updateAgeOnGet: true,
+      maxSize: this.config.maxSize,
       sizeCalculation: (value) => value.byteLength,
     });
   }

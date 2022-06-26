@@ -1,37 +1,27 @@
-import { initializeImageMagick, ImageMagick } from "@imagemagick/magick-wasm";
-import { MagickColor } from "@imagemagick/magick-wasm/magick-color";
-import { MagickFormat } from "@imagemagick/magick-wasm/magick-format";
-import { MagickGeometry } from "@imagemagick/magick-wasm/magick-geometry";
-import { ImageFit, ImagePosition, MimeType, Transformer } from "remix-image";
+import resize, { initResize } from "@jsquash/resize";
+import { MimeType, Transformer } from "remix-image";
+import { AvifHandler, WebpHandler, JpegHandler, PngHandler } from "./handlers";
+import { ImageHandler } from "./types/transformer";
 
-const supportedInputs = new Set([
+export const supportedInputs = new Set([
   MimeType.JPEG,
   MimeType.PNG,
-  MimeType.GIF,
   MimeType.WEBP,
-  MimeType.BMP,
-  MimeType.TIFF,
   MimeType.AVIF,
 ]);
 
-const supportedOutputs = new Set([
+export const supportedOutputs = new Set([
   MimeType.JPEG,
   MimeType.PNG,
-  MimeType.GIF,
   MimeType.WEBP,
-  MimeType.BMP,
   MimeType.AVIF,
 ]);
 
-const typeMap: Record<MimeType, MagickFormat> = {
-  [MimeType.SVG]: MagickFormat.Svg,
-  [MimeType.JPEG]: MagickFormat.Jpeg,
-  [MimeType.PNG]: MagickFormat.Png,
-  [MimeType.GIF]: MagickFormat.Gif,
-  [MimeType.WEBP]: MagickFormat.Webp,
-  [MimeType.BMP]: MagickFormat.Bmp,
-  [MimeType.TIFF]: MagickFormat.Tiff,
-  [MimeType.AVIF]: MagickFormat.Avif,
+const typeHandlers: Record<string, ImageHandler> = {
+  [MimeType.JPEG]: JpegHandler,
+  [MimeType.PNG]: PngHandler,
+  [MimeType.AVIF]: AvifHandler,
+  [MimeType.WEBP]: WebpHandler,
 };
 
 export const wasmTransformer: Transformer = {
@@ -39,7 +29,7 @@ export const wasmTransformer: Transformer = {
   supportedInputs,
   supportedOutputs,
   transform: async (
-    { data },
+    { data, contentType: inputContentType },
     {
       contentType: outputContentType,
       width,
@@ -48,80 +38,66 @@ export const wasmTransformer: Transformer = {
       position,
       background,
       quality,
-      blurRadius,
-      rotate,
-      crop,
+      compressionLevel,
+      loop,
+      delay,
     }
   ) => {
-    await initializeImageMagick();
+    try {
+      await initResize(RESIZE_WASM);
 
-    return new Promise((resolve) => {
-      ImageMagick.read(data, (image) => {
-        if (crop) {
-          const cropGeometry = new MagickGeometry(
-            crop.x,
-            crop.y,
-            crop.width,
-            crop.height
-          );
-          image.crop(cropGeometry);
-        }
+      const inputHandler = typeHandlers[inputContentType];
+      const rgba = await inputHandler.decode(data);
 
-        const newSize = new MagickGeometry(width);
-        if (height) {
-          newSize.height = height;
-        }
-        newSize.ignoreAspectRatio = false;
-        if (fit === ImageFit.FILL) {
-          newSize.ignoreAspectRatio = true;
-          newSize.fillArea = true;
-        }
-        if (fit === ImageFit.CONTAIN) {
-          //
-        }
-        if (fit === ImageFit.COVER) {
-          newSize.limitPixels = true;
-        }
-        if (fit === ImageFit.INSIDE) {
-          newSize.less = true;
-        }
-        if (fit === ImageFit.OUTSIDE) {
-          newSize.greater = true;
-        }
-        if (position === ImagePosition.TOP) {
-          //
-        }
-        if (position === ImagePosition.LEFT) {
-          //
-        }
-        if (position === ImagePosition.RIGHT) {
-          //
-        }
-        image.resize(newSize);
+      let targetWidth = width || rgba.width * ((height || 0) / rgba.height);
+      let targetHeight = height || rgba.height * ((width || 0) / rgba.width);
 
-        if (rotate && rotate != 0) {
-          image.rotate(rotate);
-        }
+      if (targetWidth <= 0 || targetHeight <= 0) {
+        throw new Error("At least one dimension must be provided!");
+      }
 
-        if (blurRadius && blurRadius > 0) {
-          image.blur(blurRadius);
-        }
+      targetWidth = Math.round(targetWidth);
+      targetHeight = Math.round(targetHeight);
 
-        if (background) {
-          image.backgroundColor = new MagickColor(...background);
+      const resizedImageData = await resize(
+        {
+          width: rgba.width,
+          height: rgba.height,
+          data: new Uint8ClampedArray(rgba.data),
+          colorSpace: "srgb",
+        },
+        {
+          width: targetWidth,
+          height: targetHeight,
         }
+      );
 
-        if (quality) {
-          image.quality = quality;
+      const outputHandler = typeHandlers[outputContentType || inputContentType];
+      const result = await outputHandler.encode(
+        {
+          width: resizedImageData.width,
+          height: resizedImageData.height,
+          data: resizedImageData.data,
+          colorSpace: "srgb",
+        },
+        {
+          width: targetWidth,
+          height: targetHeight,
+          fit,
+          position,
+          background,
+          quality,
+          compressionLevel,
+          loop,
+          delay,
         }
+      );
 
-        image.write(
-          (data) => {
-            resolve(data);
-          },
-          outputContentType ? typeMap[outputContentType] : undefined
-        );
-      });
-    });
+      return new Uint8Array(result);
+    } catch (e) {
+      console.error(12345);
+      console.error(e);
+      throw e;
+    }
   },
 };

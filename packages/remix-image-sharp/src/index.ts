@@ -1,1 +1,1 @@
-export { sharpTransformer } from "./sharpTransformer";
+export * from "./sharpTransformer";

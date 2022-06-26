@@ -1,7 +1,7 @@
-import { FlipDirection, MimeType, Transformer } from "remix-image";
+import { MimeType, Transformer } from "remix-image";
 import sharp from "sharp";
 
-const supportedInputs = new Set([
+export const supportedInputs = new Set([
   MimeType.JPEG,
   MimeType.PNG,
   MimeType.GIF,
@@ -10,7 +10,7 @@ const supportedInputs = new Set([
   MimeType.AVIF,
 ]);
 
-const supportedOutputs = new Set([
+export const supportedOutputs = new Set([
   MimeType.JPEG,
   MimeType.PNG,
   MimeType.GIF,
@@ -42,9 +42,18 @@ export const sharpTransformer: Transformer = {
       crop,
     }
   ) => {
+    const fixedBackground = {
+      r: background[0],
+      g: background[1],
+      b: background[2],
+      alpha: background[3],
+    };
+
     const image = sharp(data, {
       animated: true,
     });
+
+    image.ensureAlpha(0);
 
     if (crop) {
       image.extract({
@@ -58,45 +67,26 @@ export const sharpTransformer: Transformer = {
     image.resize(width, height, {
       fit,
       position,
-      ...(background && {
-        background: {
-          r: background[0],
-          g: background[1],
-          b: background[2],
-          alpha: background[3],
-        },
-      }),
+      background: fixedBackground,
     });
 
     if (flip) {
-      if (flip === FlipDirection.HORIZONTAL || flip === FlipDirection.BOTH) {
+      if (flip === "horizontal" || flip === "both") {
         image.flop();
       }
-      if (flip === FlipDirection.VERTICAL || flip === FlipDirection.BOTH) {
+      if (flip === "vertical" || flip === "both") {
         image.flip();
       }
     }
 
     if (rotate && rotate != 0) {
-      image.rotate(rotate);
+      image.rotate(rotate, {
+        background: fixedBackground,
+      });
     }
 
     if (blurRadius && blurRadius > 0) {
       image.blur(blurRadius);
-    }
-
-    if (background) {
-      image.flatten({
-        background: {
-          r: background[0],
-          g: background[1],
-          b: background[2],
-          alpha: background[3],
-        },
-      });
-      if (background[3] !== 1) {
-        image.ensureAlpha(background[3]);
-      }
     }
 
     return image

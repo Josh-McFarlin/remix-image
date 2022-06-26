@@ -1,7 +1,17 @@
 import { MimeType } from "./file";
 import { Color } from "./image";
 
-export type ImageFit = "contain" | "cover" | "fill" | "inside" | "outside";
+export type ImageFit =
+  /** Preserving aspect ratio, contain image within both provided dimensions using a border where necessary. */
+  | "contain"
+  /** Preserving aspect ratio, ensure the image covers both provided dimensions by cropping it to fit. */
+  | "cover"
+  /** Ignore the aspect ratio of the input and stretch to both provided dimensions. */
+  | "fill"
+  /** Preserving aspect ratio, resize the image to be as large as possible while ensuring its dimensions are less than or equal to both those specified. */
+  | "inside"
+  /** Preserving aspect ratio, resize the image to be as small as possible while ensuring its dimensions are greater than or equal to both those specified. */
+  | "outside";
 
 export type ImagePositionHorizontal = "left" | "center" | "right";
 export type ImagePositionVertical = "top" | "center" | "bottom";
@@ -24,10 +34,10 @@ export interface CropOptions {
 }
 
 export interface TransformOptions {
-  /** Width of resulting image. */
-  width: number;
-  /** Height of resulting image. If width is present, this take priority. */
-  height?: number;
+  /** Width of resulting image. (optional, default null) */
+  width?: number | null;
+  /** Height of resulting image. If width is present, this takes priority. (optional, default null) */
+  height?: number | null;
   /** The content type of the resulting image. (optional, default source type) */
   contentType?: MimeType;
   /** How the image should be resized to fit both provided dimensions. (optional, default 'contain') */
@@ -66,6 +76,6 @@ export type Transformer = {
       data: Uint8Array;
       contentType: MimeType;
     },
-    output: TransformOptions
+    output: Required<TransformOptions>
   ) => Promise<Uint8Array>;
 };

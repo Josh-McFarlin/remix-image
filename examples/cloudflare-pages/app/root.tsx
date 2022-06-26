@@ -1,3 +1,4 @@
+import type { MetaFunction, LinksFunction } from "@remix-run/cloudflare";
 import {
   Links,
   LiveReload,
@@ -5,14 +6,12 @@ import {
   Outlet,
   Scripts,
   ScrollRestoration,
-  LinksFunction,
-} from "remix";
-import type { MetaFunction } from "remix";
+} from "@remix-run/react";
 import appStyles from "./styles/app.css";
 
 export const meta: MetaFunction = () => ({
   charset: "utf-8",
-  title: "Remix-Image Cloudflare Pages",
+  title: "Remix-Image Cloudflare Pages Example",
   viewport: "width=device-width,initial-scale=1",
 });
 

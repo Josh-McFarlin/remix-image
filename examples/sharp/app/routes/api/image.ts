@@ -1,11 +1,11 @@
-import type { LoaderFunction } from "remix";
+import type { LoaderFunction } from "@remix-run/node";
 import { sharpTransformer } from "remix-image-sharp";
 import {
   imageLoader,
+  DiskCache,
   fsResolver,
   fetchResolver,
   Resolver,
-  MemoryCache,
 } from "remix-image/server";
 
 export const fetchImage: Resolver = async (asset, url, options, basePath) => {
@@ -18,9 +18,9 @@ export const fetchImage: Resolver = async (asset, url, options, basePath) => {
 
 const config = {
   selfUrl: "http://localhost:3000",
-  cache: new MemoryCache(),
-  transformer: sharpTransformer,
+  cache: new DiskCache(),
   resolver: fetchImage,
+  transformer: sharpTransformer,
 };
 
 export const loader: LoaderFunction = ({ request }) => {

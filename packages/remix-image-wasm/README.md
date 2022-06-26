@@ -14,7 +14,7 @@ A WebAssembly transformer for Remix-Image
 
 ### Install
 
-To install this library, use on of the following commands:
+To install this library, use one of the following commands:
 ```bash
 npm install -S remix-image-wasm
 yarn add remix-image-wasm
@@ -37,6 +37,23 @@ const config = {
 export const loader: LoaderFunction = ({ request }) => {
   return imageLoader(config, request);
 };
+```
+
+Then make sure the wasm files are accessible in your environment.
+
+#### Cloudflare:
+
+Add the following lines to the bottom of your `wrangler.toml` file:
+```
+[wasm_modules]
+AVIF_ENC_WASM = "node_modules/remix-image-wasm/avif_enc.wasm"
+AVIF_DEC_WASM = "node_modules/remix-image-wasm/avif_dec.wasm"
+JPEG_ENC_WASM = "node_modules/remix-image-wasm/jpeg_enc.wasm"
+JPEG_DEC_WASM = "node_modules/remix-image-wasm/jpeg_dec.wasm"
+PNG_WASM = "node_modules/remix-image-wasm/png.wasm"
+WEBP_ENC_WASM = "node_modules/remix-image-wasm/webp_enc.wasm"
+WEBP_DEC_WASM = "node_modules/remix-image-wasm/webp_dec.wasm"
+RESIZE_WASM = "node_modules/remix-image-wasm/resize.wasm"
 ```
 
 ### Docs

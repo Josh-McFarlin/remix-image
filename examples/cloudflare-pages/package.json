@@ -1,38 +1,36 @@
 {
-  "name": "cloudflare-pages-example",
-  "version": "0.4.0",
-  "description": "An example showing Remix-Image on Cloudflare Pages",
-  "license": "MIT",
   "private": true,
+  "sideEffects": false,
   "scripts": {
-    "postinstall": "remix setup cloudflare-pages",
-    "build": "cross-env NODE_ENV=production remix build",
-    "dev:remix": "cross-env NODE_ENV=development remix watch",
-    "dev:wrangler": "cross-env NODE_ENV=development wrangler pages dev ./public --binding \"SELF_URL\"=\"http://localhost:8788\"",
-    "dev": "cross-env NODE_ENV=development remix build && run-p dev:*",
+    "build": "remix build",
+    "dev:remix": "remix watch",
+    "dev:wrangler": "cross-env NODE_ENV=development wrangler pages dev ./public",
+    "dev": "remix build && run-p dev:*",
     "start": "cross-env NODE_ENV=production npm run dev:wrangler"
   },
   "dependencies": {
     "@cloudflare/kv-asset-handler": "^0.2.0",
-    "@remix-run/cloudflare-pages": "^1.2.2",
-    "@remix-run/react": "^1.2.2",
+    "@imagemagick/magick-wasm": "^0.0.13",
+    "@remix-run/cloudflare": "^1.6.0",
+    "@remix-run/cloudflare-pages": "^1.6.0",
+    "@remix-run/react": "^1.6.0",
+    "cross-env": "^7.0.3",
     "react": "^17.0.2",
     "react-dom": "^17.0.2",
-    "remix": "^1.2.2",
-    "remix-image": "^0.3.16"
+    "remix-image": "file:../../packages/remix-image"
   },
   "devDependencies": {
-    "@cloudflare/workers-types": "^3.2.0",
-    "@remix-run/dev": "^1.2.2",
-    "@types/react": "^17.0.24",
-    "@types/react-dom": "^17.0.9",
-    "cross-env": "^7.0.3",
+    "@cloudflare/workers-types": "^3.10.0",
+    "@remix-run/dev": "^1.6.0",
+    "@remix-run/eslint-config": "^1.6.0",
+    "@types/react": "^17.0.45",
+    "@types/react-dom": "^17.0.17",
+    "eslint": "^8.15.0",
     "npm-run-all": "^4.1.5",
-    "typescript": "^4.5.5",
+    "typescript": "^4.6.4",
     "wrangler": "beta"
   },
   "engines": {
     "node": ">=14"
-  },
-  "sideEffects": false
+  }
 }

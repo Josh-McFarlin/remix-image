@@ -61,8 +61,8 @@ export const imageLoader: AssetLoader = async (
     }
 
     const decodedQuery = decodeTransformQuery(reqUrl.search);
-    const transformOptions: TransformOptions = {
-      fit: "contain",
+    const transformOptions: Required<TransformOptions> = {
+      fit: "cover",
       position: "center",
       background: [0x00, 0x00, 0x00, 0x00],
       quality: 80,
@@ -72,9 +72,10 @@ export const imageLoader: AssetLoader = async (
       blurRadius: null,
       rotate: null,
       flip: null,
+      crop: null,
       ...defaultOptions,
       ...decodedQuery,
-    } as TransformOptions;
+    } as Required<TransformOptions>;
 
     const assetUrl = parseURL(src, selfUrl);
 
@@ -216,7 +217,7 @@ export const imageLoader: AssetLoader = async (
         : `public, max-age=${60 * 60 * 24 * 365}`
     );
   } catch (error: any) {
-    if (process?.env?.NODE_ENV === "test") {
+    if (typeof process !== "undefined" && process?.env?.NODE_ENV === "test") {
       throw error;
     }
 
