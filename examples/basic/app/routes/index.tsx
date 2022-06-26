@@ -12,6 +12,12 @@ const images = [
         },
         maxWidth: 200,
       },
+      {
+        size: {
+          width: 600,
+          height: 600,
+        },
+      },
     ],
   },
   {
@@ -19,16 +25,16 @@ const images = [
     responsive: [
       {
         size: {
-          width: 300,
-          height: 300,
-        },
-      },
-      {
-        size: {
           width: 100,
           height: 100,
         },
         maxWidth: 200,
+      },
+      {
+        size: {
+          width: 300,
+          height: 300,
+        },
       },
     ],
   },

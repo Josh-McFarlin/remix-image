@@ -1,1 +1,0 @@
-export { cloudflareResolver } from "./cfImagesResolver";

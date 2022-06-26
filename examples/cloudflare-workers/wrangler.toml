@@ -1,0 +1,27 @@
+name = "remix-cloudflare-workers"
+type = "javascript"
+
+zone_id = ""
+account_id = ""
+route = ""
+workers_dev = true
+
+[site]
+bucket = "./public"
+entry-point = "."
+
+[build]
+command = "npm run build"
+
+[build.upload]
+format="service-worker"
+
+[wasm_modules]
+AVIF_ENC_WASM = "node_modules/remix-image-wasm/avif_enc.wasm"
+AVIF_DEC_WASM = "node_modules/remix-image-wasm/avif_dec.wasm"
+JPEG_ENC_WASM = "node_modules/remix-image-wasm/jpeg_enc.wasm"
+JPEG_DEC_WASM = "node_modules/remix-image-wasm/jpeg_dec.wasm"
+PNG_WASM = "node_modules/remix-image-wasm/png.wasm"
+WEBP_ENC_WASM = "node_modules/remix-image-wasm/webp_enc.wasm"
+WEBP_DEC_WASM = "node_modules/remix-image-wasm/webp_dec.wasm"
+RESIZE_WASM = "node_modules/remix-image-wasm/resize.wasm"

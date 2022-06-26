@@ -1,3 +1,4 @@
+import type { MetaFunction, LinksFunction } from "@remix-run/node";
 import {
   Links,
   LiveReload,
@@ -5,26 +6,23 @@ import {
   Outlet,
   Scripts,
   ScrollRestoration,
-} from "remix";
-import type { MetaFunction, LinksFunction } from "remix";
+} from "@remix-run/react";
 import appStyles from "./styles/app.css";
 
-export const meta: MetaFunction = () => {
-  return {
-    title: "Remix-Image Example",
-  };
-};
+export const meta: MetaFunction = () => ({
+  charset: "utf-8",
+  title: "Remix-Image Sharp Example",
+  viewport: "width=device-width,initial-scale=1",
+});
 
-export const links: LinksFunction = () => {
-  return [{ rel: "stylesheet", href: appStyles }];
-};
+export const links: LinksFunction = () => [
+  { rel: "stylesheet", href: appStyles },
+];
 
 export default function App() {
   return (
     <html lang="en">
       <head>
-        <meta charSet="utf-8" />
-        <meta name="viewport" content="width=device-width,initial-scale=1" />
         <Meta />
         <Links />
       </head>
@@ -32,7 +30,7 @@ export default function App() {
         <Outlet />
         <ScrollRestoration />
         <Scripts />
-        {process.env.NODE_ENV === "development" && <LiveReload />}
+        <LiveReload />
       </body>
     </html>
   );

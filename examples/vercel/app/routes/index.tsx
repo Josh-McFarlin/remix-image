@@ -10,6 +10,13 @@ const images = [
           width: 100,
           height: 100,
         },
+        maxWidth: 600,
+      },
+      {
+        size: {
+          width: 300,
+          height: 300,
+        },
       },
     ],
   },
@@ -21,13 +28,13 @@ const images = [
           width: 300,
           height: 300,
         },
+        maxWidth: 600,
       },
       {
         size: {
           width: 100,
           height: 100,
         },
-        maxWidth: 600,
       },
     ],
   },

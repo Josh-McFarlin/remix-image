@@ -1,0 +1,11 @@
+{
+  "extends": "../../tsconfig.json",
+  "compilerOptions": {
+    "rootDir": "src",
+    "outDir": "build",
+    "declarationDir": "build"
+  },
+  "include": ["src"],
+  "exclude": ["node_modules", "build"],
+  "references": [{ "path": "../remix-image" }]
+}
