@@ -25,22 +25,21 @@
     "format": "prettier --write \"**/*.{js,jsx,ts,tsx,json,css,scss}\"",
     "lint": "eslint --fix --ext ts --ext tsx --ext js --ext jsx .",
     "typecheck": "tsc --project tsconfig.json --noEmit",
-    "test": "jest --passWithNoTests",
-    "test:watch": "jest --watch",
+    "test": "jest -c=../../jest.config.js --passWithNoTests",
+    "test:watch": "jest -c=../../jest.config.js --watch",
     "prebuild": "rimraf coverage build tmp",
     "build": "rollup -c",
     "watch": "rollup -c -w",
     "release": "dotenv release-it --"
   },
-  "dependencies": {
-    "remix-image": "^0.4.0"
-  },
   "devDependencies": {
     "@types/sharp": "^0.30.4",
+    "remix-image": "^0.4.0",
     "sharp": "^0.30.7"
   },
   "peerDependencies": {
     "remix": "^1.0.0",
+    "remix-image": "^0.4.0",
     "sharp": "^0.30.7"
   }
 }
