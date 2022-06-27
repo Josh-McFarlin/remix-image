@@ -30,7 +30,6 @@
     "compile": "tsc -b tsconfig.build.json",
     "commit": "git-cz",
     "update-docs": "npm run deploy --prefix docs",
-    "update-examples": "node ./scripts/version.js",
     "prepare": "husky install"
   },
   "dependencies": {

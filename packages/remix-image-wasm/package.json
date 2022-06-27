@@ -50,10 +50,10 @@
   "devDependencies": {
     "rollup-plugin-copy": "^3.4.0",
     "rollup-plugin-polyfill-node": "^0.9.0",
-    "remix-image": "^0.4.0"
+    "remix-image": "^1.0.0"
   },
   "peerDependencies": {
     "remix": "^1.0.0",
-    "remix-image": "^0.4.0"
+    "remix-image": "^1.0.0"
   }
 }
