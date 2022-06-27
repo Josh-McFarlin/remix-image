@@ -5,7 +5,7 @@ import { encodeQuery } from "../src/utils/url";
 
 const fetchResolver: Resolver = async () => {
   return {
-    buffer: await fs.readFile(path.join(__dirname, "assets/camera.png")),
+    buffer: await fs.readFile(path.join(__dirname, "fixtures/camera.png")),
     contentType: MimeType.PNG,
   };
 };

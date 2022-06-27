@@ -64,11 +64,13 @@ export const sharpTransformer: Transformer = {
       });
     }
 
-    image.resize(width, height, {
-      fit,
-      position,
-      background: fixedBackground,
-    });
+    if (width != null || height != null) {
+      image.resize(width, height, {
+        fit,
+        position,
+        background: fixedBackground,
+      });
+    }
 
     if (flip) {
       if (flip === "horizontal" || flip === "both") {

@@ -43,6 +43,39 @@ const IndexPage: React.FC = () => (
         responsive={img.responsive}
       />
     ))}
+    <Image
+      src={images[0].src}
+      responsive={images[0].responsive}
+      options={{
+        rotate: 45,
+      }}
+    />
+    <Image
+      src={images[0].src}
+      responsive={images[0].responsive}
+      options={{
+        blurRadius: 5,
+      }}
+    />
+    <Image
+      src={images[0].src}
+      responsive={images[0].responsive}
+      options={{
+        flip: "both",
+      }}
+    />
+    <Image
+      src={images[0].src}
+      responsive={images[0].responsive}
+      options={{
+        crop: {
+          x: 0,
+          y: 0,
+          width: 5,
+          height: 5,
+        },
+      }}
+    />
   </div>
 );
 

@@ -1,6 +1,11 @@
-import resize, { initResize } from "@jsquash/resize";
-import { MimeType, Transformer } from "remix-image";
+import { initResize } from "@jsquash/resize";
+import { ImagePosition, MimeType, Transformer } from "remix-image";
 import { AvifHandler, WebpHandler, JpegHandler, PngHandler } from "./handlers";
+import { blurImage } from "./operations/blur";
+import { cropImage } from "./operations/crop";
+import { flipImage } from "./operations/flip";
+import { resizeImage } from "./operations/resize";
+import { rotateImage } from "./operations/rotate";
 import { ImageHandler } from "./types/transformer";
 
 export const supportedInputs = new Set([
@@ -38,66 +43,62 @@ export const wasmTransformer: Transformer = {
       position,
       background,
       quality,
+      loop,
+      delay,
+      blurRadius,
+      rotate,
+      flip,
+      crop,
+      compressionLevel,
+    }
+  ) => {
+    await initResize(RESIZE_WASM);
+
+    const inputHandler = typeHandlers[inputContentType];
+    let image = await inputHandler.decode(data);
+
+    if (crop) {
+      image = await cropImage(image, crop, background);
+    }
+
+    if (width != null || height != null) {
+      image = await resizeImage(
+        image,
+        width,
+        height,
+        {
+          fit,
+          position: position as ImagePosition,
+        },
+        background
+      );
+    }
+
+    if (flip) {
+      image = await flipImage(image, flip);
+    }
+
+    if (rotate && rotate !== 0) {
+      image = await rotateImage(image, rotate, background);
+    }
+
+    if (blurRadius && blurRadius > 0) {
+      image = await blurImage(image, blurRadius);
+    }
+
+    const outputHandler = typeHandlers[outputContentType || inputContentType];
+    const result = await outputHandler.encode(image, {
+      width: image.width,
+      height: image.height,
+      fit,
+      position,
+      background,
+      quality,
       compressionLevel,
       loop,
       delay,
-    }
-  ) => {
-    try {
-      await initResize(RESIZE_WASM);
+    });
 
-      const inputHandler = typeHandlers[inputContentType];
-      const rgba = await inputHandler.decode(data);
-
-      let targetWidth = width || rgba.width * ((height || 0) / rgba.height);
-      let targetHeight = height || rgba.height * ((width || 0) / rgba.width);
-
-      if (targetWidth <= 0 || targetHeight <= 0) {
-        throw new Error("At least one dimension must be provided!");
-      }
-
-      targetWidth = Math.round(targetWidth);
-      targetHeight = Math.round(targetHeight);
-
-      const resizedImageData = await resize(
-        {
-          width: rgba.width,
-          height: rgba.height,
-          data: new Uint8ClampedArray(rgba.data),
-          colorSpace: "srgb",
-        },
-        {
-          width: targetWidth,
-          height: targetHeight,
-        }
-      );
-
-      const outputHandler = typeHandlers[outputContentType || inputContentType];
-      const result = await outputHandler.encode(
-        {
-          width: resizedImageData.width,
-          height: resizedImageData.height,
-          data: resizedImageData.data,
-          colorSpace: "srgb",
-        },
-        {
-          width: targetWidth,
-          height: targetHeight,
-          fit,
-          position,
-          background,
-          quality,
-          compressionLevel,
-          loop,
-          delay,
-        }
-      );
-
-      return new Uint8Array(result);
-    } catch (e) {
-      console.error(12345);
-      console.error(e);
-      throw e;
-    }
+    return new Uint8Array(result);
   },
 };

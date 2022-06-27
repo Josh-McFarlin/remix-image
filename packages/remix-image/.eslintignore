@@ -2,6 +2,7 @@ out/
 build/
 coverage/
 dist/
+tests/
 node_modules/
 server.d.ts
 serverPure.d.ts
