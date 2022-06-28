@@ -43,27 +43,13 @@
     "prebuild": "rimraf coverage build tmp",
     "build": "rollup -c",
     "watch": "rollup -c -w",
-    "release": "dotenv release-it --"
+    "release": "dotenv release-it -- --only-version"
   },
   "dependencies": {
     "is-svg": "^4.3.2",
     "js-image-lib": "^1.0.1",
     "lru-cache": "^7.10.1",
     "query-string": "^7.1.1"
-  },
-  "devDependencies": {
-    "@cloudflare/kv-asset-handler": "^0.2.0",
-    "@cloudflare/workers-types": "^3.10.0",
-    "@next-boost/hybrid-disk-cache": "^0.3.0",
-    "@remix-run/node": "^1.6.0",
-    "@remix-run/react": "^1.6.0",
-    "@remix-run/server-runtime": "^1.6.0",
-    "@types/react": "^17.0.37",
-    "babel-loader": "^8.2.3",
-    "react": "^17.0.2",
-    "react-dom": "^17.0.2",
-    "remix": "^1.6.0",
-    "rollup-plugin-copy": "^3.4.0"
   },
   "peerDependencies": {
     "@cloudflare/kv-asset-handler": "^0.2.0",

@@ -30,12 +30,7 @@
     "prebuild": "rimraf coverage build tmp",
     "build": "rollup -c",
     "watch": "rollup -c -w",
-    "release": "dotenv release-it --"
-  },
-  "devDependencies": {
-    "@types/sharp": "^0.30.4",
-    "remix-image": "^1.0.0",
-    "sharp": "^0.30.7"
+    "release": "dotenv release-it -- --only-version"
   },
   "peerDependencies": {
     "remix": "^1.0.0",

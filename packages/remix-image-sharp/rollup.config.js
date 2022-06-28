@@ -26,7 +26,9 @@ export default [
       }),
       resolve({ preferBuiltins: false }),
       commonjs(),
-      terser(),
+      terser({
+        keep_fnames: true,
+      }),
     ],
   },
 ];

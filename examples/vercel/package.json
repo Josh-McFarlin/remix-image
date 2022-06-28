@@ -13,8 +13,8 @@
     "@vercel/node": "^1.15.2",
     "react": "^17.0.2",
     "react-dom": "^17.0.2",
-    "remix-image": "file:../../packages/remix-image",
-    "remix-image-sharp": "file:../../packages/remix-image-sharp",
+    "remix-image": "^1.0.0",
+    "remix-image-sharp": "^0.1.0",
     "sharp": "^0.30.7"
   },
   "devDependencies": {

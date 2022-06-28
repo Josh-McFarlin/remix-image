@@ -6,8 +6,10 @@
   },
   "git": {
     "requireBranch": "master",
-    "commitMessage": "chore: release v${version}",
-    "tagName": "v${version}"
+    "commitMessage": "chore: release ${name} v${version}",
+    "tag": true,
+    "tagName": "v${version}",
+    "push": true
   },
   "npm": {
     "publish": true

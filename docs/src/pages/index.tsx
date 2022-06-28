@@ -9,30 +9,33 @@ import styles from "./index.module.css";
 
 const features: FeatureItem[] = [
   {
-    title: "Focus on What Matters",
+    title: "Optimize Performance",
+    description: (
+      <>
+        Remix-Image will automatically create dynamic images on demand and cache
+        them for the best performance. You can serve images to your users in the
+        most efficient file formats to improve page loads and save bandwidth.
+      </>
+    ),
+  },
+  {
+    title: "Save Time",
     description: (
       <>
         Setup the library once and Remix-Image will automatically create dynamic
-        images on demand and cache them for the best performance.
+        images on demand and cache them for the best performance. You will
+        longer need to manually convert and compress your images every time you
+        make changes.
       </>
     ),
   },
   {
-    title: "Easy to Use",
+    title: "Save Money",
     description: (
       <>
-        Remix-Image was designed to be easily installed and used to get your
-        Remix app up and running quickly.
-      </>
-    ),
-  },
-
-  {
-    title: "Made for Remix",
-    description: (
-      <>
-        Designed from the ground up to work with{" "}
-        <a href="https://remix.run">Remix</a> on all of its supported platforms.
+        Remix-Image runs as a Loader Function in your existing Remix server.
+        This means you do not have to setup additional servers for image
+        transformation or pay for services such as Cloudinary.
       </>
     ),
   },
@@ -40,27 +43,29 @@ const features: FeatureItem[] = [
 
 const codeBlocks: CodeItem[] = [
   {
-    title: "Turns",
+    title: "Turning",
     code:
       "<Image\n" +
       '  src="https://i.imgur.com/5cQnAQC.png"\n' +
-      "  responsive={[{\n" +
-      "    size: {\n" +
-      "      width: 100,\n" +
-      "      height: 100,\n" +
+      "  responsive={[\n" +
+      "    {\n" +
+      "      size: { width: 100, height: 100 },\n" +
+      "      maxWidth: 500,\n" +
       "    },\n" +
-      "    maxWidth: 200,\n" +
-      "  }]}\n" +
+      "    {\n" +
+      "      size: { width: 600, height: 600 },\n" +
+      "    },\n" +
+      "  ]}\n" +
+      "  dprVariants={[1, 3]}\n" +
       "/>",
   },
   {
     title: "Into",
     code:
       "<img\n" +
-      '  class="Image-module_root__56rgX"\n' +
-      '  src="/api/image?src=https%253A%252F%252Fi.imgur.com%252F5cQnAQC.png&amp;width=100&amp;height=100%2520100w"\n' +
-      '  srcset="/api/image?src=https%253A%252F%252Fi.imgur.com%252F5cQnAQC.png&amp;width=100&amp;height=100%2520100w"\n' +
-      '  sizes="(max-width: 200px) 100px"\n' +
+      '  src="/api/image?src=https%3A%2F%2Fi.imgur.com%2F5cQnAQC.png&width=600&height=600"\n' +
+      '  srcset="/api/image?src=https%3A%2F%2Fi.imgur.com%2F5cQnAQC.png&width=100&height=100 100w, /api/image?src=https%3A%2F%2Fi.imgur.com%2F5cQnAQC.png&width=600&height=600 600w, /api/image?src=https%3A%2F%2Fi.imgur.com%2F5cQnAQC.png&width=300&height=300 300w, /api/image?src=https%3A%2F%2Fi.imgur.com%2F5cQnAQC.png&width=1800&height=1800 1800w"\n' +
+      '  sizes="(max-width: 500px) 100px, 600px"\n' +
       ">",
   },
 ];
@@ -96,13 +101,30 @@ const IndexPage: React.FC = () => {
         <div className={styles.content}>
           <section>
             <h2>What</h2>
+            <h3>Remix Image Supports:</h3>
+            <ul>
+              <li>
+                <b>Format Conversion:</b> Convert your large png images into
+                more efficient file formats like webp
+              </li>
+              <li>
+                <b>Image Resizing:</b> Resize your 1600x1600 px image into a
+                200x200 px image to load much faster when a large image is not
+                needed
+              </li>
+              <li>
+                <b>Image Transformations:</b> Apply image transformations such
+                as <code>resize</code>, <code>crop</code>, <code>rotate</code>,{" "}
+                <code>blur</code>, and <code>flip</code>
+              </li>
+            </ul>
+            <br />
             <HomepageCode codeBlocks={codeBlocks} />
             <p>
-              Where the <code>responsive</code> sizes provided through the props
-              are turned into image URLs served by the local server. This
+              Remix-Image turns the <code>responsive</code> sizes provided
+              through the props into image URLs served by the Remix server. This
               enables sending the smallest images possible to the client,
-              allowing pages to load much faster. These images can also be
-              cached on the server for the best performance.
+              allowing pages to load much faster.
             </p>
           </section>
           <section>
