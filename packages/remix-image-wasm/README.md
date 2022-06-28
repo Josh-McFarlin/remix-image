@@ -1,4 +1,4 @@
-# Remix-Image-ImageMagick
+# Remix-Image-Wasm
 
 ![](https://badgen.net/npm/v/remix-image-wasm)
 ![](https://badgen.net/npm/license/remix-image-wasm)
