@@ -43,7 +43,7 @@
     "prebuild": "rimraf coverage build tmp",
     "build": "rollup -c",
     "watch": "rollup -c -w",
-    "release": "dotenv release-it --"
+    "release": "dotenv release-it -- --only-version"
   },
   "dependencies": {
     "is-svg": "^4.3.2",

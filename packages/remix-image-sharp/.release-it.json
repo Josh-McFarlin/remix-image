@@ -6,14 +6,15 @@
   },
   "git": {
     "requireBranch": "master",
-    "commitMessage": "chore: release v${version}",
-    "tagName": "v${version}"
+    "commitMessage": "chore: release ${name} v${version}",
+    "tag": false,
+    "push": true
   },
   "npm": {
     "publish": true
   },
   "github": {
-    "release": true
+    "release": false
   },
   "hooks": {
     "before:init": "npm run test",
