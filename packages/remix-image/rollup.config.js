@@ -6,6 +6,8 @@ import typescript from "rollup-plugin-typescript2";
 import { terser } from "rollup-plugin-terser";
 import replace from "@rollup/plugin-replace";
 
+const external = ["fs", "path", "react", "react-dom"];
+
 export default [
   {
     input: "src/index.tsx",
@@ -16,6 +18,7 @@ export default [
         sourcemap: true,
       },
     ],
+    external,
     plugins: [
       peerDepsExternal(),
       json(),
@@ -27,6 +30,9 @@ export default [
       }),
       commonjs(),
       resolve(),
+      terser({
+        keep_fnames: true,
+      }),
     ],
   },
   {
@@ -38,7 +44,7 @@ export default [
         sourcemap: true,
       },
     ],
-    external: ["fs", "path"],
+    external,
     plugins: [
       peerDepsExternal(),
       json(),
@@ -50,7 +56,9 @@ export default [
       }),
       resolve({ preferBuiltins: false }),
       commonjs(),
-      terser(),
+      terser({
+        keep_fnames: true,
+      }),
     ],
   },
   {
@@ -62,6 +70,7 @@ export default [
         sourcemap: true,
       },
     ],
+    external,
     plugins: [
       peerDepsExternal(),
       json(),
@@ -80,7 +89,9 @@ export default [
           "Buffer.from": "new Uint8Array",
         },
       }),
-      terser(),
+      terser({
+        keep_fnames: true,
+      }),
     ],
   },
 ];

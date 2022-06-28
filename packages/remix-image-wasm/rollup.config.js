@@ -39,7 +39,9 @@ export default [
         "import.meta.url": JSON.stringify("http://localhost"),
         "self.location.href": JSON.stringify("http://localhost"),
       }),
-      terser(),
+      terser({
+        keep_fnames: true,
+      }),
       copy({
         copyOnce: true,
         targets: [

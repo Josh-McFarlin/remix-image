@@ -16,3 +16,11 @@ export const imageResponse = (
       "Cache-Control": cacheControl,
     },
   });
+
+export const redirectResponse = (location: string): Response =>
+  new Response(null, {
+    status: 302,
+    headers: {
+      Location: location,
+    },
+  });

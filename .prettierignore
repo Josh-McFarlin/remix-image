@@ -15,6 +15,10 @@ examples/**/tmp
 examples/**/.mf
 examples/**/functions
 
+packages/**/node_modules
+packages/**/package-lock.json
+packages/**/build
+
 docs/.docusaurus
 docs/build
 docs/node_modules

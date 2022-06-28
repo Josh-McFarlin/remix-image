@@ -1,9 +1,12 @@
-import { redirect } from "@remix-run/server-runtime";
 import mimeFromBuffer from "mime-tree";
 import { MimeType, TransformOptions, UnsupportedImageError } from "../../types";
 import { RemixImageError } from "../../types/error";
 import type { AssetLoader } from "../../types/loader";
-import { imageResponse, textResponse } from "../../utils/response";
+import {
+  imageResponse,
+  textResponse,
+  redirectResponse,
+} from "../../utils/response";
 import { decodeQuery, decodeTransformQuery, parseURL } from "../../utils/url";
 import { fetchResolver } from "../resolvers/fetchResolver";
 import { pureTransformer } from "../transformers";
@@ -225,7 +228,7 @@ export const imageLoader: AssetLoader = async (
     console.error(error);
 
     if (redirectOnFail && src) {
-      return redirect(src);
+      return redirectResponse(src);
     }
 
     if (error instanceof RemixImageError) {
