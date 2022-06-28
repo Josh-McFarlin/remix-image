@@ -22,15 +22,17 @@ import Image from "remix-image";
       maxWidth: 200,
     },
   ]}
+  dprVariants={[1, 3]}
 />
 ```
 
 ## PropTypes
-|    Name    |                                Type                                | Required |   Default    |                                                                   Description                                                                    |
-|:----------:|:------------------------------------------------------------------:|:--------:|:------------:|:------------------------------------------------------------------------------------------------------------------------------------------------:|
-| loaderUrl  |                               string                               |          | "/api/image" | The path of the image loader resource route. The `loaderUrl` prop is optional if the resource route has been created at the path `"/api/image"`. |
-| responsive | { size: { width: number; height: number; }; maxWidth?: number; }[] |          |      []      |                           An array of responsive sizes. The resource route is not called if this prop is not provided.                           |
-|  options   |                          TransformOptions                          |          |              |                                TransformOptions that can be used to override the defaults provided to the loader.                                |
+|    Name     |                                Type                                | Required |   Default    |                                                                   Description                                                                    |
+|:-----------:|:------------------------------------------------------------------:|:--------:|:------------:|:------------------------------------------------------------------------------------------------------------------------------------------------:|
+|  loaderUrl  |                               string                               |          | "/api/image" | The path of the image loader resource route. The `loaderUrl` prop is optional if the resource route has been created at the path `"/api/image"`. |
+| responsive  | { size: { width: number; height: number; }; maxWidth?: number; }[] |          |      []      |                           An array of responsive sizes. The resource route is not called if this prop is not provided.                           |
+|   options   |                          TransformOptions                          |          |      {}      |                                TransformOptions that can be used to override the defaults provided to the loader.                                |
+| dprVariants |                         number or number[]                         |          |     [1]      |                  Different DPR variants to generate images for. This value will always be merged into an array with value [1].                   |
 
 
 **Note**: The `Image` component extends the native `img` element, so any props used with `img` can be provided to the `Image` component.

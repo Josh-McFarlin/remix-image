@@ -18,13 +18,16 @@ Turning:
 ```typescript jsx
 <Image
   src="https://i.imgur.com/5cQnAQC.png"
-  responsive={[{
-    size: {
-      width: 100,
-      height: 100,
+  responsive={[
+    {
+      size: { width: 100, height: 100 },
+      maxWidth: 500,
     },
-    maxWidth: 200,
-  }]}
+    {
+      size: { width: 600, height: 600 },
+    },
+  ]}
+  dprVariants={[1, 3]}
 />
 ```
 
@@ -32,10 +35,9 @@ Into:
 
 ```typescript jsx
 <img
-  class="Image-module_root__56rgX"
-  src="/api/image?src=https%253A%252F%252Fi.imgur.com%252F5cQnAQC.png&amp;width=100&amp;height=100%2520100w"
-  srcset="/api/image?src=https%253A%252F%252Fi.imgur.com%252F5cQnAQC.png&amp;width=100&amp;height=100%2520100w"
-  sizes="(max-width: 200px) 100px"
+  src="/api/image?src=https%3A%2F%2Fi.imgur.com%2F5cQnAQC.png&width=600&height=600"
+  srcset="/api/image?src=https%3A%2F%2Fi.imgur.com%2F5cQnAQC.png&width=100&height=100 100w, /api/image?src=https%3A%2F%2Fi.imgur.com%2F5cQnAQC.png&width=600&height=600 600w, /api/image?src=https%3A%2F%2Fi.imgur.com%2F5cQnAQC.png&width=300&height=300 300w, /api/image?src=https%3A%2F%2Fi.imgur.com%2F5cQnAQC.png&width=1800&height=1800 1800w"
+  sizes="(max-width: 500px) 100px, 600px"
 >
 ```
 
@@ -45,7 +47,7 @@ Where the `responsive` sizes provided through the props are turned into image UR
 
 ### Install
 
-To install this library and its peer deps, use on of the following commands:
+To install this library and its peer deps, use one of the following commands:
 ```bash
 npm install -S remix-image @next-boost/hybrid-disk-cache
 yarn add remix-image @next-boost/hybrid-disk-cache

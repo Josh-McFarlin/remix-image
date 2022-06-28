@@ -1,4 +1,4 @@
-import React from "react";
+import * as React from "react";
 import type { ResponsiveSize } from "../types/image";
 import type { SizelessOptions } from "../types/transformer";
 import { encodeQuery } from "../utils/url";
@@ -21,43 +21,66 @@ const sizeConverter = (resp: ResponsiveSize): string =>
     ? `(max-width: ${resp.maxWidth}px) ${resp.size.width}px`
     : `${resp.size.width}px`;
 
-export const useResponsiveImage = (
+export function useResponsiveImage(
   image: ImageSource,
   loaderUrl: string,
   responsive: ResponsiveSize[],
-  options: SizelessOptions = {}
-): ResponsiveHookResult => {
-  let largestSrc = image.src || "";
-  let largestWidth = 0;
-  const srcSet: string[] = [];
+  options: SizelessOptions = {},
+  dprVariants: number | number[] = [1]
+): ResponsiveHookResult {
+  return React.useMemo<ResponsiveHookResult>(() => {
+    let largestSrc = image.src || "";
+    let largestWidth = 0;
+    const srcSet: string[] = [];
+    const multipliers = Array.from(
+      new Set<number>([
+        1,
+        ...(typeof dprVariants === "number" ? [dprVariants] : dprVariants),
+      ])
+    ).sort();
 
-  for (const { size } of responsive) {
-    const srcSetUrl = encodeQuery(loaderUrl, {
-      src: encodeURI(image.src || ""),
-      width: size.width,
-      height: size.height,
-      ...options,
-    });
+    for (const multiplier of multipliers) {
+      for (const { size } of responsive) {
+        const srcSetUrl = encodeQuery(loaderUrl, {
+          src: encodeURI(image.src || ""),
+          width:
+            typeof size.width === "number"
+              ? size.width * multiplier
+              : size.width,
+          height:
+            typeof size.height === "number"
+              ? size.height * multiplier
+              : size.height,
+          ...options,
+        });
 
-    srcSet.push(srcSetUrl + ` ${size.width}w`);
+        srcSet.push(srcSetUrl + ` ${size.width * multiplier}w`);
 
-    if (size.width > largestWidth) {
-      largestWidth = size.width;
-      largestSrc = srcSetUrl;
+        if (multiplier === 1 && size.width > largestWidth) {
+          largestWidth = size.width;
+          largestSrc = srcSetUrl;
+        }
+      }
     }
-  }
 
-  const sizes = [...responsive].sort(sizeComparator).map(sizeConverter);
+    const sizes = [...responsive].sort(sizeComparator).map(sizeConverter);
 
-  if (responsive.length === 1 && responsive[0].maxWidth != null) {
-    sizes.push(`${responsive[0].size.width}px`);
-  }
+    if (responsive.length === 1 && responsive[0].maxWidth != null) {
+      sizes.push(`${responsive[0].size.width}px`);
+    }
 
-  return {
-    src: largestSrc,
-    ...(srcSet.length && {
-      srcSet: srcSet.join(", "),
-      sizes: sizes.join(", "),
-    }),
-  };
-};
+    return {
+      ...(srcSet.length > 0 && {
+        srcSet: srcSet.join(", "),
+        sizes: sizes.join(", "),
+      }),
+      // It's intended to keep `src` the last attribute because React updates
+      // attributes in order. If we keep `src` the first one, Safari will
+      // immediately start to fetch `src`, before `sizes` and `srcSet` are even
+      // updated by React. That causes multiple unnecessary requests if `srcSet`
+      // and `sizes` are defined.
+      // This bug cannot be reproduced in Chrome or Firefox.
+      src: largestSrc,
+    };
+  }, [image.src, loaderUrl, responsive, options, dprVariants]);
+}
