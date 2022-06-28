@@ -38,7 +38,7 @@
     "prebuild": "rimraf coverage build tmp",
     "build": "rollup -c",
     "watch": "rollup -c -w",
-    "release": "dotenv release-it -- --only-version"
+    "release": "dotenv release-it --"
   },
   "dependencies": {
     "@jsquash/avif": "^1.0.2",
