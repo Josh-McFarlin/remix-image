@@ -1,0 +1,25 @@
+img.remix-image {
+  transition: 0.125s filter ease-in-out;
+  filter: blur(0px);
+}
+
+img.remix-image.blur {
+  filter: blur(15px);
+}
+
+.remix-image.blur-in {
+  filter: blur(0px);
+  animation-name: blurIn;
+  animation-iteration-count: 1;
+  animation-timing-function: ease-in;
+  animation-duration: 0.5s;
+}
+
+@keyframes blurIn {
+  0% {
+    filter: blur(15px);
+  }
+  100% {
+    filter: blur(0px);
+  }
+}
