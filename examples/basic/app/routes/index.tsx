@@ -94,6 +94,7 @@ const IndexPage: React.FC = () => (
                 src={formatsTest.filePath + fileType}
                 loaderUrl="/api/image"
                 responsive={[size]}
+                placeholder="blur"
                 options={{
                   contentType: formatMap[fileType],
                 }}
@@ -115,6 +116,7 @@ const IndexPage: React.FC = () => (
               <Image
                 src={formatsTest.filePath + "png"}
                 loaderUrl="/api/image"
+                placeholder="blur"
                 responsive={[size]}
                 options={{
                   contentType: formatMap[fileType],

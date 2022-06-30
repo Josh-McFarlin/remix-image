@@ -22,17 +22,20 @@
   },
   "main": "build/index.js",
   "types": "build/index.d.ts",
+  "style": "remix-image.css",
   "exports": {
     ".": "./build/index.js",
     "./server": "./build/server/index.js",
-    "./serverPure": "./build/server/pure.js"
+    "./serverPure": "./build/server/pure.js",
+    "./remix-image.css": "./remix-image.css"
   },
   "files": [
     "build",
     "package.json",
     "README.md",
     "server.d.ts",
-    "serverPure.d.ts"
+    "serverPure.d.ts",
+    "remix-image.css"
   ],
   "scripts": {
     "format": "prettier --write \"**/*.{js,jsx,ts,tsx,json,css,scss}\"",
@@ -46,6 +49,7 @@
     "release": "dotenv release-it --"
   },
   "dependencies": {
+    "clsx": "^1.1.1",
     "is-svg": "^4.3.2",
     "js-image-lib": "^1.0.1",
     "lru-cache": "^7.10.1",
