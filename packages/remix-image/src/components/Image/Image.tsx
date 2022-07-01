@@ -1,6 +1,7 @@
 import clsx from "clsx";
 import * as React from "react";
 import { useResponsiveImage } from "../../hooks";
+import { remixImageLoader } from "../../loaders";
 import { encodeQuery } from "../../utils/url";
 import {
   ImgElementWithDataProp,
@@ -15,6 +16,7 @@ export const Image = React.memo<ImageProps>(
       {
         src,
         loaderUrl = "/api/image",
+        loader = remixImageLoader,
         responsive = [],
         options = {},
         dprVariants = 1,
@@ -43,10 +45,11 @@ export const Image = React.memo<ImageProps>(
     ) => {
       const responsiveProps = useResponsiveImage(
         { src },
-        loaderUrl,
         responsive,
         options,
-        dprVariants
+        dprVariants,
+        loaderUrl,
+        loader
       );
 
       const imageStyle = React.useMemo<React.CSSProperties>(() => {

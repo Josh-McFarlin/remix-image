@@ -3,6 +3,18 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [Unreleased]
+
+### Added
+
+- Added Client Loader functions to enable the use of external image transformation services
+
+### Changed
+
+- Added optional `loader` prop to `Image` and `BaseImage` components
+- **BREAKING**: Moved `loaderUrl` argument of `useResponsiveImage` hook to the end
+- Added optional `loader` argument to the end of `useResponsiveImage` hook
+
 ## [1.2.0] - 2022-06-30
 
 ### Changed

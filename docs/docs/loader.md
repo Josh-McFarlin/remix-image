@@ -23,7 +23,7 @@ export const loader: LoaderFunction = ({ request }) => {
 ## Options
 |          Name          |              Type              | Required |       Default       |                                                   Description                                                    |
 |:----------------------:|:------------------------------:|:--------:|:-------------------:|:----------------------------------------------------------------------------------------------------------------:|
-|        selfUrl         |             string             |    X     |                     |                                           The URL of the local server.                                           |
+|        selfUrl         |             string             |   Yes    |                     |                                           The URL of the local server.                                           |
 |        resolver        |            Resolver            |          |    fetchResolver    |                                            The image resolver to use.                                            |
 |      transformer       |      Transformer or null       |          |   pureTransformer   | A transformer function that handles mutations of images. If this option is null, transformation will be skipped. |
 |   useFallbackFormat    |            boolean             |          |        true         |           If RemixImage should fallback to the fallback mime type if the output type is not supported.           |

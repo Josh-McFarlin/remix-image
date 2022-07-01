@@ -8,7 +8,7 @@ Optionally, this library also exports the hook used to generate responsive props
 In most use cases you can simply use the `Image` component, but you might need the hook for custom components.
 
 ```typescript jsx
-import { useResponsiveImage } from "remix-image";
+import { useResponsiveImage, remixImageLoader } from "remix-image";
 
 const Image: React.FC<ImageProps> = ({
   className,
@@ -16,7 +16,7 @@ const Image: React.FC<ImageProps> = ({
   responsive = [],
   ...imgProps
 }) => {
-  const responsiveProps = useResponsiveImage(imgProps, loaderUrl, responsive);
+  const responsiveProps = useResponsiveImage(imgProps, responsive, [1], loaderUrl, remixImageLoader);
 
   return (
     <img
@@ -29,13 +29,17 @@ const Image: React.FC<ImageProps> = ({
 ```
 
 ## Parameters
-|    Name     |                                Type                                | Required | Default |                                                  Description                                                   |
-|:-----------:|:------------------------------------------------------------------:|:--------:|:-------:|:--------------------------------------------------------------------------------------------------------------:|
-|  imgProps   |                          { src: string }                           |     X    |         |                                The props to be passed to the base img element.                                 |
-|  loaderUrl  |                               string                               |     X    |   []    |                                  The path of the image loader resource route.                                  |
-| responsive  | { size: { width: number; height: number; }; maxWidth?: number; }[] |          |   []    |                                         An array of responsive sizes.                                          |
-|   options   |                          TransformOptions                          |          |         |               TransformOptions that can be used to override the defaults provided to the loader.               |
-| dprVariants |                         number or number[]                         |          |   [1]   | Different DPR variants to generate images for. This value will always be merged into an array with value [1].  |
+|    Name     |                                Type                                |                                 Required                                  |       Default       |                                                  Description                                                  |
+|:-----------:|:------------------------------------------------------------------:|:-------------------------------------------------------------------------:|:-------------------:|:-------------------------------------------------------------------------------------------------------------:|
+|  imgProps   |                          { src: string }                           |                                    Yes                                    |                     |                                The props to be passed to the base img element.                                |
+| responsive  | { size: { width: number; height: number; }; maxWidth?: number; }[] |                                                                           |        `[]`         |                                         An array of responsive sizes.                                         |
+|   options   |                          TransformOptions                          |                                                                           |                     |              TransformOptions that can be used to override the defaults provided to the loader.               |
+| dprVariants |                         number or number[]                         |                                                                           |        `[1]`        | Different DPR variants to generate images for. This value will always be merged into an array with value [1]. |
+|  loaderUrl  |                               string                               | Yes when using `cloudinaryLoader` or `imgixLoader` for `loader` parameter |   `"/api/image"`    |                                 The path of the image loader resource route.                                  |
+|   loader    |                            ClientLoader                            |                                                                           | `remixImageLoader`  |                         The ClientLoader to use for generating the transformed image.                         |
+
+### ClientLoader Options
+By default, `remixImageLoader` is used. If you would like to use an external ClientLoader, please refer to the [ClientLoader documentation](./client-loader.md). 
 
 ### TransformOptions
 ```typescript

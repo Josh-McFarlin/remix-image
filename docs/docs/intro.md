@@ -10,7 +10,8 @@ A React component for responsive images in Remix.
 
 This library lets you:
 * Resize images to the minimum size needed for faster page loading
-* Transform images to more efficient file types for faster speed
+* Convert images to more efficient file types for faster page loader
+* Apply transformations to images such as `resize`, `crop`, `rotate`, `blur`, and `flip`
 * Cache commonly requested assets for the best performance
 
 Turning:
