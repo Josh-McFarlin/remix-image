@@ -1,11 +1,13 @@
 import * as React from "react";
 import { useResponsiveImage } from "../../hooks";
+import { remixImageLoader } from "../../loaders";
 import { BaseImageProps } from "./types";
 
 export const BaseImage = React.forwardRef<HTMLImageElement, BaseImageProps>(
   (
     {
       loaderUrl = "/api/image",
+      loader = remixImageLoader,
       responsive = [],
       options = {},
       dprVariants = 1,
@@ -17,10 +19,11 @@ export const BaseImage = React.forwardRef<HTMLImageElement, BaseImageProps>(
   ) => {
     const responsiveProps = useResponsiveImage(
       imgProps,
-      loaderUrl,
       responsive,
       options,
-      dprVariants
+      dprVariants,
+      loaderUrl,
+      loader
     );
 
     return (

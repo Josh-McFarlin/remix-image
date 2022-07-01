@@ -27,13 +27,16 @@ import Image from "remix-image";
 ```
 
 ## PropTypes
-|    Name     |                                Type                                | Required |   Default    |                                                                   Description                                                                    |
-|:-----------:|:------------------------------------------------------------------:|:--------:|:------------:|:------------------------------------------------------------------------------------------------------------------------------------------------:|
-|  loaderUrl  |                               string                               |          | "/api/image" | The path of the image loader resource route. The `loaderUrl` prop is optional if the resource route has been created at the path `"/api/image"`. |
-| responsive  | { size: { width: number; height: number; }; maxWidth?: number; }[] |          |      []      |                           An array of responsive sizes. The resource route is not called if this prop is not provided.                           |
-|   options   |                          TransformOptions                          |          |      {}      |                                TransformOptions that can be used to override the defaults provided to the loader.                                |
-| dprVariants |                         number or number[]                         |          |     [1]      |                  Different DPR variants to generate images for. This value will always be merged into an array with value [1].                   |
+|    Name     |                                Type                                |                               Required                               |       Default       |                                                                   Description                                                                    |
+|:-----------:|:------------------------------------------------------------------:|:--------------------------------------------------------------------:|:-------------------:|:------------------------------------------------------------------------------------------------------------------------------------------------:|
+|  loaderUrl  |                               string                               | Yes when using `cloudinaryLoader` or `imgixLoader` for `loader` prop |   `"/api/image"`    | The path of the image loader resource route. The `loaderUrl` prop is optional if the resource route has been created at the path `"/api/image"`. |
+|   loader    |                            ClientLoader                            |                                                                      | `remixImageLoader`  |                                          The ClientLoader to use for generating the transformed image.                                           |
+| responsive  | { size: { width: number; height: number; }; maxWidth?: number; }[] |                                                                      |        `[]`         |                           An array of responsive sizes. The resource route is not called if this prop is not provided.                           |
+|   options   |                          TransformOptions                          |                                                                      |        `{}`         |                                TransformOptions that can be used to override the defaults provided to the loader.                                |
+| dprVariants |                         number or number[]                         |                                                                      |        `[1]`        |                  Different DPR variants to generate images for. This value will always be merged into an array with value [1].                   |
 
+### ClientLoader Options
+By default, `remixImageLoader` is used. If you would like to use an external ClientLoader, please refer to the [ClientLoader documentation](../client-loader.md).
 
 **Note**: The `Image` component extends the native `img` element, so any props used with `img` can be provided to the `Image` component.
 
