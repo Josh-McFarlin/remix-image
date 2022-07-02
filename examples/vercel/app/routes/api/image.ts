@@ -28,9 +28,9 @@ const config = {
     process.env.NODE_ENV === "development"
       ? "http://localhost:3000"
       : fixedVercelUrl,
-  // cache: new DiskCache({
-  //   path: path.join(os.tmpdir(), "img"),
-  // }),
+  cache: new DiskCache({
+    path: path.join(os.tmpdir(), "img"),
+  }),
   resolver: fetchImage,
   transformer: sharpTransformer,
   basePath: process.env.NODE_ENV === "development" ? "public" : "/",

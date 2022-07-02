@@ -104,14 +104,14 @@ export const Image = React.memo<ImageProps>(
             },
             [unoptimized, ref, src, placeholder, onLoadingComplete]
           )}
+          decoding={decoding}
+          loading={loading}
+          style={imageStyle}
           className={clsx(
             !unoptimized && "remix-image",
             !unoptimized && placeholder === "blur" && "blur-in",
             className
           )}
-          decoding={decoding}
-          loading={loading}
-          style={imageStyle}
           {...imgProps}
           {...responsiveProps}
           onLoad={(event) => {

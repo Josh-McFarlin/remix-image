@@ -1,5 +1,5 @@
 import React from "react";
-import Image from "remix-image";
+import Image, { MimeType } from "remix-image";
 
 const images = [
   {
@@ -21,7 +21,7 @@ const images = [
     ],
   },
   {
-    src: "/camera.png",
+    src: "/camera-transparent.webp",
     responsive: [
       {
         size: {
@@ -48,6 +48,10 @@ const IndexPage: React.FC = () => (
         src={img.src}
         loaderUrl="/api/image"
         responsive={img.responsive}
+        placeholder="blur"
+        options={{
+          contentType: MimeType.WEBP,
+        }}
       />
     ))}
   </div>

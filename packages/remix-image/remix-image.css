@@ -11,6 +11,7 @@ img.remix-image.blur {
   filter: blur(0px);
   animation-name: blurIn;
   animation-iteration-count: 1;
+  animation-fill-mode: forwards;
   animation-timing-function: ease-in;
   animation-duration: 0.5s;
 }
@@ -21,5 +22,6 @@ img.remix-image.blur {
   }
   100% {
     filter: blur(0px);
+    background: white;
   }
 }
