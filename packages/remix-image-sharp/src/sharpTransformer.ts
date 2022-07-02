@@ -53,7 +53,7 @@ export const sharpTransformer: Transformer = {
       animated: true,
     });
 
-    image.ensureAlpha(0);
+    image.ensureAlpha(1);
 
     if (crop) {
       image.extract({
@@ -91,7 +91,7 @@ export const sharpTransformer: Transformer = {
       image.blur(blurRadius);
     }
 
-    return image
+    const result = await image
       .jpeg({
         quality,
         progressive: true,
@@ -120,5 +120,7 @@ export const sharpTransformer: Transformer = {
         force: outputContentType === MimeType.AVIF,
       })
       .toBuffer();
+
+    return new Uint8Array(result);
   },
 };
