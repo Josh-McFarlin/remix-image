@@ -5,6 +5,7 @@ import {
   MemoryCache,
   kvResolver,
   fetchResolver,
+  mB,
 } from "remix-image/serverPure";
 import { wasmTransformer } from "remix-image-wasm";
 
@@ -27,7 +28,7 @@ export const myResolver: Resolver = async (asset, url, options, basePath) => {
 const config = {
   selfUrl: SELF_URL,
   cache: new MemoryCache({
-    maxSize: 5e7,
+    maxSize: mB(50),
   }),
   resolver: myResolver,
   transformer: wasmTransformer,

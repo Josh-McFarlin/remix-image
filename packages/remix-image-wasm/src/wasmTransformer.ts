@@ -1,10 +1,9 @@
-import { initResize } from "@jsquash/resize";
 import { ImagePosition, MimeType, Transformer } from "remix-image";
 import { AvifHandler, WebpHandler, JpegHandler, PngHandler } from "./handlers";
 import { blurImage } from "./operations/blur";
 import { cropImage } from "./operations/crop";
 import { flipImage } from "./operations/flip";
-import { resizeImage } from "./operations/resize";
+import { resizeImage } from "./operations/js-resize";
 import { rotateImage } from "./operations/rotate";
 import { ImageHandler } from "./types/transformer";
 
@@ -53,7 +52,7 @@ export const wasmTransformer: Transformer = {
   transform: async (
     { data, contentType: inputContentType },
     {
-      contentType: outputContentType,
+      contentType: outputContentType = inputContentType,
       width,
       height,
       fit,
@@ -69,14 +68,7 @@ export const wasmTransformer: Transformer = {
       compressionLevel,
     }
   ) => {
-    if (typeof RESIZE_WASM == "undefined") {
-      throw new Error("RESIZE_WASM is required if using Cloudflare Workers!");
-    }
-
-    await initResize(RESIZE_WASM);
-
-    const inputHandler = typeHandlers[inputContentType];
-    let image = await inputHandler.decode(data);
+    let image = await typeHandlers[inputContentType].decode(data);
 
     if (crop) {
       image = await cropImage(image, crop, background);
@@ -107,8 +99,7 @@ export const wasmTransformer: Transformer = {
       image = await blurImage(image, blurRadius);
     }
 
-    const outputHandler = typeHandlers[outputContentType || inputContentType];
-    const result = await outputHandler.encode(image, {
+    const result = await typeHandlers[outputContentType].encode(image, {
       width: image.width,
       height: image.height,
       fit,

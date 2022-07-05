@@ -42,7 +42,8 @@ export const pureTransformer: Transformer = {
     }
 
     if (width != null || height != null) {
-      image.resize(width as any, height as any, {
+      // @ts-ignore at least one is a number
+      image.resize(width, height, {
         fit,
         position: position as ImagePosition,
       });

@@ -51,7 +51,6 @@ JPEG_DEC_WASM = "node_modules/remix-image-wasm/jpeg_dec.wasm"
 PNG_WASM = "node_modules/remix-image-wasm/png.wasm"
 WEBP_ENC_WASM = "node_modules/remix-image-wasm/webp_enc.wasm"
 WEBP_DEC_WASM = "node_modules/remix-image-wasm/webp_dec.wasm"
-RESIZE_WASM = "node_modules/remix-image-wasm/resize.wasm"          # always required
 # AVIF_ENC_WASM = "node_modules/remix-image-wasm/avif_enc.wasm"    # uncomment for AVIF support
 # AVIF_DEC_WASM = "node_modules/remix-image-wasm/avif_dec.wasm"    # uncomment for AVIF support
 ```
@@ -92,7 +91,6 @@ Which we can do by setting the `[wasm_modules]` field in the `wrangler.toml` fil
 PNG_WASM = "node_modules/remix-image-wasm/png.wasm"
 WEBP_ENC_WASM = "node_modules/remix-image-wasm/webp_enc.wasm"
 WEBP_DEC_WASM = "node_modules/remix-image-wasm/webp_dec.wasm"
-RESIZE_WASM = "node_modules/remix-image-wasm/resize.wasm"         # always required
 ```
 
 **Note**: `pureTransformer` does not include any support for WEBP inputs or outputs.

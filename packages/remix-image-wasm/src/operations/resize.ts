@@ -1,7 +1,10 @@
 import resize from "@jsquash/resize";
 import { Color, ImageFit, ImagePosition } from "remix-image";
 import ImageData from "../types/ImageData";
-import { getFrameDimensions, getImageDimensions } from "../utils/sizing";
+import {
+  getFrameDimensions,
+  // getImageDimensions
+} from "../utils/sizing";
 
 export const resizeImage = async (
   src: ImageData,
@@ -25,14 +28,14 @@ export const resizeImage = async (
     resizeOptions.fit
   );
 
-  const { imageWidth, imageHeight, xOffset, yOffset } = getImageDimensions(
-    src.width,
-    src.height,
-    frameWidth,
-    frameHeight,
-    resizeOptions.fit,
-    resizeOptions.position
-  );
+  // const { imageWidth, imageHeight, xOffset, yOffset } = getImageDimensions(
+  //   src.width,
+  //   src.height,
+  //   frameWidth,
+  //   frameHeight,
+  //   resizeOptions.fit,
+  //   resizeOptions.position
+  // );
 
   const dstBuffer = new Uint8ClampedArray(src.data.length);
 

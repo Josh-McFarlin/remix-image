@@ -5,6 +5,7 @@ zone_id = ""
 account_id = ""
 route = ""
 workers_dev = true
+usage_model = "bundled"
 
 main = "build/index.js"
 compatibility_date = "2022-06-05"
