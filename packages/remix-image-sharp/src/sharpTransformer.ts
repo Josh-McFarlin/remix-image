@@ -23,6 +23,7 @@ export const sharpTransformer: Transformer = {
   name: "sharpTransformer",
   supportedInputs,
   supportedOutputs,
+  fallbackOutput: MimeType.PNG,
   transform: async (
     { data },
     {

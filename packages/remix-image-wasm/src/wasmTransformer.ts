@@ -8,23 +8,39 @@ import { resizeImage } from "./operations/resize";
 import { rotateImage } from "./operations/rotate";
 import { ImageHandler } from "./types/transformer";
 
-export const supportedInputs = new Set([
-  MimeType.JPEG,
-  MimeType.PNG,
-  MimeType.WEBP,
-  MimeType.AVIF,
-]);
+export const supportedInputs = new Set<MimeType>(
+  Object.entries({
+    [MimeType.PNG]: typeof PNG_WASM != "undefined",
+    [MimeType.JPEG]: typeof JPEG_DEC_WASM != "undefined",
+    [MimeType.WEBP]: typeof WEBP_DEC_WASM != "undefined",
+    [MimeType.AVIF]: typeof AVIF_DEC_WASM != "undefined",
+  }).reduce<MimeType[]>((accum, [mimeType, isSupported]) => {
+    if (isSupported) {
+      accum.push(mimeType as MimeType);
+    }
 
-export const supportedOutputs = new Set([
-  MimeType.JPEG,
-  MimeType.PNG,
-  MimeType.WEBP,
-  MimeType.AVIF,
-]);
+    return accum;
+  }, [])
+);
+
+export const supportedOutputs = new Set<MimeType>(
+  Object.entries({
+    [MimeType.PNG]: typeof PNG_WASM != "undefined",
+    [MimeType.JPEG]: typeof JPEG_ENC_WASM != "undefined",
+    [MimeType.WEBP]: typeof WEBP_ENC_WASM != "undefined",
+    [MimeType.AVIF]: typeof AVIF_ENC_WASM != "undefined",
+  }).reduce<MimeType[]>((accum, [mimeType, isSupported]) => {
+    if (isSupported) {
+      accum.push(mimeType as MimeType);
+    }
+
+    return accum;
+  }, [])
+);
 
 const typeHandlers: Record<string, ImageHandler> = {
-  [MimeType.JPEG]: JpegHandler,
   [MimeType.PNG]: PngHandler,
+  [MimeType.JPEG]: JpegHandler,
   [MimeType.AVIF]: AvifHandler,
   [MimeType.WEBP]: WebpHandler,
 };
@@ -33,6 +49,7 @@ export const wasmTransformer: Transformer = {
   name: "wasmTransformer",
   supportedInputs,
   supportedOutputs,
+  fallbackOutput: Array.from(supportedOutputs.values())[0],
   transform: async (
     { data, contentType: inputContentType },
     {
@@ -52,6 +69,10 @@ export const wasmTransformer: Transformer = {
       compressionLevel,
     }
   ) => {
+    if (typeof RESIZE_WASM == "undefined") {
+      throw new Error("RESIZE_WASM is required if using Cloudflare Workers!");
+    }
+
     await initResize(RESIZE_WASM);
 
     const inputHandler = typeHandlers[inputContentType];

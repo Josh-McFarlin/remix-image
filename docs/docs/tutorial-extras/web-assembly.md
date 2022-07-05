@@ -36,6 +36,8 @@ export const loader: LoaderFunction = ({ request }) => {
 };
 ```
 
+For an example project using Web Assembly, look at [this example](https://github.com/Josh-McFarlin/remix-image/tree/master/examples/cloudflare-workers).
+
 ## Add Wasm Files To Your Environment
 
 
@@ -44,14 +46,54 @@ export const loader: LoaderFunction = ({ request }) => {
 Add the following lines to the bottom of your `wrangler.toml` file:
 ```
 [wasm_modules]
-AVIF_ENC_WASM = "node_modules/remix-image-wasm/avif_enc.wasm"
-AVIF_DEC_WASM = "node_modules/remix-image-wasm/avif_dec.wasm"
 JPEG_ENC_WASM = "node_modules/remix-image-wasm/jpeg_enc.wasm"
 JPEG_DEC_WASM = "node_modules/remix-image-wasm/jpeg_dec.wasm"
 PNG_WASM = "node_modules/remix-image-wasm/png.wasm"
 WEBP_ENC_WASM = "node_modules/remix-image-wasm/webp_enc.wasm"
 WEBP_DEC_WASM = "node_modules/remix-image-wasm/webp_dec.wasm"
-RESIZE_WASM = "node_modules/remix-image-wasm/resize.wasm"
+RESIZE_WASM = "node_modules/remix-image-wasm/resize.wasm"          # always required
+# AVIF_ENC_WASM = "node_modules/remix-image-wasm/avif_enc.wasm"    # uncomment for AVIF support
+# AVIF_DEC_WASM = "node_modules/remix-image-wasm/avif_dec.wasm"    # uncomment for AVIF support
 ```
 
-For an example project using Web Assembly, look at [this example](https://github.com/Josh-McFarlin/remix-image/tree/master/examples/cloudflare-workers).
+### Reducing Bundle Size
+
+Going over the Cloudflare Worker file size limit?
+
+You can solve this by only including the `.wasm` files for image types you want to speed up transformation for.
+
+* Files ending with `_dec.wasm` are used for  image inputs
+* Files ending with `_enc.wasm` are used for image outputs
+
+**Note**: An exception is PNG, which uses a single `png.wasm` for image inputs and outputs.
+
+If an input image is in a format that you haven’t included the `.wasm` files for in your environment,
+it will use the `fallbackTransformer` option, which is `pureTransformer`
+by default and supports JPEG, PNG, GIF, BMP, and TIFF images.
+
+### Example
+
+Let’s say we have a project that uses images that are JPEGs, PNGs, and WEBPs.
+We want our faster `wasmTransformer` to handle our PNG→PNG, WEBP→WEBP, and PNG→WEBP transformations,
+while letting any JPEG transformations (JPEG→JPEG, JPEG→PNG, PNG→JPEG, etc) be handled by the built-in `pureTransformer`
+so we don’t have to include the large `JPEG_DEC.wasm` and `JPEG_ENC.wasm` files in our bundled project.
+
+Therefore, we want our `supportedInputs` to be:
+* MimeType.PNG
+* MimeType.WEBP
+
+And our `supportedOutputs` to be:
+* MimeType.PNG
+* MimeType.WEBP
+
+Which we can do by setting the `[wasm_modules]` field in the `wrangler.toml` file to:
+```
+[wasm_modules]
+PNG_WASM = "node_modules/remix-image-wasm/png.wasm"
+WEBP_ENC_WASM = "node_modules/remix-image-wasm/webp_enc.wasm"
+WEBP_DEC_WASM = "node_modules/remix-image-wasm/webp_dec.wasm"
+RESIZE_WASM = "node_modules/remix-image-wasm/resize.wasm"         # always required
+```
+
+**Note**: `pureTransformer` does not include any support for WEBP inputs or outputs.
+If you do not include `WEBP_DEC.wasm` or `WEBP_ENC.wasm` in your environment, your WEBP images will not be transformed by Remix-Image.

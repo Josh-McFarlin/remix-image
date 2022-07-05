@@ -6,9 +6,12 @@ account_id = ""
 route = ""
 workers_dev = true
 
+main = "build/index.js"
+compatibility_date = "2022-06-05"
+
 [site]
 bucket = "./public"
-entry-point = "."
+# entry-point = "."
 
 [build]
 command = "npm run build"
@@ -16,12 +19,25 @@ command = "npm run build"
 [build.upload]
 format="service-worker"
 
+# [wasm_modules]
+# AVIF_ENC_WASM = "node_modules/remix-image-wasm/avif_enc.wasm"
+# AVIF_DEC_WASM = "node_modules/remix-image-wasm/avif_dec.wasm"
+# JPEG_ENC_WASM = "node_modules/remix-image-wasm/jpeg_enc.wasm"
+# JPEG_DEC_WASM = "node_modules/remix-image-wasm/jpeg_dec.wasm"
+# PNG_WASM = "node_modules/remix-image-wasm/png.wasm"
+# WEBP_ENC_WASM = "node_modules/remix-image-wasm/webp_enc.wasm"
+# WEBP_DEC_WASM = "node_modules/remix-image-wasm/webp_dec.wasm"
+# RESIZE_WASM = "node_modules/remix-image-wasm/resize.wasm"
+
+
+# Ignore this config, use the commented-out one above in your own projects
+# This is different because of internal differences in this repo
 [wasm_modules]
-AVIF_ENC_WASM = "node_modules/remix-image-wasm/avif_enc.wasm"
-AVIF_DEC_WASM = "node_modules/remix-image-wasm/avif_dec.wasm"
-JPEG_ENC_WASM = "node_modules/remix-image-wasm/jpeg_enc.wasm"
-JPEG_DEC_WASM = "node_modules/remix-image-wasm/jpeg_dec.wasm"
-PNG_WASM = "node_modules/remix-image-wasm/png.wasm"
-WEBP_ENC_WASM = "node_modules/remix-image-wasm/webp_enc.wasm"
-WEBP_DEC_WASM = "node_modules/remix-image-wasm/webp_dec.wasm"
-RESIZE_WASM = "node_modules/remix-image-wasm/resize.wasm"
+# AVIF_ENC_WASM = "../../node_modules/remix-image-wasm/avif_enc.wasm"
+# AVIF_DEC_WASM = "../../node_modules/remix-image-wasm/avif_dec.wasm"
+# JPEG_ENC_WASM = "../../node_modules/remix-image-wasm/jpeg_enc.wasm"
+# JPEG_DEC_WASM = "../../node_modules/remix-image-wasm/jpeg_dec.wasm"         # allow jpeg as input
+PNG_WASM = "../../node_modules/remix-image-wasm/png.wasm"                   # allow png as input or output
+WEBP_ENC_WASM = "../../node_modules/remix-image-wasm/webp_enc.wasm"         # allow webp as output
+WEBP_DEC_WASM = "../../node_modules/remix-image-wasm/webp_dec.wasm"
+RESIZE_WASM = "../../node_modules/remix-image-wasm/resize.wasm"             # always required

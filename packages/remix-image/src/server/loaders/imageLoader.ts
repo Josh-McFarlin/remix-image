@@ -18,7 +18,7 @@ export const imageLoader: AssetLoader = async (
     resolver = fetchResolver,
     transformer = pureTransformer,
     useFallbackFormat = true,
-    fallbackFormat = MimeType.JPEG,
+    fallbackFormat,
     useFallbackTransformer = true,
     fallbackTransformer = pureTransformer,
     defaultOptions = {},
@@ -173,6 +173,7 @@ export const imageLoader: AssetLoader = async (
       if (!curTransformer.supportedOutputs.has(outputContentType)) {
         if (
           useFallbackFormat &&
+          fallbackFormat != null &&
           curTransformer.supportedOutputs.has(fallbackFormat)
         ) {
           console.error(
@@ -180,9 +181,10 @@ export const imageLoader: AssetLoader = async (
           );
           outputContentType = fallbackFormat;
         } else {
-          throw new UnsupportedImageError(
-            `Transformer does not allow this output content type: ${outputContentType}!`
+          console.error(
+            `Transformer does not allow this output content type: ${outputContentType}! Falling back to mime type: ${curTransformer.fallbackOutput}`
           );
+          outputContentType = curTransformer.fallbackOutput;
         }
       }
 

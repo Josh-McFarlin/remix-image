@@ -1,5 +1,5 @@
 import React from "react";
-import Image, { MimeType, cloudflareLoader } from "remix-image";
+import Image, { MimeType } from "remix-image";
 
 const images = [
   {
@@ -75,7 +75,6 @@ const IndexPage: React.FC = () => (
           <Image
             src={img.src}
             loaderUrl="/api/image"
-            loader={cloudflareLoader}
             responsive={img.responsive}
             dprVariants={[1, 3]}
           />

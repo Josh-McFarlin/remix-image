@@ -2,12 +2,14 @@ import ImageTransformer, {
   supportedInputs,
   supportedOutputs,
 } from "js-image-lib";
-import { Transformer, ImagePosition } from "../../types/transformer";
+import { MimeType } from "../../types/file";
+import { ImagePosition, Transformer } from "../../types/transformer";
 
 export const pureTransformer: Transformer = {
   name: "pureTransformer",
   supportedInputs,
   supportedOutputs,
+  fallbackOutput: MimeType.PNG,
   transform: async (
     { data, contentType: inputContentType },
     {
