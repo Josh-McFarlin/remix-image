@@ -5,10 +5,16 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Fixed
+
+- Fixed placeholder images not using `loader`
+- Ensured `Image` still exists before ref operations
+
 ### Changed
 
 - Added `fallbackOutput` field to `Transformer` type to customize default fallback for each transformer
 - Set the `fallbackOutput` field for `pureTransformer` to `MimeType.PNG`
+- Moved transformer defaults to `useResponsiveImage` hook
 
 ## [1.3.1] - 2022-07-02
 
