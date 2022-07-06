@@ -39,7 +39,7 @@
   },
   "rules": {
     "import/no-unresolved": "error",
-    "no-console": ["warn", { "allow": ["warn", "error"] }],
+    "no-console": "off",
     "no-return-await": "error",
     "react/react-in-jsx-scope": "off",
     "react/no-multi-comp": "off",

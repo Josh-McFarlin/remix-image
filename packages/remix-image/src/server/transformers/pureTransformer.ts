@@ -2,12 +2,14 @@ import ImageTransformer, {
   supportedInputs,
   supportedOutputs,
 } from "js-image-lib";
-import { Transformer, ImagePosition } from "../../types/transformer";
+import { MimeType } from "../../types/file";
+import { ImagePosition, Transformer } from "../../types/transformer";
 
 export const pureTransformer: Transformer = {
   name: "pureTransformer",
   supportedInputs,
   supportedOutputs,
+  fallbackOutput: MimeType.PNG,
   transform: async (
     { data, contentType: inputContentType },
     {
@@ -40,7 +42,8 @@ export const pureTransformer: Transformer = {
     }
 
     if (width != null || height != null) {
-      image.resize(width as any, height as any, {
+      // @ts-ignore at least one is a number
+      image.resize(width, height, {
         fit,
         position: position as ImagePosition,
       });

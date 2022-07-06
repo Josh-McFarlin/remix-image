@@ -53,7 +53,6 @@ JPEG_DEC_WASM = "node_modules/remix-image-wasm/jpeg_dec.wasm"
 PNG_WASM = "node_modules/remix-image-wasm/png.wasm"
 WEBP_ENC_WASM = "node_modules/remix-image-wasm/webp_enc.wasm"
 WEBP_DEC_WASM = "node_modules/remix-image-wasm/webp_dec.wasm"
-RESIZE_WASM = "node_modules/remix-image-wasm/resize.wasm"
 ```
 
 ### Docs

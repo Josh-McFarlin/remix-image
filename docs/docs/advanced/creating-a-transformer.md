@@ -15,6 +15,7 @@ export type Transformer = {
   name: string;
   supportedInputs: Set<MimeType>;
   supportedOutputs: Set<MimeType>;
+  fallbackOutput: MimeType;
   transform: (
     input: {
       url: string;

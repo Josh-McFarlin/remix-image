@@ -2,7 +2,6 @@ import clsx from "clsx";
 import * as React from "react";
 import { useResponsiveImage } from "../../hooks";
 import { remixImageLoader } from "../../loaders";
-import { encodeQuery } from "../../utils/url";
 import {
   ImgElementWithDataProp,
   computePlaceholderSize,
@@ -25,8 +24,7 @@ export const Image = React.memo<ImageProps>(
         unoptimized = false,
         placeholder = "empty",
         blurDataURL = !unoptimized && placeholder === "blur"
-          ? encodeQuery(loaderUrl, {
-              src: encodeURI(src || ""),
+          ? loader(src || "", loaderUrl, {
               width: 15,
               height: 15,
               fit: options?.fit || "cover",
@@ -84,21 +82,23 @@ export const Image = React.memo<ImageProps>(
         <img
           ref={React.useCallback(
             (img: ImgElementWithDataProp) => {
-              if (!unoptimized) {
-                if (placeholder === "blur") {
-                  img.classList.add("blur");
+              if (img != null) {
+                if (!unoptimized) {
+                  if (placeholder === "blur") {
+                    img.classList.add("blur");
+                  }
+                  if (img?.complete) {
+                    handleLoading(img, src!, onLoadingComplete);
+                  }
                 }
-                if (img?.complete) {
-                  handleLoading(img, src!, onLoadingComplete);
-                }
-              }
-              if (ref) {
-                if (typeof ref === "function") {
-                  ref(img);
-                } else {
-                  (
-                    ref as React.MutableRefObject<HTMLImageElement | null>
-                  ).current = img;
+                if (ref) {
+                  if (typeof ref === "function") {
+                    ref(img);
+                  } else {
+                    (
+                      ref as React.MutableRefObject<HTMLImageElement | null>
+                    ).current = img;
+                  }
                 }
               }
             },

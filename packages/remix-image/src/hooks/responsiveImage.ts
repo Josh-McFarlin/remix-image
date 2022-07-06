@@ -28,7 +28,7 @@ export function useResponsiveImage(
   options: SizelessOptions = {},
   dprVariants: number | number[] = [1],
   loaderUrl = "/api/image",
-  loaderFunction: ClientLoader = remixImageLoader
+  loader: ClientLoader = remixImageLoader
 ): ResponsiveHookResult {
   return React.useMemo<ResponsiveHookResult>(() => {
     let largestSrc = image.src || "";
@@ -43,7 +43,7 @@ export function useResponsiveImage(
 
     for (const multiplier of multipliers) {
       for (const { size } of responsive) {
-        const srcSetUrl = loaderFunction(image.src || "", loaderUrl, {
+        const srcSetUrl = loader(image.src || "", loaderUrl, {
           width:
             typeof size.width === "number"
               ? size.width * multiplier
@@ -52,6 +52,17 @@ export function useResponsiveImage(
             typeof size.height === "number"
               ? size.height * multiplier
               : size.height,
+          fit: "cover",
+          position: "center",
+          background: [0x00, 0x00, 0x00, 0x00],
+          quality: 80,
+          compressionLevel: 9,
+          loop: 0,
+          delay: 100,
+          blurRadius: null,
+          rotate: null,
+          flip: null,
+          crop: null,
           ...options,
         });
 
@@ -83,5 +94,5 @@ export function useResponsiveImage(
       // This bug cannot be reproduced in Chrome or Firefox.
       src: largestSrc,
     };
-  }, [image.src, loaderUrl, loaderFunction, responsive, options, dprVariants]);
+  }, [image.src, loaderUrl, loader, responsive, options, dprVariants]);
 }

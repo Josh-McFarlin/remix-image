@@ -12,12 +12,14 @@ body {
   font-family: system-ui, sans-serif;
 }
 
-.stepper {
-  width: 100%;
-  height: 100%;
+.root {
+  display: flex;
+  flex-direction: column;
+  padding: 12px;
 }
 
-.stepper > .screen {
-  width: 100%;
-  height: 100%;
+section {
+  display: flex;
+  flex-direction: row;
+  gap: 12px;
 }

@@ -38,6 +38,7 @@ export default [
         preventAssignment: false,
         "import.meta.url": JSON.stringify("http://localhost"),
         "self.location.href": JSON.stringify("http://localhost"),
+        "await simd": "(() => false)",
       }),
       terser({
         keep_fnames: true,
