@@ -24,7 +24,7 @@ export function computePlaceholderSize(
       }
 
       if (!aspectRatio && size.height) {
-        ratio = size.width / size.height;
+        ratio = size.height / size.width;
       }
     }
   }
