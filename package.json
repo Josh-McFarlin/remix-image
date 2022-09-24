@@ -20,7 +20,7 @@
     "*.{js,jsx,ts,tsx,json,css,scss}": "prettier --write"
   },
   "scripts": {
-    "setup-repo": "node scripts/delete-node-packages.js && npm i --legacy-peer-deps && husky install",
+    "setup-repo": "node scripts/delete-node-packages.js && npm i --legacy-peer-deps && husky install && cd docs && npm i",
     "format": "prettier --write \"**/*.{js,jsx,ts,tsx,json,css,scss}\"",
     "lint": "eslint --fix --ext ts --ext tsx --ext js --ext jsx .",
     "typecheck": "tsc --project tsconfig.json --noEmit",
