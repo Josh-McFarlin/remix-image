@@ -3,6 +3,12 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [Unreleased]
+
+### Fixed
+
+- Fixed aspect ratio calculation in `Image` component
+
 ## [1.3.2] - 2022-07-05
 
 ### Fixed
@@ -182,7 +188,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
-- Added an optional `fallbackTransformer` parameter to `LoaderConfig`. Set to `pureTransformer` by default, this option lets you choose which transformer the loader will fall back to if your custom transformer fails or if the content type is not supported. 
+- Added an optional `fallbackTransformer` parameter to `LoaderConfig`. Set to `pureTransformer` by default, this option lets you choose which transformer the loader will fall back to if your custom transformer fails or if the content type is not supported.
 - Added an optional `skipFormats` parameter to `LoaderConfig`. This is a set of mime types that should be returned without transformation. Defaults to `Set([MimeType.SVG])`.
 
 ### Changed
