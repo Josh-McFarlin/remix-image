@@ -23,21 +23,14 @@ async function deleteNodePackages(directoryPath, searchInsideDirs) {
     throw new Error(`Invalid directory: ${directoryPath}`);
   }
 
-  const searching = searchInsideDirs.map((dir) =>
-    path.join(directoryPath, dir)
-  );
-
   const toDelete = [];
 
-  for (let i = 0; i < searching.length; i += 1) {
-    let fp = searching[i];
-    const includeSubDirs = fp.endsWith("/*");
-    if (includeSubDirs) {
-      fp = fp.slice(0, -2);
-    }
+  for (let { dir, includeSubDirs } of searchInsideDirs) {
+    const fp = path.join(directoryPath, dir);
 
     if (!fp || !fs.existsSync(fp)) {
-      throw new Error(`Invalid directory: ${directoryPath}`);
+      throw new Error(`Invalid directory: ${fp}`);
+    } else {
     }
 
     fs.readdirSync(fp, { withFileTypes: true }).forEach((item) => {
@@ -45,7 +38,10 @@ async function deleteNodePackages(directoryPath, searchInsideDirs) {
         if (item.name === "node_modules") {
           toDelete.push(path.join(fp, item.name));
         } else if (includeSubDirs) {
-          searching.push(path.join(fp, item.name));
+          searchInsideDirs.push({
+            dir: path.join(dir, item.name),
+            includeSubDirs: false,
+          });
         }
       } else if (item.isFile() && item.name === "package-lock.json") {
         toDelete.push(path.join(fp, item.name));
@@ -67,10 +63,12 @@ async function promptDeletions(filePaths) {
     const deleteAll = await prompt(`Would you like to delete all files?`);
 
     if (deleteAll) {
+      console.log("deleting...");
       deleting = filePaths;
     } else if (await prompt(`Would you like to delete individual files?`)) {
       for (const item of filePaths) {
         if (await prompt(`Would you like to delete: ${item}?`)) {
+          console.log("deleting...");
           deleting.push(item);
         }
       }
@@ -108,5 +106,18 @@ async function promptDeletions(filePaths) {
 
 // Remix Image Package root
 const rootDir = path.resolve(__dirname, "..");
-const searchInsideDirs = [".", "examples/*", "packages/*"];
+const searchInsideDirs = [
+  {
+    dir: ".",
+    includeSubDirs: false,
+  },
+  {
+    dir: "examples",
+    includeSubDirs: true,
+  },
+  {
+    dir: "packages",
+    includeSubDirs: true,
+  },
+];
 deleteNodePackages(rootDir, searchInsideDirs);

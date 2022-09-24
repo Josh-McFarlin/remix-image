@@ -33,12 +33,12 @@
     "release": "dotenv release-it --"
   },
   "devDependencies": {
-    "@types/sharp": "^0.30.4",
-    "sharp": "^0.30.7"
+    "@types/sharp": "~0.30.5",
+    "sharp": "^0.31.0"
   },
   "peerDependencies": {
     "remix": "^1.0.0",
     "remix-image": "^1.0.0",
-    "sharp": "^0.30.7"
+    "sharp": "^0.31.0"
   }
 }
