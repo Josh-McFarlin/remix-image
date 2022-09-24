@@ -51,7 +51,7 @@ export const decodeTransformQuery = (
   return parsed;
 };
 
-export const parseURL = (rawUrl: string, baseUrl?: URL | string): URL => {
+export const parseURL = (rawUrl: string, baseUrl?: string): URL => {
   let urlObject: URL;
 
   try {

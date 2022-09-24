@@ -9,6 +9,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Fixed aspect ratio calculation in `Image` component
 
+### Changed
+
+- Changed `parseURL` util to only accept `baseUrl?: string` for the second parameter
+
 ## [1.3.2] - 2022-07-05
 
 ### Fixed
