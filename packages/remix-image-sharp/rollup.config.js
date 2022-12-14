@@ -4,6 +4,7 @@ import commonjs from "@rollup/plugin-commonjs";
 import json from "@rollup/plugin-json";
 import typescript from "rollup-plugin-typescript2";
 import { terser } from "rollup-plugin-terser";
+import versionInjector from "rollup-plugin-version-injector";
 
 export default [
   {
@@ -17,6 +18,13 @@ export default [
     ],
     external: ["fs", "path", "stream", "child_process", "os", "sharp"],
     plugins: [
+      versionInjector({
+        injectInTags: {
+          fileRegexp: /\.(js|jsx|ts|tsx)$/,
+          tagId: "VI",
+          dateFormat: "mmmm d, yyyy HH:MM:ss",
+        },
+      }),
       peerDepsExternal(),
       json(),
       typescript({

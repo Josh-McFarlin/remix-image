@@ -4,7 +4,7 @@ import Layout from "@theme/Layout";
 import Link from "@docusaurus/Link";
 import useDocusaurusContext from "@docusaurus/useDocusaurusContext";
 import HomepageFeatures, { FeatureItem } from "../components/HomepageFeatures";
-import HomepageCode, { CodeItem } from "@site/src/components/HomepageCode";
+import HomepageCode, { CodeItem } from "../components/HomepageCode";
 import styles from "./index.module.css";
 
 const features: FeatureItem[] = [

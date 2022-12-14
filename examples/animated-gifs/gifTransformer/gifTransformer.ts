@@ -1,4 +1,4 @@
-import type { Transformer, ImagePosition } from "remix-image";
+import type { ImagePosition, Transformer } from "remix-image";
 import { MimeType } from "remix-image";
 import * as GIFJS from "omggif";
 import { getFrameDimensions } from "./sizing";
@@ -11,6 +11,7 @@ export const gifTransformer: Transformer = {
   name: "gifTransformer",
   supportedInputs: supported,
   supportedOutputs: supported,
+  fallbackOutput: MimeType.GIF,
   transform: async (
     { data },
     { width, height, fit, position, background, loop, delay }

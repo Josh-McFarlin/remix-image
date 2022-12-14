@@ -5,6 +5,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added
+
+- Exported `version` variable with the current version of the package
+
 ### Changed
 
 - Added a `verbose` flag to silence excessive logs

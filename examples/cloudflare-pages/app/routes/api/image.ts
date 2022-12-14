@@ -16,6 +16,7 @@ const SELF_URL = "http://localhost:8788";
 export const loader: LoaderFunction = ({ request, context }) => {
   const resolver: Resolver = async (asset, url, options, basePath) => {
     if (asset.startsWith("/") && (asset.length === 1 || asset[1] !== "/")) {
+      // @ts-ignore
       const imageResponse = await context.ASSETS.fetch(url, request.clone());
       const arrBuff = await imageResponse.arrayBuffer();
 

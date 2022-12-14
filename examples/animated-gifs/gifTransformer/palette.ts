@@ -16,6 +16,7 @@ export const generatePalette = (buffer: Uint8Array, count: number): Color[] => {
   ]);
 
   if (colors.length === 0) {
+    // @ts-ignore find types for "get-rgba-palette" in js-image-lib if needed
     colors = getPalette(buffer, count, 10, () => true).map(
       (color: number[]) => [color[0], color[1], color[2], 0xff]
     );

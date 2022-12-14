@@ -5,3 +5,5 @@ export * from "./resolvers/kvResolver";
 export * from "./loaders";
 export * from "../utils";
 export * from "../types";
+// eslint-disable-next-line @typescript-eslint/no-inferrable-types
+export const version: string = "[VI]{version}[/VI]";
