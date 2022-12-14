@@ -5,6 +5,7 @@ import json from "@rollup/plugin-json";
 import typescript from "rollup-plugin-typescript2";
 import { terser } from "rollup-plugin-terser";
 import replace from "@rollup/plugin-replace";
+import versionInjector from "rollup-plugin-version-injector";
 
 const external = ["fs", "path", "react", "react-dom"];
 
@@ -20,6 +21,13 @@ export default [
     ],
     external,
     plugins: [
+      versionInjector({
+        injectInTags: {
+          fileRegexp: /\.(js|jsx|ts|tsx)$/,
+          tagId: "VI",
+          dateFormat: "mmmm d, yyyy HH:MM:ss",
+        },
+      }),
       peerDepsExternal(),
       json(),
       typescript({
@@ -46,6 +54,13 @@ export default [
     ],
     external,
     plugins: [
+      versionInjector({
+        injectInTags: {
+          fileRegexp: /\.(js|jsx|ts|tsx)$/,
+          tagId: "VI",
+          dateFormat: "mmmm d, yyyy HH:MM:ss",
+        },
+      }),
       peerDepsExternal(),
       json(),
       typescript({
@@ -72,6 +87,13 @@ export default [
     ],
     external,
     plugins: [
+      versionInjector({
+        injectInTags: {
+          fileRegexp: /\.(js|jsx|ts|tsx)$/,
+          tagId: "VI",
+          dateFormat: "mmmm d, yyyy HH:MM:ss",
+        },
+      }),
       peerDepsExternal(),
       json(),
       typescript({

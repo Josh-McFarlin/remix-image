@@ -7,6 +7,7 @@ import { terser } from "rollup-plugin-terser";
 import nodePolyfills from "rollup-plugin-polyfill-node";
 import replace from "@rollup/plugin-replace";
 import copy from "rollup-plugin-copy";
+import versionInjector from "rollup-plugin-version-injector";
 
 export default [
   {
@@ -20,6 +21,13 @@ export default [
     ],
     inlineDynamicImports: true,
     plugins: [
+      versionInjector({
+        injectInTags: {
+          fileRegexp: /\.(js|jsx|ts|tsx)$/,
+          tagId: "VI",
+          dateFormat: "mmmm d, yyyy HH:MM:ss",
+        },
+      }),
       peerDepsExternal(),
       json(),
       typescript({

@@ -36,8 +36,8 @@
     "test": "jest -c=../../jest.config.js --passWithNoTests",
     "test:watch": "jest -c=../../jest.config.js --watch",
     "prebuild": "rimraf coverage build tmp",
-    "build": "rollup -c",
-    "watch": "rollup -c -w",
+    "build": "rollup -c --bundleConfigAsCjs",
+    "watch": "rollup -c -w --bundleConfigAsCjs",
     "release": "dotenv release-it --"
   },
   "dependencies": {
