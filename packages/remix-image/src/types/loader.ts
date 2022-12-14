@@ -32,6 +32,8 @@ export interface LoaderConfig {
   whitelistedDomains?: string[] | null;
   /** An array of domains that assets are not allowed to be fetched from. Only used if whitelistedDomains is not null. (optional, default null) */
   blacklistedDomains?: string[] | null;
+  /** Enables verbose logging for debugging */
+  verbose?: boolean;
 }
 
 export type AssetLoader = (

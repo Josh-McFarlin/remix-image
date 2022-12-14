@@ -27,6 +27,7 @@ export const imageLoader: AssetLoader = async (
     basePath = "public",
     whitelistedDomains = null,
     blacklistedDomains = null,
+    verbose = false
   },
   request
 ) => {
@@ -104,7 +105,10 @@ export const imageLoader: AssetLoader = async (
       const cacheValue = await cache.get(cacheKey);
 
       if (cacheValue) {
-        console.log(`Retrieved image [${cacheKey}] from cache.`);
+        if (verbose){
+          console.log(`Retrieved image [${cacheKey}] from cache.`);
+        }
+
         isNewImage = false;
         shouldTransform = false;
 
@@ -130,9 +134,12 @@ export const imageLoader: AssetLoader = async (
         basePath
       );
 
-      console.log(
-        `Fetched image [${cacheKey}] directly using resolver: ${resolver.name}.`
-      );
+      if (verbose) {
+        console.log(
+          `Fetched image [${cacheKey}] directly using resolver: ${resolver.name}.`
+        );
+      }
+
       isNewImage = true;
       shouldTransform = true;
 
@@ -200,9 +207,11 @@ export const imageLoader: AssetLoader = async (
         }
       );
 
-      console.log(
-        `Successfully transformed image using transformer: ${curTransformer.name}`
-      );
+      if (verbose){
+        console.log(
+          `Successfully transformed image using transformer: ${curTransformer.name}`
+        );
+      }
     }
 
     if (!resultImg) {
