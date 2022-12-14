@@ -27,7 +27,7 @@ export const imageLoader: AssetLoader = async (
     basePath = "public",
     whitelistedDomains = null,
     blacklistedDomains = null,
-    verbose = false
+    verbose = false,
   },
   request
 ) => {
@@ -105,7 +105,7 @@ export const imageLoader: AssetLoader = async (
       const cacheValue = await cache.get(cacheKey);
 
       if (cacheValue) {
-        if (verbose){
+        if (verbose) {
           console.log(`Retrieved image [${cacheKey}] from cache.`);
         }
 
@@ -207,7 +207,7 @@ export const imageLoader: AssetLoader = async (
         }
       );
 
-      if (verbose){
+      if (verbose) {
         console.log(
           `Successfully transformed image using transformer: ${curTransformer.name}`
         );
