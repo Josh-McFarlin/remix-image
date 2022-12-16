@@ -3,11 +3,18 @@ import resolve from "@rollup/plugin-node-resolve";
 import commonjs from "@rollup/plugin-commonjs";
 import json from "@rollup/plugin-json";
 import typescript from "rollup-plugin-typescript2";
-import { terser } from "rollup-plugin-terser";
+import terser from "@rollup/plugin-terser";
 import replace from "@rollup/plugin-replace";
-import versionInjector from "rollup-plugin-version-injector";
+import { version } from "./package.json";
 
 const external = ["fs", "path", "react", "react-dom"];
+
+const tsSettings = {
+  useTsconfigDeclarationDir: true,
+  tsconfigOverride: {
+    exclude: ["node_modules", "build", "tests"],
+  },
+};
 
 export default [
   {
@@ -17,29 +24,28 @@ export default [
         file: "build/index.js",
         format: "cjs",
         sourcemap: true,
+        exports: "named",
       },
     ],
     external,
     plugins: [
-      versionInjector({
-        injectInTags: {
-          fileRegexp: /\.(js|jsx|ts|tsx)$/,
-          tagId: "VI",
-          dateFormat: "mmmm d, yyyy HH:MM:ss",
-        },
-      }),
       peerDepsExternal(),
       json(),
-      typescript({
-        useTsconfigDeclarationDir: true,
-        tsconfigOverride: {
-          exclude: ["node_modules", "build", "tests"],
+      resolve(),
+      typescript(tsSettings),
+      commonjs({
+        sourceMap: true,
+      }),
+      replace({
+        preventAssignment: true,
+        sourceMap: true,
+        values: {
+          __remix_image_version: version,
         },
       }),
-      commonjs(),
-      resolve(),
       terser({
         keep_fnames: true,
+        sourceMap: true,
       }),
     ],
   },
@@ -50,29 +56,30 @@ export default [
         file: "build/server/index.js",
         format: "cjs",
         sourcemap: true,
+        exports: "named",
       },
     ],
     external,
     plugins: [
-      versionInjector({
-        injectInTags: {
-          fileRegexp: /\.(js|jsx|ts|tsx)$/,
-          tagId: "VI",
-          dateFormat: "mmmm d, yyyy HH:MM:ss",
-        },
-      }),
       peerDepsExternal(),
       json(),
-      typescript({
-        useTsconfigDeclarationDir: true,
-        tsconfigOverride: {
-          exclude: ["node_modules", "build", "tests"],
+      resolve({
+        preferBuiltins: false,
+      }),
+      typescript(tsSettings),
+      commonjs({
+        sourceMap: true,
+      }),
+      replace({
+        preventAssignment: true,
+        sourceMap: true,
+        values: {
+          __remix_image_version: version,
         },
       }),
-      resolve({ preferBuiltins: false }),
-      commonjs(),
       terser({
         keep_fnames: true,
+        sourceMap: true,
       }),
     ],
   },
@@ -83,36 +90,38 @@ export default [
         file: "build/server/pure.js",
         format: "cjs",
         sourcemap: true,
+        exports: "named",
       },
     ],
     external,
     plugins: [
-      versionInjector({
-        injectInTags: {
-          fileRegexp: /\.(js|jsx|ts|tsx)$/,
-          tagId: "VI",
-          dateFormat: "mmmm d, yyyy HH:MM:ss",
-        },
-      }),
       peerDepsExternal(),
       json(),
-      typescript({
-        useTsconfigDeclarationDir: true,
-        tsconfigOverride: {
-          exclude: ["node_modules", "build", "tests"],
-        },
+      resolve({
+        preferBuiltins: false,
       }),
-      resolve({ preferBuiltins: false }),
-      commonjs(),
+      typescript(tsSettings),
+      commonjs({
+        sourceMap: true,
+      }),
       replace({
         preventAssignment: true,
+        sourceMap: true,
         include: ["node_modules/jpeg-js/**/*.js"],
         values: {
           "Buffer.from": "new Uint8Array",
         },
       }),
+      replace({
+        preventAssignment: true,
+        sourceMap: true,
+        values: {
+          __remix_image_version: version,
+        },
+      }),
       terser({
         keep_fnames: true,
+        sourceMap: true,
       }),
     ],
   },
