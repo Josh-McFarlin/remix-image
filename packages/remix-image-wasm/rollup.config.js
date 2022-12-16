@@ -2,12 +2,12 @@ import peerDepsExternal from "rollup-plugin-peer-deps-external";
 import resolve from "@rollup/plugin-node-resolve";
 import commonjs from "@rollup/plugin-commonjs";
 import json from "@rollup/plugin-json";
-import typescript from "rollup-plugin-typescript2";
-import { terser } from "rollup-plugin-terser";
 import nodePolyfills from "rollup-plugin-polyfill-node";
-import replace from "@rollup/plugin-replace";
 import copy from "rollup-plugin-copy";
-import versionInjector from "rollup-plugin-version-injector";
+import typescript from "rollup-plugin-typescript2";
+import terser from "@rollup/plugin-terser";
+import replace from "@rollup/plugin-replace";
+import { version } from "./package.json";
 
 export default [
   {
@@ -17,39 +17,43 @@ export default [
         file: "build/index.js",
         format: "cjs",
         sourcemap: true,
+        exports: "named",
+        inlineDynamicImports: true,
       },
     ],
-    inlineDynamicImports: true,
     plugins: [
-      versionInjector({
-        injectInTags: {
-          fileRegexp: /\.(js|jsx|ts|tsx)$/,
-          tagId: "VI",
-          dateFormat: "mmmm d, yyyy HH:MM:ss",
-        },
-      }),
       peerDepsExternal(),
       json(),
+      resolve({
+        preferBuiltins: false,
+      }),
       typescript({
         tsconfigOverride: {
           exclude: ["node_modules", "build", "tests"],
         },
       }),
       nodePolyfills({
+        sourceMap: true,
         include: null,
-      }),
-      resolve({
-        preferBuiltins: false,
       }),
       commonjs(),
       replace({
+        sourceMap: true,
         preventAssignment: false,
         "import.meta.url": JSON.stringify("http://localhost"),
         "self.location.href": JSON.stringify("http://localhost"),
         "await simd": "(() => false)",
       }),
+      replace({
+        preventAssignment: true,
+        sourceMap: true,
+        values: {
+          __remix_image_version: version,
+        },
+      }),
       terser({
         keep_fnames: true,
+        sourceMap: true,
       }),
       copy({
         copyOnce: true,

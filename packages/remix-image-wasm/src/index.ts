@@ -3,4 +3,4 @@ import ImageData from "./types/ImageData";
 globalThis.ImageData = ImageData;
 export * from "./wasmTransformer";
 // eslint-disable-next-line @typescript-eslint/no-inferrable-types
-export const version: string = "[VI]{version}[/VI]";
+export const version: string = "__remix_image_version";

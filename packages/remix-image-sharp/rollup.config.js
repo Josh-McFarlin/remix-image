@@ -3,8 +3,9 @@ import resolve from "@rollup/plugin-node-resolve";
 import commonjs from "@rollup/plugin-commonjs";
 import json from "@rollup/plugin-json";
 import typescript from "rollup-plugin-typescript2";
-import { terser } from "rollup-plugin-terser";
-import versionInjector from "rollup-plugin-version-injector";
+import terser from "@rollup/plugin-terser";
+import replace from "@rollup/plugin-replace";
+import { version } from "./package.json";
 
 export default [
   {
@@ -14,27 +15,29 @@ export default [
         file: "build/index.js",
         format: "cjs",
         sourcemap: true,
+        exports: "named",
       },
     ],
     external: ["fs", "path", "stream", "child_process", "os", "sharp"],
     plugins: [
-      versionInjector({
-        injectInTags: {
-          fileRegexp: /\.(js|jsx|ts|tsx)$/,
-          tagId: "VI",
-          dateFormat: "mmmm d, yyyy HH:MM:ss",
-        },
-      }),
       peerDepsExternal(),
       json(),
+      resolve({ preferBuiltins: false }),
       typescript({
         tsconfigOverride: {
           exclude: ["node_modules", "build", "tests"],
         },
       }),
-      resolve({ preferBuiltins: false }),
-      commonjs(),
+      commonjs({ sourceMap: true }),
+      replace({
+        preventAssignment: true,
+        sourceMap: true,
+        values: {
+          __remix_image_version: version,
+        },
+      }),
       terser({
+        sourceMap: true,
         keep_fnames: true,
       }),
     ],

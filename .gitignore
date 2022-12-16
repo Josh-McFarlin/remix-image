@@ -280,3 +280,5 @@ docs/.docusaurus
 docs/build
 docs/node_modules
 docs/.env
+
+.rollup.cache
