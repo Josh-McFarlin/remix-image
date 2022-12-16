@@ -41,7 +41,6 @@
     "@commitlint/config-conventional": "^17.3.0",
     "@commitlint/cz-commitlint": "^17.3.0",
     "@commitlint/prompt-cli": "^17.3.0",
-    "@next-boost/hybrid-disk-cache": "^0.3.0",
     "@release-it/bumper": "^4.0.0",
     "@release-it/keep-a-changelog": "^3.1.0",
     "@rollup/plugin-commonjs": "^23.0.4",

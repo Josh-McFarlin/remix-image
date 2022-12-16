@@ -7,7 +7,17 @@ import terser from "@rollup/plugin-terser";
 import replace from "@rollup/plugin-replace";
 import { version } from "./package.json";
 
-const external = ["fs", "path", "react", "react-dom"];
+const external = [
+  "fs",
+  "path",
+  "react",
+  "react-dom",
+  "assert",
+  "constants",
+  "stream",
+  "tty",
+  "os",
+];
 
 const tsSettings = {
   useTsconfigDeclarationDir: true,
@@ -31,11 +41,11 @@ export default [
     plugins: [
       peerDepsExternal(),
       json(),
-      resolve(),
-      typescript(tsSettings),
       commonjs({
         sourceMap: true,
       }),
+      resolve(),
+      typescript(tsSettings),
       replace({
         preventAssignment: true,
         sourceMap: true,

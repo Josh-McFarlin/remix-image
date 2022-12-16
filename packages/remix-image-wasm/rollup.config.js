@@ -24,6 +24,9 @@ export default [
     plugins: [
       peerDepsExternal(),
       json(),
+      commonjs({
+        sourceMap: true,
+      }),
       resolve({
         preferBuiltins: false,
       }),
@@ -36,7 +39,6 @@ export default [
         sourceMap: true,
         include: null,
       }),
-      commonjs(),
       replace({
         sourceMap: true,
         preventAssignment: false,

@@ -1,4 +1,6 @@
-import BaseCache from "@next-boost/hybrid-disk-cache";
+import { tmpdir } from "os";
+import Keyv from "keyv";
+import { KeyvFile } from "keyv-file";
 import { CacheConfig, Cache, CacheStatus } from "../../types/cache";
 
 export interface DiskCacheConfig extends CacheConfig {
@@ -10,22 +12,32 @@ export interface DiskCacheConfig extends CacheConfig {
 
 export class DiskCache extends Cache {
   config: DiskCacheConfig;
-  cache: BaseCache;
+  cache: Keyv<Uint8Array>;
 
   constructor(config: Partial<DiskCacheConfig> | null | undefined = {}) {
     super();
 
     this.config = {
-      path: config?.path ?? "tmp/img",
+      path: config?.path ?? `${tmpdir()}/img`,
       ttl: config?.ttl ?? 24 * 60 * 60,
       tbd: config?.tbd ?? 365 * 24 * 60 * 60,
     };
 
-    this.cache = new BaseCache(this.config);
+    // @ts-ignore Fix deserialize field having wrong type
+    this.cache = new Keyv<Uint8Array>({
+      store: new KeyvFile<Uint8Array>({
+        filename: `${this.config.path}/images.json`,
+        expiredCheckDelay: this.config.tbd,
+        writeDelay: 100,
+      }),
+      ttl: this.config.ttl,
+      serialize: (item) => item.value.toString(),
+      deserialize: (val) => Uint8Array.from(val.split(",").map(parseInt)),
+    });
   }
 
   async status(key: string): Promise<CacheStatus> {
-    return (await this.cache.has(key)) as CacheStatus;
+    return (await this.cache.has(key)) ? CacheStatus.HIT : CacheStatus.MISS;
   }
 
   async has(key: string): Promise<boolean> {
@@ -37,18 +49,14 @@ export class DiskCache extends Cache {
       return null;
     }
 
-    const cacheValue = (await this.cache.get(key))!;
-
-    await this.cache.set(key, cacheValue);
-
-    return cacheValue;
+    return (await this.cache.get(key))!;
   }
 
   async set(key: string, resultImg: Uint8Array): Promise<void> {
-    await this.cache.set(key, resultImg as Buffer);
+    await this.cache.set(key, resultImg, this.config.ttl);
   }
 
   async clear(): Promise<void> {
-    await this.cache.purge();
+    await this.cache.clear();
   }
 }

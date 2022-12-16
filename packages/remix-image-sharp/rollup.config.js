@@ -22,13 +22,17 @@ export default [
     plugins: [
       peerDepsExternal(),
       json(),
-      resolve({ preferBuiltins: false }),
+      commonjs({
+        sourceMap: true,
+      }),
+      resolve({
+        preferBuiltins: false,
+      }),
       typescript({
         tsconfigOverride: {
           exclude: ["node_modules", "build", "tests"],
         },
       }),
-      commonjs({ sourceMap: true }),
       replace({
         preventAssignment: true,
         sourceMap: true,
