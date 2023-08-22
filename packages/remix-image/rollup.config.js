@@ -6,6 +6,7 @@ import typescript from "rollup-plugin-typescript2";
 import terser from "@rollup/plugin-terser";
 import replace from "@rollup/plugin-replace";
 import { version } from "./package.json";
+import { defineConfig } from "rollup";
 
 const external = ["fs", "path", "react", "react-dom"];
 
@@ -16,7 +17,7 @@ const tsSettings = {
   },
 };
 
-export default [
+export default defineConfig([
   {
     input: "src/index.tsx",
     output: [
@@ -57,6 +58,7 @@ export default [
         format: "cjs",
         sourcemap: true,
         exports: "named",
+        interop: "auto",
       },
     ],
     external,
@@ -76,10 +78,6 @@ export default [
         values: {
           __remix_image_version: version,
         },
-      }),
-      terser({
-        keep_fnames: true,
-        sourceMap: true,
       }),
     ],
   },
@@ -125,4 +123,4 @@ export default [
       }),
     ],
   },
-];
+]);
